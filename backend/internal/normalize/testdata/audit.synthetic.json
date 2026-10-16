@@ -1,0 +1,512 @@
+[
+  {
+    "name": "typed_street",
+    "raw": "улица Новая 12а кв 4",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "12а",
+      "apartment": "4",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "fraction",
+    "raw": "улица Новая 55/6 кв 99",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "55/6",
+      "apartment": "99",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "hyphen",
+    "raw": "улица Новая 12-1",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "12-1",
+      "apartment": "",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "punctuation",
+    "raw": "Ул .Курильская 9 кв 1",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Курильская",
+      "house": "9",
+      "apartment": "1",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "flat",
+    "raw": "ул. Курильская 9 flat 191",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Курильская",
+      "house": "9",
+      "apartment": "191",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "kv",
+    "raw": "улица Новая 12 kv 4",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "12",
+      "apartment": "4",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "glued_street_house",
+    "raw": "Назарбаева8",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "",
+      "street_name": "Назарбаева",
+      "house": "8",
+      "apartment": "",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "reverse_markers",
+    "raw": "66квартал 12дом 69квартира",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "квартал",
+      "street_name": "66",
+      "house": "12",
+      "apartment": "69",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "glued_details",
+    "raw": "улица Новая 55/6 магазин Береке 4подьезд 9этаж",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "55/6",
+      "apartment": "",
+      "entrance": "4",
+      "floor": "9",
+      "landmark": "магазин Береке"
+    }
+  },
+  {
+    "name": "spaced_reverse_details",
+    "raw": "улица Новая 12, 5 подьезд, 239 кв, 9 этаж",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "12",
+      "apartment": "239",
+      "entrance": "5",
+      "floor": "9",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "named_microdistrict",
+    "raw": "Нурсити 2 микрорайон 11дом 5 подьезд 239 кв",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "микрорайон",
+      "street_name": "Нурсити 2",
+      "house": "11",
+      "apartment": "239",
+      "entrance": "5",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "microdistrict_comma_house",
+    "raw": "Мкр Аксай 3а, 59, кв 70",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "микрорайон",
+      "street_name": "Аксай 3а",
+      "house": "59",
+      "apartment": "70",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "landmark_qazpost",
+    "raw": "улица Новая 12, Qazpost Солнечный",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "12",
+      "apartment": "",
+      "entrance": "",
+      "floor": "",
+      "landmark": "Qazpost Солнечный"
+    }
+  },
+  {
+    "name": "invisible",
+    "raw": "﻿улица​ Новая 12а\tкв 4\n",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "12а",
+      "apartment": "4",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "missing_house",
+    "raw": "улица Новая кв 9",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "",
+      "apartment": "9",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "missing_details",
+    "raw": "улица Новая 12",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "12",
+      "apartment": "",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "unknown",
+    "raw": "неизвестно",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "",
+      "street_name": "",
+      "house": "",
+      "apartment": "",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "empty",
+    "raw": "",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "",
+      "street_name": "",
+      "house": "",
+      "apartment": "",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "whitespace",
+    "raw": " \t\n​",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "",
+      "street_name": "",
+      "house": "",
+      "apartment": "",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "almaty_explicit",
+    "raw": "Алматы, улица Новая 12а кв 4",
+    "want": {
+      "province": "Алматы",
+      "city": "Алматы",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "12а",
+      "apartment": "4",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "astana_explicit",
+    "raw": "Астана, проспект Туран 55/6 кв 4",
+    "want": {
+      "province": "Астана",
+      "city": "Астана",
+      "district": "",
+      "living_area": "",
+      "street_type": "проспект",
+      "street_name": "Туран",
+      "house": "55/6",
+      "apartment": "4",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "bilingual_city",
+    "raw": "город Актобе/Ақтөбе қаласы, улица Новая 12",
+    "want": {
+      "province": "Актюбинская область",
+      "city": "Актобе",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "12",
+      "apartment": "",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "repeated_city",
+    "raw": "Астана, Астана, улица Новая 12",
+    "want": {
+      "province": "Астана",
+      "city": "Астана",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "12",
+      "apartment": "",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "conflicting_cities",
+    "raw": "Астана, Алматы, улица Новая 12",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "12",
+      "apartment": "",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "kazakh_street",
+    "raw": "Астана, Тұран даңғылы 55/6",
+    "want": {
+      "province": "Астана",
+      "city": "Астана",
+      "district": "",
+      "living_area": "",
+      "street_type": "проспект",
+      "street_name": "Тұран",
+      "house": "55/6",
+      "apartment": "",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "district_explicit",
+    "raw": "Алматы, Ауэзовский район, улица Новая 12",
+    "want": {
+      "province": "Алматы",
+      "city": "Алматы",
+      "district": "Ауэзовский",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "12",
+      "apartment": "",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "living_area_and_street",
+    "raw": "Алматы, микрорайон Аксай 3а, улица Новая 12",
+    "want": {
+      "province": "Алматы",
+      "city": "Алматы",
+      "district": "",
+      "living_area": "Аксай 3а",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "12",
+      "apartment": "",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "genitive_spelling",
+    "raw": "улица Назарбаева 8",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Назарбаева",
+      "house": "8",
+      "apartment": "",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "typo_spelling",
+    "raw": "улица Курилская 9",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Курилская",
+      "house": "9",
+      "apartment": "",
+      "entrance": "",
+      "floor": "",
+      "landmark": ""
+    }
+  },
+  {
+    "name": "negative_floor",
+    "raw": "улица Новая 12, этаж -1",
+    "want": {
+      "province": "",
+      "city": "",
+      "district": "",
+      "living_area": "",
+      "street_type": "улица",
+      "street_name": "Новая",
+      "house": "12",
+      "apartment": "",
+      "entrance": "",
+      "floor": "-1",
+      "landmark": ""
+    }
+  }
+]

@@ -1,0 +1,5 @@
+# Build images first. This override prevents outbound internet at runtime while
+# retaining service-to-service traffic and published local UI/API ports.
+networks:
+  default:
+    internal: true

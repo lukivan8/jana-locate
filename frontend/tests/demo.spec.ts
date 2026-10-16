@@ -1,0 +1,47 @@
+import { test, expect } from '@playwright/test'
+for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+  test(`API docs and live input through HTTP at ${viewport.width}px`, async ({ page }) => {
+    await page.setViewportSize(viewport)
+    const api = process.env.JANA_TEST_API_URL ?? 'http://localhost:8080'
+    await page.route('**/config.js', route => route.fulfill({ contentType: 'text/javascript', body: `window.JANA_CONFIG = ${JSON.stringify({ apiBaseUrl: api })}` }))
+    await page.goto('/api')
+    await expect(page.getByRole('heading', { name: 'Нормализация адресов', exact: true })).toBeVisible()
+    await expect(page.getByRole('navigation', { name: 'Методы API' }).getByRole('button')).toHaveCount(5)
+    await page.getByRole('button', { name: 'POST /v1/catalog/confirmations', exact: true }).click()
+    await expect(page.getByRole('heading', { name: 'Подтверждение здания', exact: true })).toBeVisible()
+    await expect(page.locator('.api-operation')).toContainText('expected_revision')
+    const downloading = page.waitForEvent('download')
+    await page.getByRole('link', { name: 'Скачать OpenAPI' }).click()
+    expect((await downloading).suggestedFilename()).toBe('jana-openapi.json')
+    await page.getByRole('link', { name: '3 Свободный ввод' }).click()
+    await expect(page.getByRole('button', { name: 'Найти на карте' })).toBeDisabled()
+    const liveAddress = 'Астана, Туран 55/6, кв 123'
+    await page.getByLabel('Адрес в свободной форме').fill(liveAddress)
+    const responsePromise = page.waitForResponse(r => r.url().endsWith('/v1/normalize') && r.request().method() === 'POST')
+    await page.getByRole('button', { name: 'Найти на карте' }).click()
+    const response = await responsePromise
+    expect(response.request().postDataJSON()).toEqual({ records: [{ id: 'live-input', raw_address: liveAddress }] })
+    const result = (await response.json()).results[0]
+    await expect(page.locator('.normalized-address')).toContainText('Туран')
+    await expect(page.locator('.parsed-fields')).toContainText('123')
+    await expect(page.getByRole('status')).toContainText(/мс · полный HTTP-запрос/)
+    expect(result.coordinates).not.toBeNull()
+    await expect(page.locator('.map-marker')).toHaveCount(1)
+    await expect(page.locator('.map-locations')).toContainText(result.coordinates.latitude.toFixed(6))
+    await expect(page.locator('.warning-list')).toContainText('Синтетические координаты')
+    await page.getByLabel('Адрес в свободной форме').fill('Это совсем не адрес')
+    await expect(page.locator('.map-marker')).toHaveCount(0)
+    await page.getByRole('button', { name: 'Найти на карте' }).click()
+    await expect(page.locator('.result-details')).toContainText('Не распознан')
+    await expect(page.locator('.map-empty')).toContainText('Координаты не определены')
+    await expect(page.locator('.map-marker')).toHaveCount(0)
+    await page.route('**/v1/normalize', route => route.fulfill({ status: 500, contentType: 'application/json', body: JSON.stringify({ code: 'test', message: 'Ошибка проверки' }) }), { times: 1 })
+    await page.getByRole('button', { name: 'Найти на карте' }).click()
+    await expect(page.getByRole('alert')).toContainText('Ошибка проверки')
+    await expect(page.getByRole('button', { name: 'Найти на карте' })).toBeEnabled()
+    await page.getByRole('button', { name: 'Найти на карте' }).click()
+    await expect(page.getByRole('alert')).toHaveCount(0)
+    await expect(page.locator('.result-details')).toContainText('Не распознан')
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  })
+}

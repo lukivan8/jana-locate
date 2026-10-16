@@ -1,0 +1,27 @@
+{
+  "prepared_at": "2026-10-16T10:57:36.558002+00:00",
+  "kato": {
+    "url": "https://stat.gov.kz/upload/iblock/a7d/eqogm92xc0udumlzfzffhcrutk0fjhb4/КАТО_18.09.2026.xlsx",
+    "sha256": "7b87e0a8a72818ca5adcc7b4a7792dd0afd1a3165ed163197012c7c154d4e990",
+    "rows": 15586
+  },
+  "osm": {
+    "url": "https://overpass-api.de/api/interpreter",
+    "bbox": [
+      51.0,
+      71.2,
+      51.25,
+      71.65
+    ],
+    "scope": "Intersection of Astana administrative area (name:ru=Астана, admin_level=4) and bbox; NOT nationwide street coverage",
+    "timestamp": "2026-10-16T10:52:35Z",
+    "sha256": "633298919019a6c09d2d163d964ec3a70536caf485069a548fb535da2312846a",
+    "objects": 5093,
+    "attribution": "© OpenStreetMap contributors",
+    "license": "ODbL-1.0",
+    "license_url": "https://www.openstreetmap.org/copyright"
+  },
+  "entity_count": 17242,
+  "jsonl_sha256": "710dd947d381ca9b7465153aec56c7b10e851b5f6a6ea46d8afeb7e30116a58e",
+  "building_coordinates": false
+}

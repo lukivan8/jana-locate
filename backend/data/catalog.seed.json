@@ -1,0 +1,73 @@
+{
+  "entries": [
+    {
+      "id": "Алматы-demo",
+      "revision": 0,
+      "fields": {
+        "province": "Алматы",
+        "city": "Алматы",
+        "district": null,
+        "living_area": null,
+        "street_type": "улица",
+        "street_name": "Курильская",
+        "house": "9",
+        "apartment": null,
+        "entrance": null,
+        "floor": null,
+        "landmark": null
+      },
+      "coordinates": {
+        "latitude": 43.238,
+        "longitude": 76.889
+      },
+      "source": "synthetic-demo-not-surveyed",
+      "confirmed": false
+    },
+    {
+      "id": "Астана-demo",
+      "revision": 0,
+      "fields": {
+        "province": "Астана",
+        "city": "Астана",
+        "district": null,
+        "living_area": null,
+        "street_type": "проспект",
+        "street_name": "Туран",
+        "house": "55/6",
+        "apartment": null,
+        "entrance": null,
+        "floor": null,
+        "landmark": null
+      },
+      "coordinates": {
+        "latitude": 51.128,
+        "longitude": 71.43
+      },
+      "source": "synthetic-demo-not-surveyed",
+      "confirmed": false
+    },
+    {
+      "id": "Караганда-demo",
+      "revision": 0,
+      "fields": {
+        "province": "Карагандинская область",
+        "city": "Караганда",
+        "district": null,
+        "living_area": null,
+        "street_type": "квартал",
+        "street_name": "66",
+        "house": "12",
+        "apartment": null,
+        "entrance": null,
+        "floor": null,
+        "landmark": null
+      },
+      "coordinates": {
+        "latitude": 49.805,
+        "longitude": 73.085
+      },
+      "source": "synthetic-demo-not-surveyed",
+      "confirmed": false
+    }
+  ]
+}

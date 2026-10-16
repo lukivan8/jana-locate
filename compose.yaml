@@ -1,0 +1,68 @@
+name: jana-address
+services:
+  backend:
+    image: jana-address-api:local
+    build:
+      context: ./backend
+    ports:
+      - "${API_BIND_ADDRESS:-127.0.0.1}:${API_PORT:-8080}:8080"
+    environment:
+      CORS_ORIGINS: "${CORS_ORIGINS:-http://localhost:3000}"
+      GLINER_URL: http://gliner:8090
+      MODELS_REQUIRED: "true"
+      ALLOW_DEMO_CATALOG: "${ALLOW_DEMO_CATALOG:-false}"
+    depends_on:
+      gliner:
+        condition: service_healthy
+    volumes:
+      - catalog-data:/data
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 3g
+    cpus: 2
+  frontend:
+    image: jana-address-web:local
+    build:
+      context: ./frontend
+    ports:
+      - "${WEB_BIND_ADDRESS:-127.0.0.1}:${WEB_PORT:-3000}:8080"
+    environment:
+      # This is a browser URL, never the Docker-internal service name.
+      JANA_API_URL: "${JANA_API_URL:-http://localhost:8080}"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+  gliner:
+    image: jana-address-gliner:local
+    build:
+      context: ./nlp
+    # Internal-only: no host port. Frontend continues to call only the Go API.
+    expose:
+      - "8090"
+    environment:
+      GLINER_THREADS: "${GLINER_THREADS:-2}"
+      GLINER_MICROBATCH: "${GLINER_MICROBATCH:-8}"
+      GLINER_QUANTIZE: "${GLINER_QUANTIZE:-true}"
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 3g
+    cpus: 2
+volumes:
+  catalog-data:

@@ -1,0 +1,12 @@
+/bin/
+/var/
+/backups/
+.env
+.env.*
+!.env.example
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+__pycache__/
+.DS_Store

@@ -1,0 +1,10 @@
+# CPU-only PyTorch index is selected explicitly in Docker; no CUDA dependencies.
+gliner==0.2.22
+transformers==4.51.0
+huggingface-hub==0.30.2
+torch==2.6.0
+fastapi==0.115.12
+uvicorn==0.34.2
+psutil==7.0.0
+sentencepiece==0.2.0
+protobuf==5.29.4

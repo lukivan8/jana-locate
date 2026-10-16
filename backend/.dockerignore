@@ -1,0 +1,11 @@
+.git
+.github
+bin
+var
+backups
+.env
+.env.*
+AGENTS.md
+__pycache__
+*.sqlite
+*.sqlite-*

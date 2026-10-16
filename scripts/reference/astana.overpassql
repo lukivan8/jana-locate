@@ -1,0 +1,1 @@
+[out:json][timeout:90];area["boundary"="administrative"]["name:ru"="Астана"]["admin_level"="4"]->.city;(way(area.city)["highway"]["name"](51.00,71.20,51.25,71.65);nwr(area.city)["place"~"suburb|neighbourhood|quarter"](51.00,71.20,51.25,71.65);nwr(area.city)["residential"]["name"](51.00,71.20,51.25,71.65););out tags;
