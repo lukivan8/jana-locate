@@ -1,6 +1,9 @@
 <p align="center">
-  <img src="docs/assets/banner.svg" alt="Jana Locate — нормализация адресов Казахстана" width="100%">
+  <a href="https://jana.linker.kz"><img src="docs/assets/banner.svg" alt="Открыть Jana Locate — jana.linker.kz" width="100%"></a>
 </p>
+
+<h2 align="center"><a href="https://jana.linker.kz">Открыть приложение → jana.linker.kz</a></h2>
+<p align="center"><strong>Готовая веб-версия — попробуйте прямо в браузере, без локальной установки.</strong></p>
 
 <p align="center">
   <a href="https://github.com/lukivan8/jana-locate/actions/workflows/ci.yml"><img src="https://github.com/lukivan8/jana-locate/actions/workflows/ci.yml/badge.svg" alt="Проверки приложения"></a>
@@ -13,7 +16,10 @@
 
 **Превратите адресную строку в структурированные поля и подключите нормализацию к своему сервису по HTTP.** Jana Locate разбирает адреса Казахстана, сохраняет исходный ввод, показывает неизвестные поля и неоднозначности. Для проверки результатов есть веб-интерфейс, для файлов и PostgreSQL — локальный CLI.
 
-[Быстрый запуск](#быстрый-запуск) · [Подключение API](docs/integration.md) · [Примеры кода](examples/http/README.md) · [Документация](docs/README.md) · [Сообщить об ошибке](https://github.com/lukivan8/jana-locate/issues/new/choose)
+[**Открыть приложение ↗**](https://jana.linker.kz) · [Быстрый запуск](#быстрый-запуск) · [Подключение API](docs/integration.md) · [Примеры кода](examples/http/README.md) · [Документация](docs/README.md) · [Сообщить об ошибке](https://github.com/lukivan8/jana-locate/issues/new/choose)
+
+> [!TIP]
+> **Проверяющим: начните с [jana.linker.kz](https://jana.linker.kz).** Вставьте синтетические адреса, нажмите «Нормализовать пакет», откройте результат и попробуйте проверку полей и экспорт JSON. Установка Docker для знакомства не нужна.
 
 ## Что можно сделать
 
@@ -85,6 +91,8 @@ Jana Locate — отдельный HTTP-сервис. Ваше приложен�
 **[Руководство подключения →](docs/integration.md)** · [JavaScript](examples/http/normalize.mjs) · [Python](examples/http/normalize.py) · [Go](examples/http/go/main.go) · [OpenAPI](backend/api/openapi.json)
 
 ## Проверка результатов в браузере
+
+**[Открыть готовое приложение на jana.linker.kz →](https://jana.linker.kz)** Для локального запуска интерфейс доступен на `http://localhost:3000`.
 
 ![Интерфейс Jana Locate: импорт адресов и очередь проверки](docs/assets/workspace.png)
 
