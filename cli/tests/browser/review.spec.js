@@ -90,7 +90,8 @@ for (const viewport of [{width:1440,height:1000},{width:390,height:844}]) {
     await page.goto(publishedURL);
     await expect(page.getByRole('heading',{name:'Итоговая таблица'})).toBeVisible();
     await expect(page.locator('.run-timing')).toHaveText(timingText);
-    await page.getByRole('link',{name:'Тестовый запуск',exact:true}).click();
+    await expect(page.getByRole('link',{name:'Тестовый запуск',exact:true})).toHaveCount(0);
+    await page.getByRole('button',{name:'Новый запуск',exact:true}).click();
     await expect(page).toHaveURL(/[?&]new=true/);
     await expect(page.getByLabel('Один адрес на строку')).toHaveValue('');
   });
