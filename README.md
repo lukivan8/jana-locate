@@ -38,15 +38,20 @@
 
 **Локальный Jana Locate полностью автономен.** Модели libpostal и справочники Казахстана уже включены в образ. После скачивания контейнеров обработка работает без интернета, hosted API, регистрации и внешних ключей. Go, Node.js, Python, Git и сборка исходников для установки не нужны.
 
-Нужны **Docker Engine или Docker Desktop с Compose v2, curl и shell**. Текущий выпуск — **[0.1.0](https://github.com/lukivan8/jana-locate/releases/tag/v0.1.0)** для `linux/amd64`. На ARM используется эмуляция amd64 средствами Docker; нативный ARM-образ пока не выпускается.
+Для API достаточно **Docker Engine или Docker Desktop**. Для комплектов с установщиком дополнительно нужны Compose v2, curl и shell. Текущий выпуск — **[0.1.0](https://github.com/lukivan8/jana-locate/releases/tag/v0.1.0)** для `linux/amd64`. На ARM используется эмуляция amd64 средствами Docker; нативный ARM-образ пока не выпускается.
 
-### Только API — одна команда установки
+### Только API — скачать и запустить одной командой
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/lukivan8/jana-locate/main/scripts/install.sh | sh -s -- api
+docker run -d --name jana-locate --platform linux/amd64 \
+  --restart unless-stopped -p 127.0.0.1:8080:8080 \
+  -v jana-locate-api-data:/data \
+  ghcr.io/lukivan8/jana-locate-api:0.1.0
 ```
 
-Установщик скачает готовый образ, сохранит настройки в `./jana-locate/` и запустит API на `http://localhost:8080`. Зависимости и модели при запуске не скачиваются. [Исходник установщика](scripts/install.sh) · [Установка и варианты запуска](docs/quickstart.md).
+Docker сам скачает готовый образ и запустит API на `http://localhost:8080`. Для этого пути не нужны Compose, Git, компиляторы, ключи внешних сервисов или подготовка моделей. Данные сохраняются в томе; остановка — `docker stop jana-locate`, повторный запуск — `docker start jana-locate`.
+
+Если нужен единый launcher для управления контейнерами, используйте [установщик](docs/quickstart.md) в режиме `api`. [Исходник установщика](scripts/install.sh).
 
 ```sh
 curl --fail-with-body http://localhost:8080/readyz

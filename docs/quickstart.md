@@ -6,6 +6,21 @@
 
 **[Откройте Jana Locate → jana.linker.kz](https://jana.linker.kz)**. Для знакомства с приложением ничего устанавливать не нужно. Можно также вызывать hosted API по `https://jana.linker.kz/v1/normalize`.
 
+## Только API: одна команда Docker
+
+Для нормализатора достаточно установленного Docker:
+
+```sh
+docker run -d --name jana-locate --platform linux/amd64 \
+  --restart unless-stopped -p 127.0.0.1:8080:8080 \
+  -v jana-locate-api-data:/data \
+  ghcr.io/lukivan8/jana-locate-api:0.1.0
+```
+
+Docker автоматически скачает образ. API — `http://localhost:8080`, готовность — `/readyz`. Модели и справочники уже внутри. Остановить: `docker stop jana-locate`; снова запустить: `docker start jana-locate`. Данные остаются в томе `jana-locate-api-data`.
+
+Ниже — альтернативный установщик с Compose и управлением через `./jana`. Выберите один путь: одновременный запуск двух экземпляров на порту 8080 вызовет конфликт.
+
 ## Установить локально одной командой
 
 Нужны Docker Engine/Docker Desktop с Docker Compose v2, curl и POSIX shell (Linux, macOS или WSL). Go, Node.js, Python, Git и подготовка моделей не требуются. Публикуются образы `linux/amd64`; ARM-хостам нужна поддержка эмуляции amd64 в Docker. Нативный ARM пока не проверен и не выпускается.
