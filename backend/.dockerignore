@@ -1,11 +1,5 @@
 .git
-.github
 bin
 var
-backups
-.env
-.env.*
-AGENTS.md
+data/reference/*.sqlite
 __pycache__
-*.sqlite
-*.sqlite-*

@@ -7,7 +7,6 @@ import (
 	"mime"
 	"net/http"
 	"strings"
-	"unicode/utf8"
 
 	contract "github.com/lukivan8/jana-address/api"
 	"github.com/lukivan8/jana-address/internal/catalog"
@@ -53,8 +52,12 @@ func decode(w http.ResponseWriter, r *http.Request, v any) bool {
 }
 
 func New(store *catalog.Store, origins []string, configured ...normalize.Engine) http.Handler {
+	return NewWithJobs(store, nil, origins, configured...)
+}
+
+func NewWithJobs(store *catalog.Store, jobs *catalog.JobStore, origins []string, configured ...normalize.Engine) http.Handler {
 	mux := http.NewServeMux()
-	engine := normalize.Engine{Catalog: store}
+	engine := normalize.Engine{}
 	if len(configured) > 0 {
 		engine = configured[0]
 	}
@@ -68,32 +71,17 @@ func New(store *catalog.Store, origins []string, configured ...normalize.Engine)
 	mux.HandleFunc("GET /v1/catalog", func(w http.ResponseWriter, r *http.Request) {
 		jsonResponse(w, 200, api.CatalogResponse{Entries: store.List()})
 	})
+	registerJobs(mux, jobs, store, engine)
+	registerRecordCitySelections(mux, engine)
 	mux.HandleFunc("POST /v1/normalize", func(w http.ResponseWriter, r *http.Request) {
 		var req normalizeRequest
 		if !decode(w, r, &req) {
 			return
 		}
-		if len(req.Records) < 1 || len(req.Records) > 1000 {
-			fail(w, 400, "invalid_batch", "records must contain 1 to 1000 items")
+		records, err := inputRecords(req)
+		if err != nil {
+			inputError(w, err)
 			return
-		}
-		for _, record := range req.Records {
-			validID := false
-			switch id := record.Id.(type) {
-			case string:
-				validID = true
-			case json.Number:
-				_, err := id.Int64()
-				validID = err == nil
-			}
-			if !validID || record.RawAddress == nil || len(*record.RawAddress) > 4096 || !utf8.ValidString(*record.RawAddress) {
-				fail(w, 400, "invalid_record", "id must be a string or int64 and raw_address must be valid UTF-8, at most 4096 bytes")
-				return
-			}
-		}
-		records := make([]api.InputRecord, 0, len(req.Records))
-		for _, record := range req.Records {
-			records = append(records, api.InputRecord{Id: record.Id, RawAddress: *record.RawAddress})
 		}
 		results := engine.NormalizeBatchContext(r.Context(), records)
 		if req.array {
@@ -137,6 +125,9 @@ func New(store *catalog.Store, origins []string, configured ...normalize.Engine)
 	})
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("X-Content-Type-Options", "nosniff")
+		if strings.HasPrefix(r.URL.Path, "/v1/normalization-jobs") {
+			w.Header().Set("Cache-Control", "no-store")
+		}
 		if origin := r.Header.Get("Origin"); origin != "" {
 			w.Header().Add("Vary", "Origin")
 			allowed := false
@@ -151,7 +142,7 @@ func New(store *catalog.Store, origins []string, configured ...normalize.Engine)
 				return
 			}
 			w.Header().Set("Access-Control-Allow-Origin", origin)
-			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		}
 		if r.Method == http.MethodOptions {

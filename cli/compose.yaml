@@ -1,0 +1,35 @@
+name: jana-cli
+services:
+  workspace:
+    image: jana-cli:local
+    build:
+      context: .
+    ports:
+      - "${CLI_BIND_ADDRESS:-127.0.0.1}:${CLI_PORT:-8095}:8095"
+    environment:
+      JANA_API_URL: "${JANA_API_URL:-http://host.docker.internal:8080}"
+      JANA_API_TOKEN: "${JANA_API_TOKEN:-}"
+      JANA_WEB_AUTH: "${JANA_WEB_AUTH:-password}"
+      JANA_WEB_TOKEN: "${JANA_WEB_TOKEN:?Set JANA_WEB_TOKEN to at least 16 characters}"
+      JANA_DATABASE_URL: "${JANA_DATABASE_URL:-}"
+      PGHOST: "${PGHOST:-host.docker.internal}"
+      PGPORT: "${PGPORT:-5432}"
+      PGDATABASE: "${PGDATABASE:-postgres}"
+      PGUSER: "${PGUSER:-postgres}"
+      PGPASSWORD: "${PGPASSWORD:-}"
+      JANA_BROWSER_URL: "${JANA_BROWSER_URL:-}"
+      JANA_PUBLIC_ORIGIN: "${JANA_PUBLIC_ORIGIN:-}"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - workspace-data:/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    restart: unless-stopped
+volumes:
+  workspace-data:

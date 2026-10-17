@@ -1,0 +1,10 @@
+.env
+var/
+bin/
+node_modules/
+test-results/
+playwright-report/
+*.sqlite
+*.sqlite-journal
+*.sqlite-shm
+*.sqlite-wal

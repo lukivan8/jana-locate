@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Руководство подключения
+    url: https://github.com/lukivan8/jana-locate/blob/main/docs/integration.md
+    about: Запросы, ответы, статусы и запускаемые примеры.
+  - name: Сообщить об уязвимости конфиденциально
+    url: https://github.com/lukivan8/jana-locate/security/advisories/new
+    about: Не публикуйте детали уязвимости в обычном issue.

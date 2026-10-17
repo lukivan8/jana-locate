@@ -1,5 +1,6 @@
 # Build images first. This override prevents outbound internet at runtime while
-# retaining service-to-service traffic and published local UI/API ports.
+# retaining service-to-service traffic. Smoke probes run inside this network;
+# Docker may omit published host ports for an internal network.
 networks:
   default:
     internal: true

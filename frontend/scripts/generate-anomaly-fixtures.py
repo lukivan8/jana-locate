@@ -3,6 +3,7 @@
 import itertools
 import json
 from pathlib import Path
+from synthetic_mutations import EXTRA_CATEGORIES, expand
 
 CATEGORIES = [
     ("joined", "Слитное написание", "presentation"),
@@ -106,10 +107,19 @@ for index in range(18):
 for index in range(5):
     add(combination(primary, index), primary, "Все девять групп одновременно; синтетический стресс-сценарий.")
 
+source = json.loads((Path(__file__).resolve().parents[1] / 'src/data/address-bases.json').read_text())
+legacy_count = len(records)
+expand(records, scenarios, source)
+CATEGORIES += EXTRA_CATEGORIES
+
 payload = {
-    "schema_version": 1,
+    "schema_version": 2,
+    "source": {key: value for key, value in source.items() if key != "bases"},
+    "base_count": len(source["bases"]),
+    "source_based_count": len(records)-legacy_count,
+    "handcrafted_count": legacy_count,
     "synthetic": True,
-    "description": "Синтетические адреса для исследования разбора. География и здания не проверены. Не train.json и не эталон ответов.",
+    "description": "2000 входных сценариев без эталонной разметки: 161 придуманный пример и 1839 искусственно изменённых вариантов публичных адресных записей OSM. Не train.json и не база проверенных адресов доставки.",
     "categories": [{"id": identifier, "label": label, "source": source} for identifier, label, source in CATEGORIES],
     "records": records,
     "scenarios": scenarios,
@@ -118,3 +128,7 @@ target = Path(__file__).resolve().parents[1] / "src/data/address-anomalies.json"
 target.parent.mkdir(parents=True, exist_ok=True)
 target.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(f"{len(records)} synthetic cases → {target}")
+
+for index in range(2):
+    part = target.with_name(f'address-anomalies-part-{index+1}.json')
+    part.write_text(json.dumps(records[index*1000:(index+1)*1000], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

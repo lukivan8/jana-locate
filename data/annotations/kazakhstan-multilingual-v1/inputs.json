@@ -1,0 +1,1602 @@
+[
+  {
+    "id": "kzlang_base_001",
+    "raw_address": "Казахстан, Алматы, Алмалинский район, ул. Макетная, д 12, кв 3; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_002",
+    "raw_address": "Қазақстан, Алматы қ., Алмалы ауданы, Үлгі көшесі, 12 үй, 3 пәтер; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_003",
+    "raw_address": "Almaty shahri, Almaly tumani, Namuna ko'chasi, 12 uy, 3 xonadon; yetkazishdan oldin xabar bering"
+  },
+  {
+    "id": "kzlang_base_004",
+    "raw_address": "Almaty Almalinnskiy r-on ul.Maketnaya dom12 kv3; pered dostavkoy napishite"
+  },
+  {
+    "id": "kzlang_base_005",
+    "raw_address": "Казахстан, г. Алматы / Алатауский район / улица Учебная / дом 24; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_006",
+    "raw_address": "Қазақстан, 24 үй, Оқу көшесі, Алатау ауданы, Алматы қаласы; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_007",
+    "raw_address": "24-uy, Oquv ko'chasi, Alatau tumani, Almaty shahri; yetkazishdan oldin xabar bering"
+  },
+  {
+    "id": "kzlang_base_008",
+    "raw_address": "Almaty, Alatausskiy rayon, Uchebnaya ul., d24; pered dostavkoy napishite"
+  },
+  {
+    "id": "kzlang_base_009",
+    "raw_address": "Казахстан, Алматы, Ауэзовский р-н, ул Тестовая, д. 31, подъезд 2; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_010",
+    "raw_address": "Қазақстан, Алматы, Әуезов ауданы, Сынақ көшесі 31 үй, 2 кіреберіс; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_011",
+    "raw_address": "Almaty shahri Auezov tumani Sinov ko'chasi 31-uy 2-kirish; yetkazishdan oldin xabar bering"
+  },
+  {
+    "id": "kzlang_base_012",
+    "raw_address": "Almaty, Auezovvskij r-n, Testovaya ulitsa31, podyezd2; pered dostavkoy napishite"
+  },
+  {
+    "id": "kzlang_base_013",
+    "raw_address": "Казахстан, Бостандыкский район, Алматы, улица Условная 45, кв 6; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_014",
+    "raw_address": "Қазақстан, Алматы қаласы, Бостандық ауданы; Шартты көшесі, 45-үй, 6-пәтер; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_015",
+    "raw_address": "Almaty, Bostandyq tumani, Shartli ko'chasi, 45 uy, xonadon 6; yetkazishdan oldin xabar bering"
+  },
+  {
+    "id": "kzlang_base_016",
+    "raw_address": "Almaty Bostandyksskiy r-n Uslovnaya ul.45 kv6; pered dostavkoy napishite"
+  },
+  {
+    "id": "kzlang_base_017",
+    "raw_address": "Казахстан, г Алматы, Жетысуский район, ул. Примерная, дом 52/1; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_018",
+    "raw_address": "Қазақстан, Жетісу ауданы, Алматы қ., Мысал көшесі 52/1 үй; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_019",
+    "raw_address": "Almaty shahri, Zhetisu tumani, Misol ko'chasi, uy 52/1; yetkazishdan oldin xabar bering"
+  },
+  {
+    "id": "kzlang_base_020",
+    "raw_address": "Almaty, Zhetyssuskiy rayon; Primernaya ulitsa, dom52/1; pered dostavkoy napishite"
+  },
+  {
+    "id": "kzlang_base_021",
+    "raw_address": "Казахстан, Алматы — Медеуский район — переулок Черновой, дом 67; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_022",
+    "raw_address": "Қазақстан, Алматы қ. Медеу ауданы Нобай тұйығы 67 үй; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_023",
+    "raw_address": "Almaty shahri, Medeu tumani, Qoralama ko'chasi, 67-uy; yetkazishdan oldin xabar bering"
+  },
+  {
+    "id": "kzlang_base_024",
+    "raw_address": "Almaty Medeeuskiy r-on Chernovoy pereulok67; pered dostavkoy napishite"
+  },
+  {
+    "id": "kzlang_base_025",
+    "raw_address": "Казахстан, Алматы, Наурызбайский район, ул. Бумажная, д 74, этаж 4; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_026",
+    "raw_address": "Қазақстан, Алматы қаласы, Наурызбай ауданы, Қағаз көшесі 74 үй, 4 қабат; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_027",
+    "raw_address": "Almaty shahri, Nauryzbay tumani, Qogoz ko'chasi, uy 74, qavat 4; yetkazishdan oldin xabar bering"
+  },
+  {
+    "id": "kzlang_base_028",
+    "raw_address": "Almaty, Nauryzbayskiyy r-n, Bumazhnaya ul., d74 etazh4; pered dostavkoy napishite"
+  },
+  {
+    "id": "kzlang_base_029",
+    "raw_address": "Казахстан, Турксибский район, г. Алматы, ул. Эскизная, д 86, ориентир: тестовый киоск; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_030",
+    "raw_address": "Қазақстан, Алматы, Түрксіб ауданы, Сұлба көшесі, 86 үй, сынақ дүңгіршегінің артында; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_031",
+    "raw_address": "Almaty shahri, Turksib tumani, Chizma ko'chasi, 86 uy, sinov kioski orqasida; yetkazishdan oldin xabar bering"
+  },
+  {
+    "id": "kzlang_base_032",
+    "raw_address": "Almaty Turksibbskiy r-n Eskiznaya ul.86 za testovym kioskom; pered dostavkoy napishite"
+  },
+  {
+    "id": "kzlang_base_033",
+    "raw_address": "Казахстан, Шымкент, Абайский район, ул. Макетная, д 91, кв 8; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_034",
+    "raw_address": "Қазақстан, Шымкент қаласы, Абай ауданы, Үлгі көшесі 91 үй, 8 пәтер; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_035",
+    "raw_address": "Shymkent shahri, Abay tumani, Namuna ko'chasi, 91 uy, 8 xonadon; yetkazishdan oldin xabar bering"
+  },
+  {
+    "id": "kzlang_base_036",
+    "raw_address": "Shymkent, Abaysskiy r-on, Maketnaya ulitsa91 kv8; pered dostavkoy napishite"
+  },
+  {
+    "id": "kzlang_base_037",
+    "raw_address": "Казахстан, Шымкент, Аль-Фарабийский район, ул. Учебная, д. 104; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_038",
+    "raw_address": "Қазақстан, 104 үй, Оқу көшесі, Әл Фараби ауданы, Шымкент қ.; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_039",
+    "raw_address": "Shymkent shahri, Al-Farabi tumani, Oquv ko'chasi, 104-uy; yetkazishdan oldin xabar bering"
+  },
+  {
+    "id": "kzlang_base_040",
+    "raw_address": "Shymkent, Al-Farabiyskiyy r-n, Uchebnaya ul.104; pered dostavkoy napishite"
+  },
+  {
+    "id": "kzlang_base_041",
+    "raw_address": "Казахстан, г. Шымкент, Енбекшинский район, ул. Тестовая, дом 116, вход со двора; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_042",
+    "raw_address": "Қазақстан, Шымкент қ., Еңбекші ауданы, Сынақ көшесі 116 үй, аула жақтан кіріңіз; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_043",
+    "raw_address": "Shymkent shahri, Enbekshi tumani, Sinov ko'chasi, 116-uy, hovli tomonidan kiring; yetkazishdan oldin xabar bering"
+  },
+  {
+    "id": "kzlang_base_044",
+    "raw_address": "Shymkent Enbekshinnskiy rayon Testovaya ul.116 vkhod so dvora; pered dostavkoy napishite"
+  },
+  {
+    "id": "kzlang_base_045",
+    "raw_address": "Казахстан, Шымкент, Каратауский р-н, улица Условная, д 127, кв 9; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_046",
+    "raw_address": "Қазақстан, Шымкент қаласы; Қаратау ауданы; Шартты көшесі; 127 үй; 9 пәтер; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_047",
+    "raw_address": "Shymkent, Qaratau tumani, Shartli ko'chasi, 127 uy, 9 xonadon; yetkazishdan oldin xabar bering"
+  },
+  {
+    "id": "kzlang_base_048",
+    "raw_address": "Shymkent, Karatausskiy r-n, Uslovnaya ulitsa127 kv9; pered dostavkoy napishite"
+  },
+  {
+    "id": "kzlang_base_049",
+    "raw_address": "Казахстан, Шымкент, район Тұран, ул. Примерная, дом 138; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_050",
+    "raw_address": "Қазақстан, Шымкент, Тұран ауданы, Мысал көшесі, 138 үй; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_051",
+    "raw_address": "Shymkent shahri, Turan tumani, Misol ko'chasi, 138-uy; yetkazishdan oldin xabar bering"
+  },
+  {
+    "id": "kzlang_base_052",
+    "raw_address": "Shymkent, rayonn Turan, Primernaya ul.138; pered dostavkoy napishite"
+  },
+  {
+    "id": "kzlang_base_053",
+    "raw_address": "Казахстан, Алматы, ул. Алмалинская, дом 149, напротив кафе «Ауэзовский район»; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_054",
+    "raw_address": "Қазақстан, Алматы қ., Бостандық көшесі 149 үй, «Медеу ауданы» кафесінің артында; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_055",
+    "raw_address": "Shymkent shahri, Abay ko'chasi, 149-uy, «Turan tumani» kafesi yonida; «Mongoliya» do'koniga yetkazishdan oldin qo'ng'iroq qiling"
+  },
+  {
+    "id": "kzlang_base_056",
+    "raw_address": "Shymkent, ul.Al-Farabi, dom149, ryadom s magazinom «Karatauskiy rayon»; pered dostavkoy pozvonite v magazin «Mongoliya»"
+  },
+  {
+    "id": "kzlang_base_057",
+    "raw_address": "Казахстан, Алматы, ул. Черновая, д 153; перед доставкой позвоните в магазин «Турксибский район»; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_058",
+    "raw_address": "Қазақстан, Алматы, Нобай көшесі 153 үй; қоңырауда «Наурызбай ауданы» деген құпия сөзді айтыңыз; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_059",
+    "raw_address": "Shymkent, Qoralama ko'chasi, 153 uy; qo'ng'iroqda «Enbekshi tumani» parolini ayting; «Mongoliya» do'koniga yetkazishdan oldin qo'ng'iroq qiling"
+  },
+  {
+    "id": "kzlang_base_060",
+    "raw_address": "Almaty, Chernovaya ulitsa153; kodovaya fraza dlya kurera «Alatauskiy rayon»; pered dostavkoy pozvonite v magazin «Mongoliya»"
+  },
+  {
+    "id": "kzlang_base_061",
+    "raw_address": "Казахстан, Алматы, Каратауский район, ул. Бумажная, дом 164; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_062",
+    "raw_address": "Қазақстан, Шымкент қ., Бостандық ауданы, Қағаз көшесі 164 үй; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_063",
+    "raw_address": "Almaty shahri, Enbekshi tumani, Qogoz ko'chasi, uy 164; «Mongoliya» do'koniga yetkazishdan oldin qo'ng'iroq qiling"
+  },
+  {
+    "id": "kzlang_base_064",
+    "raw_address": "Shymkent, Medeusskiy rayon, Bumazhnaya ul., dom164; pered dostavkoy pozvonite v magazin «Mongoliya»"
+  },
+  {
+    "id": "kzlang_base_065",
+    "raw_address": "Казахстан, Алматы, Алмалинский район, Ауэзовский район, ул. Эскизная, д 175; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_066",
+    "raw_address": "Қазақстан, Шымкент, Абай ауданы, Тұран ауданы, Сұлба көшесі 175 үй; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_067",
+    "raw_address": "Almaty shahri, Alatau tumani, Nauryzbay tumani, Chizma ko'chasi, 175 uy; «Mongoliya» do'koniga yetkazishdan oldin qo'ng'iroq qiling"
+  },
+  {
+    "id": "kzlang_base_068",
+    "raw_address": "Shymkent, Al-Farabiyskiy r-n, Karatausskiy r-n, Eskiznaya ul.175; pered dostavkoy pozvonite v magazin «Mongoliya»"
+  },
+  {
+    "id": "kzlang_base_069",
+    "raw_address": "Қазақстан, Алматы, Медеуский район / Медеу ауданы, ул. Макетная, д 186; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_070",
+    "raw_address": "Қазақстан, Шымкент, Тұран ауданы (район Тұран), Үлгі көшесі 186 үй; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_071",
+    "raw_address": "Almaty shahri, Almaly tumani, Almaly tumani, Namuna ko'chasi, 186 uy; yetkazishdan oldin xabar bering"
+  },
+  {
+    "id": "kzlang_base_072",
+    "raw_address": "Shymkent, Enbekshinskiy rayon / Enbekshi audany, Maketnaya ul.186; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_073",
+    "raw_address": "Казахстан, Алматы, ул. Учебная, д 197, кв 5; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_074",
+    "raw_address": "Қазақстан, Шымкент қ., Оқу көшесі 197 үй, 5 пәтер; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_075",
+    "raw_address": "Almaty shahri, Oquv ko'chasi, 197-uy, 5-xonadon; yetkazishdan oldin xabar bering"
+  },
+  {
+    "id": "kzlang_base_076",
+    "raw_address": "Shymkent Uchebnaya ulitsa197 kv5; pered dostavkoy napishite"
+  },
+  {
+    "id": "kzlang_base_077",
+    "raw_address": "Казахстан, Абайский район, ул. Тестовая, дом 208; перед доставкой напишите"
+  },
+  {
+    "id": "kzlang_base_078",
+    "raw_address": "Қазақстан, Абай ауданы, Сынақ көшесі, 208 үй; жеткізер алдында хабарласыңыз"
+  },
+  {
+    "id": "kzlang_base_079",
+    "raw_address": "Abay tumani, Sinov ko'chasi, 208 uy; yetkazishdan oldin xabar bering"
+  },
+  {
+    "id": "kzlang_base_080",
+    "raw_address": "Abayskiy r-n Testovaya ul.dom208; pered dostavkoy napishite"
+  },
+  {
+    "id": "kzlang_ky_001",
+    "raw_address": "Казакстан, Алматы шаары, Алмалы району, Үлгү көчөсү, 12 үй, 3 батир, үлгү дүкөнүнүн жанында"
+  },
+  {
+    "id": "kzlang_ky_002",
+    "raw_address": "3-батир, 12-үй, Үлгү көчөсү, Алмалы району, Алматы; үлгү дүкөнүнүн артында"
+  },
+  {
+    "id": "kzlang_ky_003",
+    "raw_address": "Almaty shaary, Almaly rayonu, Ulgu kochosu12 uy, 3 batir, ulgu dukonunun zhanynda"
+  },
+  {
+    "id": "kzlang_ky_004",
+    "raw_address": "Алмaты, Алмалы рaйону, Үлгү көчөсү12үй, батир3; үлгү дүкөнүнүн жанында"
+  },
+  {
+    "id": "kzlang_ky_005",
+    "raw_address": "Алматы шаары, Алатау району, Өрнөк көчөсү, 24 үй; окуу күркөсүнүн маңдайында"
+  },
+  {
+    "id": "kzlang_ky_006",
+    "raw_address": "24 үй, Өрнөк көчөсү, Алатау району, Алматы; окуу күркөсүнүн жанында күтүңүз"
+  },
+  {
+    "id": "kzlang_ky_007",
+    "raw_address": "Almaty, Alatau rayonu, Ornok kochosu, 24 uy, okuu kurkosunun mandaiynda"
+  },
+  {
+    "id": "kzlang_ky_008",
+    "raw_address": "Алматы Алатау районну Өрнөk көчөсү24 үй окуу күркөсүнүн маңдайында"
+  },
+  {
+    "id": "kzlang_ky_009",
+    "raw_address": "Казакстан, Алматы, Әуезов району, Окуу көчөсү 31 үй, 2 кире бериш"
+  },
+  {
+    "id": "kzlang_ky_010",
+    "raw_address": "Алматы шаары Әуезов району Окуу көчөсү31үй 2-кире бериш; короодон кириңиз"
+  },
+  {
+    "id": "kzlang_ky_011",
+    "raw_address": "Almaty shaary, Auezov rayonu, Okuu kochosu31 uy 2 kire berish"
+  },
+  {
+    "id": "kzlang_ky_012",
+    "raw_address": "Алматы, Әуeзов райoну, Окуу көчөсү, үй31, подъезд2"
+  },
+  {
+    "id": "kzlang_ky_013",
+    "raw_address": "Алматы, Бостандық району, Шарттуу көчөсү, 45-үй, 6-батир"
+  },
+  {
+    "id": "kzlang_ky_014",
+    "raw_address": "6 батир, үй 45, Шарттуу көчөсү, Бостандық району, Алматы шаары"
+  },
+  {
+    "id": "kzlang_ky_015",
+    "raw_address": "Almaty Bostandyq rayonu Sharttuu kochosu45 uy 6batir"
+  },
+  {
+    "id": "kzlang_ky_016",
+    "raw_address": "Алмaты, Бостанддық району; Шарттуу көчөсү45үй, кв6"
+  },
+  {
+    "id": "kzlang_ky_017",
+    "raw_address": "Казакстан, Алматы шаары, Жетісу району, Сынак көчөсү, 52/1 үй"
+  },
+  {
+    "id": "kzlang_ky_018",
+    "raw_address": "Алматы\nЖетісу району\nСынак көчөсү 52/1 үй\nкеле электе чалыңыз"
+  },
+  {
+    "id": "kzlang_ky_019",
+    "raw_address": "Almaty, Zhetisu rayonu, Synak kochosu52/1 uy"
+  },
+  {
+    "id": "kzlang_ky_020",
+    "raw_address": "Алматы Жетiсу районну Сынак көчөсү52/1 үй, келе электе чалыңыз"
+  },
+  {
+    "id": "kzlang_ky_021",
+    "raw_address": "Алматы шаары, Медеу району, Чийме көчөсү 67 үй, 4 кабат"
+  },
+  {
+    "id": "kzlang_ky_022",
+    "raw_address": "4-кабат, 67-үй, Чийме көчөсү, Медеу району, Алматы"
+  },
+  {
+    "id": "kzlang_ky_023",
+    "raw_address": "Almaty Medeu rayonu Chiime kochosu67 uy 4 kabat"
+  },
+  {
+    "id": "kzlang_ky_024",
+    "raw_address": "Алматы, Медeу району, Чиймме көчөсү67үй, этаж4"
+  },
+  {
+    "id": "kzlang_ky_025",
+    "raw_address": "Казакстан, Алматы, Наурызбай району, Кагаз көчөсү, 74 үй"
+  },
+  {
+    "id": "kzlang_ky_026",
+    "raw_address": "Алматы шаары, Наурызбай району, Кагаз көчөсү 74 үй; эшиктин алдында күтүңүз"
+  },
+  {
+    "id": "kzlang_ky_027",
+    "raw_address": "Almaty, Nauryzbay rayonu, Kagaz kochosu74 uy"
+  },
+  {
+    "id": "kzlang_ky_028",
+    "raw_address": "Алматы, Наурыззбай району, Кагaз көчөсү74үй, эшиктин алдында күтүңүз"
+  },
+  {
+    "id": "kzlang_ky_029",
+    "raw_address": "Алматы, Түрксіб району, Түзмөк көчөсү, 86 үй, 7 батир"
+  },
+  {
+    "id": "kzlang_ky_030",
+    "raw_address": "Алматы шаары Түрксіб району Түзмөк көчөсү86үй 7батир"
+  },
+  {
+    "id": "kzlang_ky_031",
+    "raw_address": "Almaty shaary, Turksib rayonu, Tuzmok kochosu, uy86 batir7"
+  },
+  {
+    "id": "kzlang_ky_032",
+    "raw_address": "Алматы, Түрксiб рaйону; Түзмөк көчөсү86үй, квартира7"
+  },
+  {
+    "id": "kzlang_ky_033",
+    "raw_address": "Казакстан, Шымкент шаары, Тұран району, Нуска көчөсү, 91 үй, үлгү базарынын артында"
+  },
+  {
+    "id": "kzlang_ky_034",
+    "raw_address": "Шымкент, Тұран району, Нуска көчөсү91үй, үлгү базарынын жанында"
+  },
+  {
+    "id": "kzlang_ky_035",
+    "raw_address": "Shymkent Turan rayonu Nuska kochosu91 uy ulgu bazarynyn artynda"
+  },
+  {
+    "id": "kzlang_ky_036",
+    "raw_address": "Шымкeнт, Тұран рaйону, Нуска көчөсү91үй, үлгү базарынын артында"
+  },
+  {
+    "id": "kzlang_ky_037",
+    "raw_address": "Астана шаары, Есіл району, Окуу көчөсү, 104 үй, 8 батир"
+  },
+  {
+    "id": "kzlang_ky_038",
+    "raw_address": "104-үй, 8-батир, Окуу көчөсү, Есіл району, Астана"
+  },
+  {
+    "id": "kzlang_ky_039",
+    "raw_address": "Astana shaary Esil rayonu Okuu kochosu104 uy 8batir"
+  },
+  {
+    "id": "kzlang_ky_040",
+    "raw_address": "Астанa, Есiл району, Окуу көчөсү104үй, кв8"
+  },
+  {
+    "id": "kzlang_ky_041",
+    "raw_address": "Казакстан, Абай облусу, Абай району, Қараауыл айылы, Нуска көчөсү, 116 үй, 5 батир"
+  },
+  {
+    "id": "kzlang_ky_042",
+    "raw_address": "Қараауыл айылы, Абай району, Абай облусу; Нуска көчөсү116үй, батир5"
+  },
+  {
+    "id": "kzlang_ky_043",
+    "raw_address": "Abay oblusu Abay rayonu Qaraauyl aiyly Nuska kochosu116 uy 5 batir"
+  },
+  {
+    "id": "kzlang_ky_044",
+    "raw_address": "Абай облуссу, Абай районну, Қaраауыл, Нуска көчөсү116үй кв5"
+  },
+  {
+    "id": "kzlang_ky_045",
+    "raw_address": "Қарағанды облусу, Абай району, Ақбастау айылы, Шарттуу көчөсү, 127/2 үй"
+  },
+  {
+    "id": "kzlang_ky_046",
+    "raw_address": "Ақбастау, Абай району, Қарағанды облусу; Шарттуу көчөсү127/2үй, короодон кириңиз"
+  },
+  {
+    "id": "kzlang_ky_047",
+    "raw_address": "Qaragandy oblusu Abay rayonu Aqbastau aiyly Sharttuu kochosu127/2 uy"
+  },
+  {
+    "id": "kzlang_ky_048",
+    "raw_address": "Қарағанды oблусу Абай районну Ақбaстау Шарттуу көчөсү127/2үй"
+  },
+  {
+    "id": "kzlang_ky_049",
+    "raw_address": "Казакстан, Түндүк Казакстан облусу, Есіл району, Явленка айылы, Чийме көчөсү, 138 үй"
+  },
+  {
+    "id": "kzlang_ky_050",
+    "raw_address": "Явленка айылы, Есіл району, Түндүк Казакстан облусу; Чийме көчөсү138үй"
+  },
+  {
+    "id": "kzlang_ky_051",
+    "raw_address": "Tunduk Kazakstan oblusu Esil rayonu Yavlenka aiyly Chiime kochosu138 uy"
+  },
+  {
+    "id": "kzlang_ky_052",
+    "raw_address": "Түндүк Казакстан облуссу, Есiл району, Явленкa, Чийме көчөсү138үй"
+  },
+  {
+    "id": "kzlang_ky_053",
+    "raw_address": "Алматы облусу, Балқаш району, Бақанас айылы, Мисал көчөсү, 149 үй, үлгү мектебинин жанында"
+  },
+  {
+    "id": "kzlang_ky_054",
+    "raw_address": "Бақанас, Балқаш району, Алматы облусу; Мисал көчөсү149үй, үлгү мектебинин артында"
+  },
+  {
+    "id": "kzlang_ky_055",
+    "raw_address": "Almaty oblusu Balqash rayonu Baqanas aiyly Misal kochosu149 uy ulgu mektebinin zhanynda"
+  },
+  {
+    "id": "kzlang_ky_056",
+    "raw_address": "Алматы облуссу, Балқaш району, Бақанaс, Мисал көчөсү149үй, үлгү мектебинин жанында"
+  },
+  {
+    "id": "kzlang_ky_057",
+    "raw_address": "Алматы шаары, Үлгү көчөсү, 153 үй; «Кыргызстан» кафесинин артында"
+  },
+  {
+    "id": "kzlang_ky_058",
+    "raw_address": "Шымкент, Үлгү көчөсү153үй, «Бишкек» дүкөнүнүн жанында"
+  },
+  {
+    "id": "kzlang_ky_059",
+    "raw_address": "Astana shaary Ulgu kochosu153 uy «Toshkent» kafesinin artynda"
+  },
+  {
+    "id": "kzlang_ky_060",
+    "raw_address": "Алмaты, Үлгү көчөсү153үй, рядом с магазином «Монголия»"
+  },
+  {
+    "id": "kzlang_ky_061",
+    "raw_address": "Алматы шаары, «Алмалы району» көчөсү, 164 үй, 9 батир"
+  },
+  {
+    "id": "kzlang_ky_062",
+    "raw_address": "Астана, «Есіл району» көчөсү164үй; «Сарыарқа району» кафесинин жанында"
+  },
+  {
+    "id": "kzlang_ky_063",
+    "raw_address": "Shymkent, «Turan rayonu» kochosu164 uy, 9 batir"
+  },
+  {
+    "id": "kzlang_ky_064",
+    "raw_address": "Алматы, «Әуeзов району» көчөсү164үй, кв9"
+  },
+  {
+    "id": "kzlang_ky_065",
+    "raw_address": "Алматы, Кагаз көчөсү, 175 үй; «Бишкекке» жөнөтпөңүз"
+  },
+  {
+    "id": "kzlang_ky_066",
+    "raw_address": "Астана шаары, Кагаз көчөсү175үй; «Кыргызстан» деген жазууга карап шаарды өзгөртпөңүз"
+  },
+  {
+    "id": "kzlang_ky_067",
+    "raw_address": "Shymkent, Kagaz kochosu175 uy; «Dushanbe» daregi emes, al zhakka zhonotponguz"
+  },
+  {
+    "id": "kzlang_ky_068",
+    "raw_address": "Алмaты, Кагaз көчөсү175үй; не отправляйте по надписи «Улан-Батор»"
+  },
+  {
+    "id": "kzlang_ky_069",
+    "raw_address": "Алматы шаары, Қаратау району, Өрнөк көчөсү, 186 үй"
+  },
+  {
+    "id": "kzlang_ky_070",
+    "raw_address": "Абай облусу, Қарағанды облусу, Абай району, Қараауыл айылы, Өрнөк көчөсү186үй"
+  },
+  {
+    "id": "kzlang_ky_071",
+    "raw_address": "Shymkent shaary Medeu rayonu Ornok kochosu186 uy"
+  },
+  {
+    "id": "kzlang_ky_072",
+    "raw_address": "Алмaты, Астанa, Өрнөк көчөсү186үй"
+  },
+  {
+    "id": "kzlang_ky_073",
+    "raw_address": "Астана, Есіл району, Нұра району, Окуу көчөсү, 197 үй"
+  },
+  {
+    "id": "kzlang_ky_074",
+    "raw_address": "Алматы шаары, Алмалы району, Медеу району, Окуу көчөсү197үй"
+  },
+  {
+    "id": "kzlang_ky_075",
+    "raw_address": "Astana Esil rayonu Nura rayonu Okuu kochosu197 uy"
+  },
+  {
+    "id": "kzlang_ky_076",
+    "raw_address": "Алматы, Алмaлы районну, Медеу району, Окуу көчөсү197үй"
+  },
+  {
+    "id": "kzlang_ky_077",
+    "raw_address": "Казакстан, Абай району, Сынак көчөсү, 208 үй"
+  },
+  {
+    "id": "kzlang_ky_078",
+    "raw_address": "Есіл району, Сынак көчөсү208үй"
+  },
+  {
+    "id": "kzlang_ky_079",
+    "raw_address": "Abay rayonu Synak kochosu208 uy"
+  },
+  {
+    "id": "kzlang_ky_080",
+    "raw_address": "Есiл рaйону, Сынак көчөсү208үй"
+  },
+  {
+    "id": "kzlang_uz_001",
+    "raw_address": "Qozog'iston, Almaty shahri, Almaly tumani, Namuna ko'chasi, 12-uy, 5-xonadon; bozor ortida"
+  },
+  {
+    "id": "kzlang_uz_002",
+    "raw_address": "Қозоғистон, Алматы шаҳри, Алмалы тумани, Намуна кўчаси 12-уй, 5-хонадон, бозор ортида"
+  },
+  {
+    "id": "kzlang_uz_003",
+    "raw_address": "Almaty, Almalinskiy rayon, Uchebnaya ulitsa, dom12 kv5; kirish hovlidan"
+  },
+  {
+    "id": "kzlang_uz_004",
+    "raw_address": "Алмaты, улица «Алмалы тумани», д12; за кафе «Ташкент, Узбекистан»"
+  },
+  {
+    "id": "kzlang_uz_005",
+    "raw_address": "Astana shahri, Saryarka tumani, Sinov ko'chasi, 8B-uy, 2-kirish; dorixona qarshisida"
+  },
+  {
+    "id": "kzlang_uz_006",
+    "raw_address": "Астана шаҳри, Сарыарқа тумани, Синов кўчаси, 8Б-уй, 2-кириш, дорихона қаршисида"
+  },
+  {
+    "id": "kzlang_uz_007",
+    "raw_address": "Astana, rayon Saryarka, Probnaya ul., dom8B, podezd2; eshik yonida kuting"
+  },
+  {
+    "id": "kzlang_uz_008",
+    "raw_address": "Астaна, Пробная ул8Б; у павильона «Сарыарқа ауданы — Бишкек»"
+  },
+  {
+    "id": "kzlang_uz_009",
+    "raw_address": "Qozog'iston, Shymkent shahri, Abay tumani, Namuna ko'chasi, 27/2-uy, 6-xonadon; maktab yonida"
+  },
+  {
+    "id": "kzlang_uz_010",
+    "raw_address": "Қозоғистон, Шымкент шаҳри, Абай тумани, Намуна кўчаси 27/2-уй, 6-хонадон; мактаб ёнида"
+  },
+  {
+    "id": "kzlang_uz_011",
+    "raw_address": "Shymkent, Abayskiy rayon, Maketnaya ulitsa27/2, kv6; chap eshikdan kiring"
+  },
+  {
+    "id": "kzlang_uz_012",
+    "raw_address": "Шымkент, Макетная улица27/2; не в кафе «Абайский район / Душанбе», вход справа"
+  },
+  {
+    "id": "kzlang_uz_013",
+    "raw_address": "Abay viloyati, Abay tumani, Karaaul qishlog'i, Sinov ko'chasi, 5A-uy; bozor ortida"
+  },
+  {
+    "id": "kzlang_uz_014",
+    "raw_address": "Абай вилояти, Абай тумани, Қараауыл қишлоғи, Синов кўчаси 5А-уй, бозор ортида"
+  },
+  {
+    "id": "kzlang_uz_015",
+    "raw_address": "oblast Abay, Abayskiy rayon, Karaaul, Primernaya ulitsa5A; hovliga kiring"
+  },
+  {
+    "id": "kzlang_uz_016",
+    "raw_address": "область Абай, Караaул, улица «Абайский район», д5А; напротив кафе «Улан-Батор»"
+  },
+  {
+    "id": "kzlang_uz_017",
+    "raw_address": "Akmola viloyati, Akkol tumani, Radovka qishlog'i, Namuna ko'chasi, 46-uy, 10-xonadon"
+  },
+  {
+    "id": "kzlang_uz_018",
+    "raw_address": "Ақмола вилояти, Ақкөл тумани, Радовка қишлоғи, Намуна кўчаси 46-уй, 10-хонадон"
+  },
+  {
+    "id": "kzlang_uz_019",
+    "raw_address": "Akmolinskaya oblast, Akkolskiy rayon, Radovka, Uchebnyy pereulok, dom46, kv10"
+  },
+  {
+    "id": "kzlang_uz_020",
+    "raw_address": "Акмолинская область, Радоbка, Учебный пер46; за магазином «Ақкөл ауданы / Ташкент»"
+  },
+  {
+    "id": "kzlang_uz_021",
+    "raw_address": "Aktobe viloyati, Alga tumani, Eset batyr Kokiuly qishlog'i, Sinov ko'chasi 31-uy, 2-kirish"
+  },
+  {
+    "id": "kzlang_uz_022",
+    "raw_address": "Ақтөбе вилояти, Алға тумани, Есет батыр Көкіұлы қишлоғи, Синов кўчаси 31-уй, 2-кириш"
+  },
+  {
+    "id": "kzlang_uz_023",
+    "raw_address": "Aktyubinskaya oblast, Alginskiy r-n, Eset batyra Kokiuly, Uslovnaya ulitsa31, podezd2"
+  },
+  {
+    "id": "kzlang_uz_024",
+    "raw_address": "Актюбинская область, Есет батыра Кокиулы, Условнaя ул31; кафе «Бишкек, Алгинский район» рядом"
+  },
+  {
+    "id": "kzlang_uz_025",
+    "raw_address": "Almaty viloyati, Balqash tumani, Bakanas qishlog'i, Namuna ko'chasi 19A-uy, 4-xonadon"
+  },
+  {
+    "id": "kzlang_uz_026",
+    "raw_address": "Алматы вилояти, Балқаш тумани, Бақанас қишлоғи, Намуна кўчаси 19А-уй, 4-хонадон"
+  },
+  {
+    "id": "kzlang_uz_027",
+    "raw_address": "Almatinskaya oblast, Balkhashskiy rayon, Bakanas, Maketnaya ulitsa, dom19A, kv4; bozor ortida"
+  },
+  {
+    "id": "kzlang_uz_028",
+    "raw_address": "Алматинская область, Баkанас, улица «Балқаш тумани», дом19А; рядом кафе «Душанбе»"
+  },
+  {
+    "id": "kzlang_uz_029",
+    "raw_address": "Atyrau viloyati, Zhylyoy tumani, Akkiztogay qishlog'i, Sinov ko'chasi 63-uy, 12-xonadon"
+  },
+  {
+    "id": "kzlang_uz_030",
+    "raw_address": "Атырау вилояти, Жылыой тумани, Ақкиізтоғай қишлоғи, Синов кўчаси 63-уй, 12-хонадон"
+  },
+  {
+    "id": "kzlang_uz_031",
+    "raw_address": "Atyrauskaya oblast, Zhylyoyskiy rayon, Akkiztogay, Probnaya ulitsa63, kv12; eshik yonida kuting"
+  },
+  {
+    "id": "kzlang_uz_032",
+    "raw_address": "Атырауская область, Аккизтогaй, Пробная ул63; за магазином «Жылыой ауданы, Самарканд»"
+  },
+  {
+    "id": "kzlang_uz_033",
+    "raw_address": "G'arbiy Qozog'iston viloyati, Akzhayyk tumani, Chapayev qishlog'i, Namuna ko'chasi 22A-uy"
+  },
+  {
+    "id": "kzlang_uz_034",
+    "raw_address": "Ғарбий Қозоғистон вилояти, Ақжайық тумани, Чапаев қишлоғи, Намуна кўчаси 22А-уй"
+  },
+  {
+    "id": "kzlang_uz_035",
+    "raw_address": "Zapadno-Kazakhstanskaya oblast, Akzhaikskiy rayon, Chapayev, Uchebnaya ulitsa22A; maktab yonida"
+  },
+  {
+    "id": "kzlang_uz_036",
+    "raw_address": "Ақжайық тумани, Бейнеу тумaни, Учебная ул22А"
+  },
+  {
+    "id": "kzlang_uz_037",
+    "raw_address": "Zhambyl viloyati, Bayzak tumani, Sarykemer qishlog'i, Sinov ko'chasi 74-uy, 9-xonadon"
+  },
+  {
+    "id": "kzlang_uz_038",
+    "raw_address": "Жамбыл вилояти, Байзақ тумани, Сарыкемер қишлоғи, Синов кўчаси74 уй9 хонадон"
+  },
+  {
+    "id": "kzlang_uz_039",
+    "raw_address": "Zhambylskaya oblast, Bayzakskiy r-n, Sarykemer, Uslovnaya ul., d74 kv9"
+  },
+  {
+    "id": "kzlang_uz_040",
+    "raw_address": "Жамбыл вилояти, Ақмола вилояти, Байзaқ тумани, Сарыкемер, Условная ул74"
+  },
+  {
+    "id": "kzlang_uz_041",
+    "raw_address": "Zhetisu viloyati, Aksu tumani, Altynaryk qishlog'i, Namuna ko'chasi, 11/3-uy, 7-xonadon"
+  },
+  {
+    "id": "kzlang_uz_042",
+    "raw_address": "Жетісу вилояти, Ақсу тумани, Алтынарық қишлоғи, Намуна кўчаси11/3 уй7 хонадон"
+  },
+  {
+    "id": "kzlang_uz_043",
+    "raw_address": "oblast Zhetisu, Aksuskiy rayon, Altynaryk, Maketnaya ulitsa, dom11/3 kv7; darvoza yonida kuting"
+  },
+  {
+    "id": "kzlang_uz_044",
+    "raw_address": "Жетісу вилояти, Ақсу тумaни, Байзақ тумани, Макетная ул11/3"
+  },
+  {
+    "id": "kzlang_uz_045",
+    "raw_address": "Karagandy viloyati, Abay tumani, Akbastau qishlog'i, Sinov ko'chasi 9B-uy, 4-kirish"
+  },
+  {
+    "id": "kzlang_uz_046",
+    "raw_address": "Қарағанды вилояти, Абай тумани, Ақбастау қишлоғи, Синов кўчаси 9Б-уй, 4-кириш"
+  },
+  {
+    "id": "kzlang_uz_047",
+    "raw_address": "Karagandinskaya oblast, Abayskiy r-n, Akbastau, Primernaya ulitsa9B, podezd4; bozor ortida"
+  },
+  {
+    "id": "kzlang_uz_048",
+    "raw_address": "Abаy tumani, Sinov ko'chasi9B"
+  },
+  {
+    "id": "kzlang_uz_049",
+    "raw_address": "Kostanay viloyati, Altynsarin tumani, Silantyevka qishlog'i, Namuna ko'chasi 35-uy; dorixona qarshisida"
+  },
+  {
+    "id": "kzlang_uz_050",
+    "raw_address": "Қостанай вилояти, Алтынсарин тумани, Силантьевка қишлоғи, Намуна кўчаси35 уй; дорихона қаршисида"
+  },
+  {
+    "id": "kzlang_uz_051",
+    "raw_address": "Kostanayskaya oblast, Altynsarinskiy rayon, Silantyevka, Uchebnaya ulitsa35; kirish hovlidan"
+  },
+  {
+    "id": "kzlang_uz_052",
+    "raw_address": "Қостанай вилояти, Атырау вилояти, Алтынсaрин тумани, Силантьевка, Учебная ул35"
+  },
+  {
+    "id": "kzlang_uz_053",
+    "raw_address": "Kyzylorda viloyati, Aral tumani, Akbay qishlog'i, Sinov ko'chasi 4A-uy, 3-qavat"
+  },
+  {
+    "id": "kzlang_uz_054",
+    "raw_address": "Қызылорда вилояти, Арал тумани, Ақбай қишлоғи, Синов кўчаси 4А-уй, 3-қават"
+  },
+  {
+    "id": "kzlang_uz_055",
+    "raw_address": "Kyzylordinskaya oblast, Aralskiy rayon, Akbay, Uslovnyy pereulok4A, etazh3; hovliga kiring"
+  },
+  {
+    "id": "kzlang_uz_056",
+    "raw_address": "Арал тумaни, Чапаев қишлоғи, Условный пер4А"
+  },
+  {
+    "id": "kzlang_uz_057",
+    "raw_address": "Mangystau viloyati, Beyneu tumani, Akzhigit qishlog'i, Namuna ko'chasi 62-uy; maktab yonida"
+  },
+  {
+    "id": "kzlang_uz_058",
+    "raw_address": "Маңғыстау вилояти, Бейнеу тумани, Ақжігіт қишлоғи, Намуна кўчаси62 уй; мактаб ёнида"
+  },
+  {
+    "id": "kzlang_uz_059",
+    "raw_address": "Mangistauskaya oblast, Beyneuskiy rayon, Akzhigit, Maketnaya ulitsa62; eshik yonida kuting"
+  },
+  {
+    "id": "kzlang_uz_060",
+    "raw_address": "Бейнеу тумaни, Ақжайық тумани, Макетная ул62"
+  },
+  {
+    "id": "kzlang_uz_061",
+    "raw_address": "Pavlodar viloyati, Aktogay tumani, Zholaman qishlog'i, Sinov ko'chasi 16B-uy, 2-xonadon"
+  },
+  {
+    "id": "kzlang_uz_062",
+    "raw_address": "Павлодар вилояти, Ақтоғай тумани, Жоламан қишлоғи, Синов кўчаси 16Б-уй, 2-хонадон"
+  },
+  {
+    "id": "kzlang_uz_063",
+    "raw_address": "Pavlodarskaya oblast, Aktogayskiy rayon, Zholaman, Primernaya ulitsa16B, kv2; chap eshikdan kiring"
+  },
+  {
+    "id": "kzlang_uz_064",
+    "raw_address": "Aktogаy tumani, Aktogay qishlog'i, Sinov ko'chasi16B"
+  },
+  {
+    "id": "kzlang_uz_065",
+    "raw_address": "Shimoliy Qozog'iston viloyati, Ayyrtau tumani, Novoukrainka qishlog'i, Namuna ko'chasi 48/1-uy, 5-xonadon"
+  },
+  {
+    "id": "kzlang_uz_066",
+    "raw_address": "Шимолий Қозоғистон вилояти, Айыртау тумани, Новоукраинка қишлоғи, Намуна кўчаси 48/1-уй, 5-хонадон"
+  },
+  {
+    "id": "kzlang_uz_067",
+    "raw_address": "Severo-Kazakhstanskaya oblast, Ayyrtauskiy rayon, Novoukrainka, Uchebnaya ul., d48/1 kv5"
+  },
+  {
+    "id": "kzlang_uz_068",
+    "raw_address": "Северо-Казахстанская область, Жетісу вилояти, Айыртaу тумани, Новоукраинка, Учебная ул48/1"
+  },
+  {
+    "id": "kzlang_uz_069",
+    "raw_address": "Turkistan viloyati, Zhetisay tumani, Khalyktar dostygy qishlog'i, Sinov ko'chasi 7A-uy; bozor ortida"
+  },
+  {
+    "id": "kzlang_uz_070",
+    "raw_address": "Түркістан вилояти, Жетісай тумани, Халықтар достығы қишлоғи, Синов кўчаси 7А-уй, бозор ортида"
+  },
+  {
+    "id": "kzlang_uz_071",
+    "raw_address": "Turkestanskaya oblast, Zhetysayskiy rayon, Khalyktar dostygy, Uslovnaya ulitsa7A; darvoza yonida kuting"
+  },
+  {
+    "id": "kzlang_uz_072",
+    "raw_address": "Туркестанская область, Жетісaй тумани, Сарыағаш тумани, Условная ул7А"
+  },
+  {
+    "id": "kzlang_uz_073",
+    "raw_address": "Ulytau viloyati, Zhanaarka tumani, Zhanaarka, Namuna ko'chasi 84-uy, 3-kirish"
+  },
+  {
+    "id": "kzlang_uz_074",
+    "raw_address": "Ұлытау вилояти, Жаңаарқа тумани, Жаңаарқа, Намуна кўчаси 84-уй, 3-кириш"
+  },
+  {
+    "id": "kzlang_uz_075",
+    "raw_address": "oblast Ulytau, Zhanaarkinskiy rayon, Zhanaarka, Maketnaya ulitsa84, podezd3; kirish hovlidan"
+  },
+  {
+    "id": "kzlang_uz_076",
+    "raw_address": "Ұлытау вилояти, Zhanaаrka tumani, Чапаев қишлоғи, Макетная ул84"
+  },
+  {
+    "id": "kzlang_uz_077",
+    "raw_address": "Sharqiy Qozog'iston viloyati, Glubokoe tumani, Glubokoe qishlog'i, Sinov ko'chasi 29A-uy, 15-xonadon"
+  },
+  {
+    "id": "kzlang_uz_078",
+    "raw_address": "Шарқий Қозоғистон вилояти, Глубокое тумани, Глубокое қишлоғи, Синов кўчаси 29А-уй, 15-хонадон"
+  },
+  {
+    "id": "kzlang_uz_079",
+    "raw_address": "Vostochno-Kazakhstanskaya oblast, Glubokovskiy rayon, Glubokoe, Primernaya ulitsa29A, kv15"
+  },
+  {
+    "id": "kzlang_uz_080",
+    "raw_address": "Шарқий Қозоғистон вилояти, Жамбыл вилояти, Глубокоbский район, Глубокое, Примерная ул29А, кв15"
+  },
+  {
+    "id": "kzlang_tg_001",
+    "raw_address": "шаҳри Астана, ноҳияи Алматы, кӯчаи Озмоишии Ҷӯй, хонаи 12, назди бозори «Намуна»"
+  },
+  {
+    "id": "kzlang_tg_002",
+    "raw_address": "ноҳияи Алматы, Астана, хонаи 23 дар кӯчаи Озмоишии Ҷӯй, квартираи 4"
+  },
+  {
+    "id": "kzlang_tg_003",
+    "raw_address": "Astana nohiyai Almaty kuchai Ozmoishii Juy khonai34 kv5"
+  },
+  {
+    "id": "kzlang_tg_004",
+    "raw_address": "Астана нохияи Алматты ул. Озмоишии Ҷӯй 45 кв6"
+  },
+  {
+    "id": "kzlang_tg_005",
+    "raw_address": "Астана, ноҳияи Есіл, кӯчаи Озмоишии Баҳор, хонаи 16, паси дорухонаи «Лола»"
+  },
+  {
+    "id": "kzlang_tg_006",
+    "raw_address": "кӯчаи Озмоишии Баҳор, 27 хона, ноҳияи Есіл, шаҳри Астана, даромадгоҳи 2"
+  },
+  {
+    "id": "kzlang_tg_007",
+    "raw_address": "Astana, nohiyai Esil, kuchai Ozmoishii Bahor, khonai38, kv7"
+  },
+  {
+    "id": "kzlang_tg_008",
+    "raw_address": "Astana, ноҳияи Ессіл, Озмоишии Баҳор ул.49 подъезд3"
+  },
+  {
+    "id": "kzlang_tg_009",
+    "raw_address": "шаҳри Астана, ноҳияи Сарыарқа, кӯчаи Озмоишии Гул, хонаи 18, дар паҳлӯи дӯкони «Баҳор»"
+  },
+  {
+    "id": "kzlang_tg_010",
+    "raw_address": "Астана\nноҳияи Сарыарқа\nкӯчаи Озмоишии Гул, хонаи 29, ошёнаи 4"
+  },
+  {
+    "id": "kzlang_tg_011",
+    "raw_address": "Astana nohiyai Saryarqa kuchai Ozmoishii Gul khonai40 kv8"
+  },
+  {
+    "id": "kzlang_tg_012",
+    "raw_address": "Астана, нoҳияи Сарыарққа, ул. Озмоишии Гул, д51 этаж5"
+  },
+  {
+    "id": "kzlang_tg_013",
+    "raw_address": "Астана, ноҳияи Байқоңыр, кӯчаи Озмоишии Барг 21, рӯ ба рӯи мактаби «Намуна»"
+  },
+  {
+    "id": "kzlang_tg_014",
+    "raw_address": "хонаи 32, кӯчаи Озмоишии Барг, ноҳияи Байқоңыр, Астана, квартираи 9"
+  },
+  {
+    "id": "kzlang_tg_015",
+    "raw_address": "Astana, nohiyai Bayqonyr, kuchai Ozmoishii Barg, 43 khona, kv10"
+  },
+  {
+    "id": "kzlang_tg_016",
+    "raw_address": "Астана район Байқоnыр кӯчаи Озмоишии Барг 54 кв11"
+  },
+  {
+    "id": "kzlang_tg_017",
+    "raw_address": "Астана, ноҳияи Нұра, кӯчаи Озмоишии Қатра, хонаи 25, назди қаҳвахонаи «Чашма»"
+  },
+  {
+    "id": "kzlang_tg_018",
+    "raw_address": "ноҳияи Нұра, шаҳри Астана, кӯчаи Озмоишии Қатра 36 хона, даромадгоҳ аз ҳавлӣ"
+  },
+  {
+    "id": "kzlang_tg_019",
+    "raw_address": "Astana, nohiyai Nura, kuchai Ozmoishii Qatra, khonai47 kv12"
+  },
+  {
+    "id": "kzlang_tg_020",
+    "raw_address": "Астана, Нұрра р-н, ул.Озмоишии Қатра д58 кв13"
+  },
+  {
+    "id": "kzlang_tg_021",
+    "raw_address": "шаҳри Астана, ноҳияи Сарайшық, кӯчаи Озмоишии Санавбар, хонаи 28, паси бозори «Соя»"
+  },
+  {
+    "id": "kzlang_tg_022",
+    "raw_address": "Астана, кӯчаи Озмоишии Санавбар, хонаи 39, ноҳияи Сарайшық, квартираи 14"
+  },
+  {
+    "id": "kzlang_tg_023",
+    "raw_address": "Astana nohiyai Sarayshyq kuchai Ozmoishii Sanavbar khonai50 kv15"
+  },
+  {
+    "id": "kzlang_tg_024",
+    "raw_address": "Astana нохияи Сарайшыққ ул. Озмоишии Санавбар 61 кв16"
+  },
+  {
+    "id": "kzlang_tg_025",
+    "raw_address": "Алматы, ноҳияи Алмалы, кӯчаи Озмоишии Зардолу, хонаи 14, назди дӯкони «Мева»"
+  },
+  {
+    "id": "kzlang_tg_026",
+    "raw_address": "ноҳияи Алмалы, шаҳри Алматы, кӯчаи Озмоишии Зардолу 25 хона, ошёнаи 3"
+  },
+  {
+    "id": "kzlang_tg_027",
+    "raw_address": "Almaty, nohiyai Almaly, kuchai Ozmoishii Zardolu, khonai36 kv17"
+  },
+  {
+    "id": "kzlang_tg_028",
+    "raw_address": "Алматы нoҳияи Алмалыы ул.Озмоишии Зардолу 47 кв18"
+  },
+  {
+    "id": "kzlang_tg_029",
+    "raw_address": "шаҳри Алматы, ноҳияи Әуезов, кӯчаи Озмоишии Олуболу, хонаи 19, паси боғи «Сабз»"
+  },
+  {
+    "id": "kzlang_tg_030",
+    "raw_address": "Алматы, кӯчаи Озмоишии Олуболу, хонаи 30, ноҳияи Әуезов, квартираи 19"
+  },
+  {
+    "id": "kzlang_tg_031",
+    "raw_address": "Almaty nohiyai Auezov kuchai Ozmoishii Olubolu khonai41 kv20"
+  },
+  {
+    "id": "kzlang_tg_032",
+    "raw_address": "Almaty ноҳияи Әуеззоов ул. Озмоишии Олуболу дом52 кв21"
+  },
+  {
+    "id": "kzlang_tg_033",
+    "raw_address": "Шымкент, ноҳияи Абай, кӯчаи Озмоишии Нок, хонаи 22, дар рӯ ба рӯи қаҳвахонаи «Рӯшноӣ»"
+  },
+  {
+    "id": "kzlang_tg_034",
+    "raw_address": "ноҳияи Абай, шаҳри Шымкент, кӯчаи Озмоишии Нок 33, квартираи 22"
+  },
+  {
+    "id": "kzlang_tg_035",
+    "raw_address": "Shymkent, nohiyai Abay, kuchai Ozmoishii Nok, khonai44 kv23"
+  },
+  {
+    "id": "kzlang_tg_036",
+    "raw_address": "Шымкент нохияи Абaй ул.Озмоишии Нок 55 кв24"
+  },
+  {
+    "id": "kzlang_tg_037",
+    "raw_address": "вилояти Ақмола, ноҳияи Есіл, шаҳри Есіл, кӯчаи Озмоишии Бодом, хонаи 26, назди мактаби «Намуна»"
+  },
+  {
+    "id": "kzlang_tg_038",
+    "raw_address": "Есіл, ноҳияи Есіл, вилояти Ақмола, кӯчаи Озмоишии Бодом 37, даромадгоҳи 2"
+  },
+  {
+    "id": "kzlang_tg_039",
+    "raw_address": "viloyati Aqmola, nohiyai Esil, shahri Esil, kuchai Ozmoishii Bodom 48 kv25"
+  },
+  {
+    "id": "kzlang_tg_040",
+    "raw_address": "Акмолинская область, ноҳияи Ессіл, г.Есіл, Озмоишии Бодом ул.59 кв26"
+  },
+  {
+    "id": "kzlang_tg_041",
+    "raw_address": "Северо-Казахстанская область, ноҳияи Есіл, деҳаи Явленка, кӯчаи Озмоишии Себ, хонаи 31, паси дӯкони «Мева»"
+  },
+  {
+    "id": "kzlang_tg_042",
+    "raw_address": "деҳаи Явленка, ноҳияи Есіл, Северо-Казахстанская область, кӯчаи Озмоишии Себ 42, ошёнаи 2"
+  },
+  {
+    "id": "kzlang_tg_043",
+    "raw_address": "Severo-Kazakhstanskaya oblast, nohiyai Esil, Yavlenka, kuchai Ozmoishii Seb 53 kv27"
+  },
+  {
+    "id": "kzlang_tg_044",
+    "raw_address": "Северо-Казахстанская обл. ноҳияи Eсіл Явленкка ул.Озмоишии Себ д64"
+  },
+  {
+    "id": "kzlang_tg_045",
+    "raw_address": "вилояти Абай, ноҳияи Абай, деҳаи Қараауыл, кӯчаи Озмоишии Занбақ, хонаи 35, назди боғи «Сабз»"
+  },
+  {
+    "id": "kzlang_tg_046",
+    "raw_address": "Қараауыл, вилояти Абай, ноҳияи Абай, кӯчаи Озмоишии Занбақ, 46 хона, квартираи 28"
+  },
+  {
+    "id": "kzlang_tg_047",
+    "raw_address": "viloyati Abay nohiyai Abay Qaraauyl kuchai Ozmoishii Zanbaq khonai57 kv29"
+  },
+  {
+    "id": "kzlang_tg_048",
+    "raw_address": "область Абай нохияи Абaй Карааул ул. Озмоишии Занбақ дом68"
+  },
+  {
+    "id": "kzlang_tg_049",
+    "raw_address": "Астана, кӯчаи Алматы, хонаи 41, квартираи 7"
+  },
+  {
+    "id": "kzlang_tg_050",
+    "raw_address": "шаҳри Астана, кӯчаи Есіл, хонаи 52, ошёнаи 3"
+  },
+  {
+    "id": "kzlang_tg_051",
+    "raw_address": "Шымкент, кӯчаи Абай, хонаи 63, даромадгоҳи 2"
+  },
+  {
+    "id": "kzlang_tg_052",
+    "raw_address": "Алматы, кӯчаи Әуезов, хонаи 74, квартираи 9"
+  },
+  {
+    "id": "kzlang_tg_053",
+    "raw_address": "Астана, кӯчаи Озмоишии Соя 15, назди қаҳвахонаи «Алматы»"
+  },
+  {
+    "id": "kzlang_tg_054",
+    "raw_address": "Астана, кӯчаи Озмоишии Соя, хонаи 26, паси дӯкони «Сарыарқа»"
+  },
+  {
+    "id": "kzlang_tg_055",
+    "raw_address": "Шымкент, кӯчаи Озмоишии Соя, хонаи 37, рӯ ба рӯи мактаби «Абай»"
+  },
+  {
+    "id": "kzlang_tg_056",
+    "raw_address": "Астана, кӯчаи Озмоишии Соя, хонаи 48, дар паҳлӯи бозори «Нұра»"
+  },
+  {
+    "id": "kzlang_tg_057",
+    "raw_address": "Астана, ноҳияи Алматы, ноҳияи Есіл, кӯчаи Озмоишии Қум, хонаи 17"
+  },
+  {
+    "id": "kzlang_tg_058",
+    "raw_address": "шаҳри Астана, ноҳияи Нұра, ноҳияи Сарайшық, кӯчаи Озмоишии Қум 28"
+  },
+  {
+    "id": "kzlang_tg_059",
+    "raw_address": "Алматы, ноҳияи Алмалы, ноҳияи Әуезов, кӯчаи Озмоишии Қум, хонаи 39"
+  },
+  {
+    "id": "kzlang_tg_060",
+    "raw_address": "Шымкент, ноҳияи Абай, ноҳияи Тұран, кӯчаи Озмоишии Қум 50 хона"
+  },
+  {
+    "id": "kzlang_tg_061",
+    "raw_address": "ноҳияи Есіл, кӯчаи Озмоишии Барф, хонаи 21"
+  },
+  {
+    "id": "kzlang_tg_062",
+    "raw_address": "кӯчаи Озмоишии Барф, хонаи 32, ноҳияи Есіл"
+  },
+  {
+    "id": "kzlang_tg_063",
+    "raw_address": "ноҳияи Абай, кӯчаи Озмоишии Ях, хонаи 43, квартираи 12"
+  },
+  {
+    "id": "kzlang_tg_064",
+    "raw_address": "хонаи 54, кӯчаи Озмоишии Ях, ноҳияи Абай"
+  },
+  {
+    "id": "kzlang_tg_065",
+    "raw_address": "Астана, ноҳияи Әуезов, кӯчаи Озмоишии Бод, хонаи 24"
+  },
+  {
+    "id": "kzlang_tg_066",
+    "raw_address": "шаҳри Алматы, ноҳияи Алматы, кӯчаи Озмоишии Бод 35 хона"
+  },
+  {
+    "id": "kzlang_tg_067",
+    "raw_address": "вилояти Ақмола, вилояти Абай, ноҳияи Абай, Қараауыл, кӯчаи Озмоишии Бод 46"
+  },
+  {
+    "id": "kzlang_tg_068",
+    "raw_address": "шаҳри Шымкент, шаҳри Астана, ноҳияи Сарыарқа, кӯчаи Озмоишии Бод 57"
+  },
+  {
+    "id": "kzlang_tg_069",
+    "raw_address": "Қазоқистон, Астана, ноҳияи Сарайшық, кӯчаи Озмоишии Абр, хонаи 29"
+  },
+  {
+    "id": "kzlang_tg_070",
+    "raw_address": "Ҷумҳурии Қазоқистон, шаҳри Астана, ноҳияи Сарайшық, кӯчаи Озмоишии Абр 40, квартираи 16"
+  },
+  {
+    "id": "kzlang_tg_071",
+    "raw_address": "ноҳияи Сарайшық, Астана, Қазоқистон, кӯчаи Озмоишии Абр, 51 хона"
+  },
+  {
+    "id": "kzlang_tg_072",
+    "raw_address": "Қазоқистон\nАстана, ноҳияи Сарайшық\nкӯчаи Озмоишии Абр, хонаи 62, даромадгоҳи 3"
+  },
+  {
+    "id": "kzlang_tg_073",
+    "raw_address": "Алматы, ноҳияи Алмалы, кӯчаи Озмоишии Моҳ, хонаи 7/2, даромадгоҳи 2, квартираи 2"
+  },
+  {
+    "id": "kzlang_tg_074",
+    "raw_address": "Алматы, ноҳияи Алмалы, кӯчаи Озмоишии Моҳ 18а, даромадгоҳи 1, ошёнаи 3"
+  },
+  {
+    "id": "kzlang_tg_075",
+    "raw_address": "шаҳри Алматы, ноҳияи Алмалы, кӯчаи Озмоишии Моҳ, хонаи 12/4б, квартираи 26, ошёнаи 4"
+  },
+  {
+    "id": "kzlang_tg_076",
+    "raw_address": "Алматы, ноҳияи Алмалы, кӯчаи Озмоишии Моҳ 102в, квартираи 27, даромадгоҳ аз кӯча, на аз ҳавлии 13"
+  },
+  {
+    "id": "kzlang_tg_077",
+    "raw_address": "Астана, кӯчаи Озмоишии Гелос, хонаи 22; ба Душанбе наравед, даромадгоҳ аз ҳавлӣ"
+  },
+  {
+    "id": "kzlang_tg_078",
+    "raw_address": "Алматы, кӯчаи Озмоишии Гелос 33, назди қаҳвахонаи «Тоҷикистон»"
+  },
+  {
+    "id": "kzlang_tg_079",
+    "raw_address": "Шымкент, кӯчаи Озмоишии Гелос, хонаи 44; ба Қирғизистон наравед, аз дари рост дароед"
+  },
+  {
+    "id": "kzlang_tg_080",
+    "raw_address": "шаҳри Астана, кӯчаи Озмоишии Гелос, хонаи 55, рӯ ба рӯи дӯкони «Улан-Батор»"
+  },
+  {
+    "id": "kzlang_mn_001",
+    "raw_address": "Казахстан, Алматы хот, Алмалинский дүүрэг, Сургалтын Нарс гудамж, 71-р байр, 4 тоот, «Гэрэл» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_002",
+    "raw_address": "Алматы хот, Алмалинский дүүрэг, Сургалтын Нарс гудамж, 71-р байр, 5 тоот, «Гэрэл» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_003",
+    "raw_address": "Almaty hot, Almalinskiy duureg, Surgaltyn Nars gudamj, 71-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_004",
+    "raw_address": "Алматы хот, Алмалинский дүүрeг, Сургaлтын Нарс гудамж, 71-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_005",
+    "raw_address": "Казахстан, Алматы хот, Ауэзовский дүүрэг, Туршилтын Хус гудамж, 72-р байр, 4 тоот, «Лотос» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_006",
+    "raw_address": "Алматы хот, Ауэзовский дүүрэг, Туршилтын Хус гудамж, 72-р байр, 5 тоот, «Лотос» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_007",
+    "raw_address": "Almaty hot, Auezovskiy duureg, Turshiltyn Hus gudamj, 72-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_008",
+    "raw_address": "Алматы хот, Ауэзовский дүүрeг, Туршилтын Хус гудамж, 72-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_009",
+    "raw_address": "Казахстан, Алматы хот, Медеуский дүүрэг, Нобай Улиас гудамж, 73-р байр, 4 тоот, «Байтерек» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_010",
+    "raw_address": "Алматы хот, Медеуский дүүрэг, Нобай Улиас гудамж, 73-р байр, 5 тоот, «Байтерек» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_011",
+    "raw_address": "Almaty hot, Medeuskiy duureg, Nobai Ulias gudamj, 73-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_012",
+    "raw_address": "Алматы хот, Медеуский дүүрeг, Нобaй Улиас гудамж, 73-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_013",
+    "raw_address": "Казахстан, Алматы хот, Турксибский дүүрэг, Сургалтын Алтан гудамж, 74-р байр, 4 тоот, «Нар» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_014",
+    "raw_address": "Алматы хот, Турксибский дүүрэг, Сургалтын Алтан гудамж, 74-р байр, 5 тоот, «Нар» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_015",
+    "raw_address": "Almaty hot, Turksibskiy duureg, Surgaltyn Altan gudamj, 74-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_016",
+    "raw_address": "Алматы хот, Турксибский дүүрeг, Сургaлтын Алтан гудамж, 74-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_017",
+    "raw_address": "Казахстан, Шымкент хот, Абай дүүрэг, Туршилтын Мод гудамж, 75-р байр, 4 тоот, «Весна» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_018",
+    "raw_address": "Шымкент хот, Абай дүүрэг, Туршилтын Мод гудамж, 75-р байр, 5 тоот, «Весна» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_019",
+    "raw_address": "Shymkent hot, Abay duureg, Turshiltyn Mod gudamj, 75-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_020",
+    "raw_address": "Шымкент хот, Абай дүүрeг, Туршилтын Мод гудамж, 75-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_021",
+    "raw_address": "Казахстан, Шымкент хот, Тұран дүүрэг, Нобай Тал гудамж, 76-р байр, 4 тоот, «Кітап» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_022",
+    "raw_address": "Шымкент хот, Тұран дүүрэг, Нобай Тал гудамж, 76-р байр, 5 тоот, «Кітап» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_023",
+    "raw_address": "Shymkent hot, Turan duureg, Nobai Tal gudamj, 76-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_024",
+    "raw_address": "Шымкент хот, Тұран дүүрeг, Нобaй Тал гудамж, 76-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_025",
+    "raw_address": "Казахстан, Астана хот, Алматы дүүрэг, Сургалтын Од гудамж, 77-р байр, 4 тоот, «Маяк» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_026",
+    "raw_address": "Астана хот, Алматы дүүрэг, Сургалтын Од гудамж, 77-р байр, 5 тоот, «Маяк» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_027",
+    "raw_address": "Astana hot, Almaty duureg, Surgaltyn Od gudamj, 77-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_028",
+    "raw_address": "Астана хот, Алматы дүүрeг, Сургaлтын Од гудамж, 77-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_029",
+    "raw_address": "Казахстан, Астана хот, Есіл дүүрэг, Туршилтын Сар гудамж, 78-р байр, 4 тоот, «Окуу» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_030",
+    "raw_address": "Астана хот, Есіл дүүрэг, Туршилтын Сар гудамж, 78-р байр, 5 тоот, «Окуу» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_031",
+    "raw_address": "Astana hot, Esil duureg, Turshiltyn Sar gudamj, 78-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_032",
+    "raw_address": "Астана хот, Есіл дүүрeг, Туршилтын Сaр гудамж, 78-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_033",
+    "raw_address": "Казахстан, Астана хот, Сарыарқа дүүрэг, Нобай Тэнгэр гудамж, 79-р байр, 4 тоот, «Гэрэл» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_034",
+    "raw_address": "Астана хот, Сарыарқа дүүрэг, Нобай Тэнгэр гудамж, 79-р байр, 5 тоот, «Гэрэл» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_035",
+    "raw_address": "Astana hot, Saryarqa duureg, Nobai Tenger gudamj, 79-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_036",
+    "raw_address": "Астана хот, Сарыарқа дүүрэг, Нобай Тэнгэр гудамж, 79-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_037",
+    "raw_address": "Казахстан, Астана хот, Сарайшық дүүрэг, Сургалтын Гэрэл гудамж, 80-р байр, 4 тоот, «Лотос» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_038",
+    "raw_address": "Астана хот, Сарайшық дүүрэг, Сургалтын Гэрэл гудамж, 80-р байр, 5 тоот, «Лотос» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_039",
+    "raw_address": "Astana hot, Saraishyq duureg, Surgaltyn Gerel gudamj, 80-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_040",
+    "raw_address": "Астана хот, Сарайшық дүүрэг, Сургалтын Гэрэл гудамж, 80-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_041",
+    "raw_address": "Казахстан, Каскелен, Қарасай дүүрэг, Туршилтын Цэцэг гудамж, 81-р байр, 4 тоот, «Байтерек» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_042",
+    "raw_address": "Каскелен, Қарасай дүүрэг, Туршилтын Цэцэг гудамж, 81-р байр, 5 тоот, «Байтерек» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_043",
+    "raw_address": "Kaskelen, Karasay duureg, Turshiltyn Tsetseg gudamj, 81-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_044",
+    "raw_address": "Каскелен, Қарасай дүүрэг, Туршилтын Цэцэг гудамж, 81-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_045",
+    "raw_address": "Казахстан, Талгар, Талғар дүүрэг, Нобай Навч гудамж, 82-р байр, 4 тоот, «Нар» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_046",
+    "raw_address": "Талгар, Талғар дүүрэг, Нобай Навч гудамж, 82-р байр, 5 тоот, «Нар» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_047",
+    "raw_address": "Talgar, Talgar duureg, Nobai Navch gudamj, 82-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_048",
+    "raw_address": "Талгар, Талғар дүүрэг, Нобай Навч гудамж, 82-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_049",
+    "raw_address": "Казахстан, Алматы хот, Сургалтын Уул гудамж, 83-р байр, 4 тоот, «Ауэзовский район» дэлгүүрийн ард; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_050",
+    "raw_address": "Алматы хот, Сургалтын Уул гудамж, 83-р байр, 5 тоот, «Ауэзовский район» дэлгүүрийн ард; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_051",
+    "raw_address": "Almaty hot, Surgaltyn Uul gudamj, 83-r bair, 6 toot, «Auezovskiy rayon» delguuriin ard; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_052",
+    "raw_address": "Алматы хот, Сургалтын Уул гудамж, 83-р байр, 7 тоот, «Ауэзовский район» дэлгүүрийн ард; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_053",
+    "raw_address": "Казахстан, Астана хот, Есіл гудамж, 84-р байр, 4 тоот, «Монголия» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_054",
+    "raw_address": "Астана хот, Есіл гудамж, 84-р байр, 5 тоот, «Монголия» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_055",
+    "raw_address": "Astana hot, Esil gudamj, 84-r bair, 6 toot, «Mongoliya» kafeny esreg tald; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_056",
+    "raw_address": "Астана хот, Есіл гудамж, 84-р байр, 7 тоот, «Монголия» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_057",
+    "raw_address": "Казахстан, Алматы хот, Қаратау дүүрэг, Нобай Салхи гудамж, 85-р байр, 4 тоот, «Маяк» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_058",
+    "raw_address": "Алматы хот, Қаратау дүүрэг, Нобай Салхи гудамж, 85-р байр, 5 тоот, «Маяк» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_059",
+    "raw_address": "Almaty hot, Karatau duureg, Nobai Salhi gudamj, 85-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_060",
+    "raw_address": "Алматы хот, Қаратау дүүрэг, Нобай Салхи гудамж, 85-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_061",
+    "raw_address": "Казахстан, Шымкент хот, Алмалы дүүрэг, Сургалтын Хавар гудамж, 86-р байр, 4 тоот, «Окуу» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_062",
+    "raw_address": "Шымкент хот, Алмалы дүүрэг, Сургалтын Хавар гудамж, 86-р байр, 5 тоот, «Окуу» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_063",
+    "raw_address": "Shymkent hot, Almaly duureg, Surgaltyn Havar gudamj, 86-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_064",
+    "raw_address": "Шымкент хот, Алмалы дүүрэг, Сургалтын Хавар гудамж, 86-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_065",
+    "raw_address": "Казахстан, Абай дүүрэг, Туршилтын Өглөө гудамж, 87-р байр, 4 тоот, «Гэрэл» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_066",
+    "raw_address": "Абай дүүрэг, Туршилтын Өглөө гудамж, 87-р байр, 5 тоот, «Гэрэл» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_067",
+    "raw_address": "Abay duureg, Turshiltyn Ogl oo gudamj, 87-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_068",
+    "raw_address": "Абай дүүрэг, Туршилтын Өглөө гудамж, 87-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_069",
+    "raw_address": "Казахстан, Есіл дүүрэг, Нобай Үүл гудамж, 88-р байр, 4 тоот, «Лотос» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_070",
+    "raw_address": "Есіл дүүрэг, Нобай Үүл гудамж, 88-р байр, 5 тоот, «Лотос» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_071",
+    "raw_address": "Esil duureg, Nobai Uul gudamj, 88-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_072",
+    "raw_address": "Есіл дүүрэг, Нобай Үүл гудамж, 88-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_073",
+    "raw_address": "Казахстан, Қарағанды, Сургалтын Мөр гудамж, 89-р байр, 4 тоот, «Байтерек» кафены эсрэг талд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_074",
+    "raw_address": "Қарағанды, Сургалтын Мөр гудамж, 89-р байр, 5 тоот, «Байтерек» дэлгүүрийн хажууд; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_075",
+    "raw_address": "Karagandy, Surgaltyn Mor gudamj, 89-r bair, 6 toot; hurgeltiin omno zalgaarai"
+  },
+  {
+    "id": "kzlang_mn_076",
+    "raw_address": "Қарағанды, Сургалтын Мөр гудамж, 89-р байр, 7 тоот; хүргэлтийн өмнө залгаарай"
+  },
+  {
+    "id": "kzlang_mn_077",
+    "raw_address": "Казахстан, Семей хот, Туршилтын Цас гудамж, 90-р байр, 4 тоот, «Нар» кафены эсрэг талд; «Бишкек» дэлгүүртэй андуурч болохгүй"
+  },
+  {
+    "id": "kzlang_mn_078",
+    "raw_address": "Семей хот, Туршилтын Цас гудамж, 90-р байр, 5 тоот, «Нар» дэлгүүрийн хажууд; «Бишкек» дэлгүүртэй андуурч болохгүй"
+  },
+  {
+    "id": "kzlang_mn_079",
+    "raw_address": "Semey hot, Turshiltyn Tsas gudamj, 90-r bair, 6 toot; «Bishkek» delguurtei anduurch bolohgui"
+  },
+  {
+    "id": "kzlang_mn_080",
+    "raw_address": "Семей хот, Туршилтын Цас гудамж, 90-р байр, 7 тоот; «Бишкек» дэлгүүртэй андуурч болохгүй"
+  }
+]

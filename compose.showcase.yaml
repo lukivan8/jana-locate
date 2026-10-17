@@ -1,0 +1,36 @@
+# Separate deployment: docker compose -p jana-showcase --env-file .deploy/showcase.env
+# -f compose.yaml -f compose.showcase.yaml ... (scripts/showcase.sh wraps this).
+services:
+  backend:
+    image: jana-showcase-api:local
+    ports: !reset []
+    environment:
+      CORS_ORIGINS: "https://${SHOWCASE_HOSTNAME:?Set SHOWCASE_HOSTNAME}"
+    networks: [runtime]
+  frontend:
+    image: jana-showcase-web:local
+    ports: !reset []
+    environment:
+      JANA_API_URL: "https://${SHOWCASE_HOSTNAME:?Set SHOWCASE_HOSTNAME}"
+    networks: [runtime]
+  tunnel:
+    image: ${CLOUDFLARED_IMAGE:-cloudflare/cloudflared:2026.10.0}
+    command: [tunnel, --no-autoupdate, --metrics, "0.0.0.0:2000", run, --token-file, /run/secrets/tunnel-token]
+    # Token is a file, never a command-line argument or browser configuration.
+    user: "${SHOWCASE_UID:-1000}:${SHOWCASE_GID:-1000}"
+    secrets: [tunnel-token]
+    depends_on:
+      frontend:
+        condition: service_healthy
+    restart: unless-stopped
+    read_only: true
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    networks: [runtime, edge]
+networks:
+  runtime:
+    internal: true
+  edge: {}
+secrets:
+  tunnel-token:
+    file: ./.deploy/tunnel-token

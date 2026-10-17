@@ -1,0 +1,68 @@
+name: Документация и HTTP-примеры
+on:
+  push:
+    paths:
+      - '**/*.md'
+      - LICENSE
+      - docs/assets/**
+      - examples/http/**
+      - backend/**
+      - scripts/check-docs.py
+      - .github/ISSUE_TEMPLATE/**
+      - .github/workflows/docs.yml
+  pull_request:
+    paths:
+      - '**/*.md'
+      - LICENSE
+      - docs/assets/**
+      - examples/http/**
+      - backend/**
+      - scripts/check-docs.py
+      - .github/ISSUE_TEMPLATE/**
+      - .github/workflows/docs.yml
+permissions:
+  contents: read
+jobs:
+  examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Локальные ссылки и JSON-примеры
+        run: python3 scripts/check-docs.py
+      - name: Подготовить справочник и временный API
+        run: |
+          make reference
+          cd backend
+          go build -o "$RUNNER_TEMP/jana-api" ./cmd/server
+      - name: Выполнить примеры против API
+        shell: bash
+        run: |
+          cd backend
+          HTTP_ADDR=:18087 REFERENCE_PATH="$PWD/data/reference/reference.sqlite" \
+            CATALOG_OVERLAY_PATH="$RUNNER_TEMP/catalog.json" JOBS_PATH="$RUNNER_TEMP/jobs.json" \
+            "$RUNNER_TEMP/jana-api" > "$RUNNER_TEMP/jana-api.log" 2>&1 &
+          api_pid=$!
+          trap 'kill "$api_pid" 2>/dev/null || true' EXIT
+          cd ..
+          export JANA_API_URL=http://127.0.0.1:18087
+          ready=false
+          for attempt in $(seq 1 120); do
+            if curl -fsS "$JANA_API_URL/readyz" >/dev/null; then ready=true; break; fi
+            sleep 1
+          done
+          if [ "$ready" != true ]; then cat "$RUNNER_TEMP/jana-api.log"; exit 1; fi
+          curl --fail-with-body "$JANA_API_URL/v1/normalize" \
+            -H 'Content-Type: application/json' --data-binary @examples/http/request.json
+          node examples/http/normalize.mjs
+          python3 examples/http/normalize.py
+          go run examples/http/go/main.go

@@ -1,0 +1,56 @@
+name: Ошибка
+description: Воспроизводимая ошибка API, интерфейса, CLI или документации
+
+title: "[Ошибка]: "
+body:
+  - type: markdown
+    attributes:
+      value: "Используйте синтетические адреса. Не публикуйте пароли, токены, рабочие ID, реальные адреса и приватные материалы. Для уязвимостей откройте SECURITY.md."
+  - type: input
+    id: version
+    attributes:
+      label: Версия исходников
+      description: Commit SHA из git rev-parse HEAD.
+    validations:
+      required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: Компонент
+      options:
+        - HTTP API
+        - Веб-интерфейс
+        - CLI / PostgreSQL
+        - CLI / файлы
+        - Docker / запуск
+        - Документация
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Окружение и режим
+      description: ОС, версия Docker/Go/Node, native libpostal или fallback, источник справочника. Без секретов.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Шаги и минимальный синтетический пример
+      description: Команда или HTTP-запрос, достаточные для воспроизведения.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Фактический результат
+      description: Ответ, предупреждения, очищенные логи или скриншот.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Ожидаемый результат и основание
+      description: Для географии объясните, какие свидетельства разрешают неоднозначность.
+    validations:
+      required: true

@@ -1,0 +1,14 @@
+# Keep generated clients and embedded web builds out of the default GitHub diff.
+backend/pkg/api/*.gen.go linguist-generated=true
+cli/internal/api/*.gen.go linguist-generated=true
+frontend/src/api/*.gen.ts linguist-generated=true
+frontend/src/routeTree.gen.ts linguist-generated=true
+frontend/src/ui/colors.css linguist-generated=true
+cli/web/static/** linguist-generated=true -whitespace
+cli/web/frontend-source.json linguist-generated=true
+
+# Public reference snapshots and synthetic fixtures are data, not implementation languages.
+backend/data/reference/** linguist-detectable=false
+data/annotations/** linguist-detectable=false
+frontend/src/data/*.json linguist-detectable=false
+cli/examples/orders/seed.sql linguist-detectable=false -whitespace

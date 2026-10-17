@@ -1,7 +1,9 @@
 package normalize
 
 import (
+	"math"
 	"path/filepath"
+	"reflect"
 	"testing"
 
 	"github.com/lukivan8/jana-address/internal/catalog"
@@ -27,6 +29,7 @@ func TestHackathonExamples(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.raw, func(t *testing.T) {
+			e.Postal = fakePostal{{Label: "road", Value: tt.street}}
 			r := e.Normalize(api.InputRecord{Id: "input", RawAddress: tt.raw})
 			if r.RawAddress != tt.raw {
 				t.Fatal("raw_address changed")
@@ -45,44 +48,27 @@ func TestUnknownHasNoInventedLocation(t *testing.T) {
 		t.Fatalf("invented fields: %+v", r)
 	}
 }
-func TestConfirmationAppliesToBuildingNotRawOrID(t *testing.T) {
+func TestBuildingCatalogCannotAffectNormalization(t *testing.T) {
 	e := engine(t)
-	before := e.Normalize(api.InputRecord{Id: "a", RawAddress: "Туран 55/6 кв 1"})
-	var found api.CatalogEntry
-	for _, c := range e.Catalog.List() {
-		if c.Id == *before.CatalogId {
-			found = c
-		}
-	}
-	_, err := e.Catalog.Confirm(api.ConfirmationRequest{Fields: found.Fields, Coordinates: api.Coordinates{Latitude: 50, Longitude: 70}, ExpectedRevision: found.Revision})
-	if err != nil {
+	e.Postal = fakePostal{{Label: "road", Value: "туран"}, {Label: "house_number", Value: "55/6"}}
+	in := api.InputRecord{Id: "a", RawAddress: "Туран 55/6 кв 99"}
+	before := e.Normalize(in)
+	f := api.AddressFields{City: str("Тестовый город"), Province: str("Тестовая область"), StreetName: str("Туран"), StreetType: str("проспект"), House: str("55/6")}
+	if _, err := e.Catalog.Confirm(api.ConfirmationRequest{Fields: f, Coordinates: api.Coordinates{Latitude: 50, Longitude: 70}}); err != nil {
 		t.Fatal(err)
 	}
-	r := e.Normalize(api.InputRecord{Id: "different", RawAddress: "Астана, проспект Туран 55/6 кв 99"})
-	if r.Status != api.Matched || r.Coordinates.Latitude != 50 || catalog.Text(r.Apartment) != "99" {
-		t.Fatalf("confirmation failed: %+v", r)
+	after := e.Normalize(in)
+	if math.Abs(before.Confidence-after.Confidence) > 1e-12 {
+		t.Fatal("catalog changed confidence")
 	}
-}
-func TestAmbiguousBuildingsDoNotGeocode(t *testing.T) {
-	e := engine(t)
-	var f api.AddressFields
-	for _, v := range e.Catalog.List() {
-		if catalog.Text(v.Fields.StreetName) == "Туран" {
-			f = v.Fields
-		}
+	before.Confidence = after.Confidence
+	if !reflect.DeepEqual(before, after) || after.Coordinates != nil || after.CatalogId != nil || after.City != nil {
+		t.Fatalf("catalog influenced normalization: before=%+v after=%+v", before, after)
 	}
-	city := "Алматы"
-	f.City = &city
-	if _, err := e.Catalog.Confirm(api.ConfirmationRequest{Fields: f, Coordinates: api.Coordinates{Latitude: 43, Longitude: 76}}); err != nil {
-		t.Fatal(err)
-	}
-	r := e.Normalize(api.InputRecord{Id: "x", RawAddress: "Туран 55/6"})
-	if r.Coordinates != nil || r.Status != api.NeedsReview {
-		t.Fatalf("ambiguous geocode: %+v", r)
-	}
-	r = e.Normalize(api.InputRecord{Id: "x", RawAddress: "Астана Туран 55/6"})
-	if r.Coordinates == nil || catalog.Text(r.City) != "Астана" {
-		t.Fatalf("city constraint failed: %+v", r)
+	// The normalizer is fully usable with no building store at all.
+	e.Catalog = nil
+	if got := e.Normalize(in); math.Abs(got.Confidence-after.Confidence) > 1e-12 || !reflect.DeepEqual(resultValues(got), resultValues(after)) {
+		t.Fatal("normalization depends on catalog")
 	}
 }
 func BenchmarkBatch1000(b *testing.B) {

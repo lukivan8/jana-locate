@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "geographic_scope": "KZ",
+  "user_scope_clarification": "All destination addresses are Kazakhstan; Kyrgyz/Uzbek/Tajik/Mongolian describe user languages, not destination countries.",
+  "language_groups": [
+    "base",
+    "ky",
+    "uz",
+    "tg",
+    "mn"
+  ],
+  "records_planned": 400,
+  "synthetic": true,
+  "human_verified": false,
+  "geographic_reference": {
+    "path": "backend/data/reference/entities.jsonl",
+    "sha256": "677115b8f8527e7bae6ea38c85ec179a056dab90fbfe978b245a4a7de4a0c4ce",
+    "source": "Local Kazakhstan KATO/OSM only; no foreign gazetteer"
+  },
+  "preserved_corpora": [
+    {
+      "path": "frontend/src/data/address-anomalies.json",
+      "sha256": "337a41bd76c651839ecf3d2cc8c8d5adad4d5beb2ac9b9c8627380df667ae95b"
+    },
+    {
+      "path": "data/annotations/address-anomalies-v1/annotations.jsonl",
+      "sha256": "c566943b2b0bf7d403f9a489207e690086e8bf3e3821c88ad14a7a9d2d6cf6f3"
+    },
+    {
+      "path": "data/annotations/districts-v1/inputs.jsonl",
+      "sha256": "1920968f4dbf577a44d0f748f7209ea0f9ee7ec6185c03c094b62141c025cbd2"
+    },
+    {
+      "path": "data/annotations/districts-v1/annotations.jsonl",
+      "sha256": "43b5f73f1ba396144d3349d0da1413ec448e30cfc7073bcc764c282e979c0d52"
+    }
+  ],
+  "supervision_policy": {
+    "target": "text_span_extraction",
+    "language_determines_geography": false,
+    "geographic_scope_is_user_constraint": "KZ",
+    "country_span_inferred_from_scope": false,
+    "closed_annotation_implies_unique_settlement": false,
+    "reference_ids_are_unique_targets": false,
+    "split_policy": "Keep all variants, shared original source families and language versions of one base in the same partition.",
+    "native_language_quality": "LLM-authored, not human-reviewed",
+    "runtime_evaluated": false,
+    "foreign_destination_draft": "discarded"
+  },
+  "authoring_methods": {
+    "base": "Composition from previously LLM-labelled Kazakhstan district examples with preserved origin/family; literal country and delivery instruction additions.",
+    "ky": "Literal LLM-authored/labelled Kazakhstan examples with Kyrgyz vocabulary.",
+    "uz": "Literal LLM-authored/labelled Kazakhstan examples with Uzbek vocabulary.",
+    "tg": "Literal LLM-authored/labelled Kazakhstan examples with Tajik vocabulary.",
+    "mn": "LLM-declared Kazakhstan components rendered with authored Mongolian patterns; label roles known from typed construction, not parser inference."
+  }
+}

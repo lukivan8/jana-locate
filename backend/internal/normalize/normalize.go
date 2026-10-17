@@ -1,5 +1,5 @@
-// Package normalize reconciles libpostal, explicit rules, GLiNER and read-only
-// reference evidence. Building coordinates come only from an unambiguous catalog.
+// Package normalize reconciles libpostal, explicit rules and immutable
+// address references. It does not read the building catalog or perform geocoding.
 package normalize
 
 import (
@@ -8,7 +8,6 @@ import (
 	"regexp"
 	"sort"
 	"strings"
-	"time"
 
 	"github.com/lukivan8/jana-address/internal/catalog"
 	"github.com/lukivan8/jana-address/internal/postal"
@@ -17,11 +16,13 @@ import (
 )
 
 type Engine struct {
+	// Deprecated: retained for internal fixture compatibility; never read during normalization.
 	Catalog   *catalog.Store
 	Postal    postal.Parser
-	GLiNER    Extractor
 	Reference *reference.Directory
-	AllowDemo bool
+	// Deprecated: demo buildings cannot influence address normalization.
+	AllowDemo    bool
+	selectedCity string
 }
 type evidence struct {
 	Field, Value, Source string
@@ -34,7 +35,7 @@ type resolved struct {
 }
 
 var numeric = regexp.MustCompile(`^[0-9]+(?:[/\-][0-9]+)?[а-яА-Яa-zA-Z]?$`)
-var streetMarker = regexp.MustCompile(`(?i)^(?:улица|ул\.?|проспект|пр\.?|пр-т|переулок|пер\.?|микрорайон|мкр\.?)\s*\.?\s*|\s+(?:көшесі|даңғылы)$`)
+var streetMarker = regexp.MustCompile(`(?i)^(?:улица|ул|проспект|пр-т|пр|переулок|пер|микрорайон|мкр)(?:\s*\.\s*|\s+)|\s+(?:көшесі|даңғылы)$`)
 var trailingHouse = regexp.MustCompile(`\s+` + number + `\s*(?:[,;]|$)`)
 
 func Working(raw string) string {
@@ -46,15 +47,11 @@ func (e Engine) Normalize(in api.InputRecord) api.Result {
 func (e Engine) NormalizeBatch(records []api.InputRecord) []api.Result {
 	return e.NormalizeBatchContext(context.Background(), records)
 }
-func (e Engine) NormalizeBatchContext(ctx context.Context, records []api.InputRecord) []api.Result {
-	ctx, cancel := context.WithTimeout(ctx, 270*time.Second)
-	defer cancel()
-	entries := e.Catalog.List()
+func (e Engine) NormalizeBatchContext(_ context.Context, records []api.InputRecord) []api.Result {
 	texts := make([]string, len(records))
 	signals := make([][]evidence, len(records))
 	warnings := make([][]string, len(records))
-	// First pass is libpostal. Rules supplement it and do not destructively modify
-	// the text passed to the second model.
+	// libpostal and rules independently inspect the same working text.
 	for i, r := range records {
 		texts[i] = Working(r.RawAddress)
 		warnings[i] = []string{}
@@ -73,47 +70,18 @@ func (e Engine) NormalizeBatchContext(ctx context.Context, records []api.InputRe
 		}
 		signals[i] = append(signals[i], ruleSignals(texts[i])...)
 	}
-	if e.GLiNER != nil {
-		active := []string{}
-		indices := []int{}
-		for i, text := range texts {
-			if text != "" {
-				active = append(active, text)
-				indices = append(indices, i)
-			}
-		}
-		if len(active) > 0 {
-			rows, err := e.GLiNER.Extract(ctx, active)
-			if err != nil || len(rows) != len(active) {
-				for _, i := range indices {
-					warnings[i] = append(warnings[i], "gliner_unavailable")
-				}
-			} else {
-				for j, row := range rows {
-					for _, entity := range row {
-						if ev, ok := modelSignal(entity); ok {
-							signals[indices[j]] = append(signals[indices[j]], ev)
-						}
-					}
-				}
-			}
-		}
-	} else {
-		for i, text := range texts {
-			if text != "" {
-				warnings[i] = append(warnings[i], "gliner_unavailable")
-			}
-		}
-	}
 	out := make([]api.Result, 0, len(records))
 	for i, r := range records {
-		out = append(out, e.reconcile(r, texts[i], signals[i], entries, warnings[i]))
+		out = append(out, e.reconcile(r, texts[i], signals[i], warnings[i]))
 	}
 	return out
 }
 func ruleSignals(work string) []evidence {
 	parsed := ruleParse(work)
 	out := []evidence{}
+	if match := typedStreetRE.FindString(work); match != "" {
+		out = append(out, evidence{"_road", match, "rules", 0})
+	}
 	for field, value := range resultValues(parsed) {
 		if value != "" {
 			out = append(out, evidence{field, value, "rules", 0.94})
@@ -139,6 +107,15 @@ func postalSignals(work string, parts []postal.Component) []evidence {
 	out := []evidence{}
 	for _, p := range parts {
 		field, ok := labels[p.Label]
+		if p.Label == "road" || p.Label == "house" {
+			if value := surface(work, p.Value); value != "" {
+				role := "_road"
+				if p.Label == "house" {
+					role = "_venue"
+				}
+				out = append(out, evidence{role, value, "libpostal", 0})
+			}
+		}
 		if p.Label == "house" && !landmarkRE.MatchString(p.Value) {
 			continue
 		}
@@ -182,32 +159,6 @@ func surface(work, value string) string {
 	return ""
 }
 
-func modelSignal(entity Entity) (evidence, bool) {
-	field := entity.Label
-	switch field {
-	case "province", "city", "district", "living_area", "street_name", "landmark":
-	case "house", "apartment", "entrance", "floor":
-		if !numeric.MatchString(entity.Text) {
-			return evidence{}, false
-		}
-	default:
-		return evidence{}, false
-	}
-	value := strings.TrimSpace(entity.Text)
-	if field == "city" {
-		value = regexp.MustCompile(`(?i)^(?:город\s+|г\.\s*|қала\s+)`).ReplaceAllString(value, "")
-	}
-	if field == "district" {
-		value = regexp.MustCompile(`(?i)\s+(?:район|ауданы)$`).ReplaceAllString(value, "")
-	}
-	if field == "street_name" {
-		value = strings.TrimSpace(streetMarker.ReplaceAllString(value, ""))
-	}
-	if value == "" || entity.Score < 0.25 {
-		return evidence{}, false
-	}
-	return evidence{field, value, "gliner", 0.45 + 0.45*entity.Score}, true
-}
 func resolve(signals []evidence) map[string]resolved {
 	grouped := map[string]map[string][]evidence{}
 	for _, ev := range signals {
@@ -250,13 +201,16 @@ func resolve(signals []evidence) map[string]resolved {
 	}
 	return out
 }
-func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, entries []api.CatalogEntry, warnings []string) api.Result {
+func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, warnings []string) api.Result {
 	r := api.Result{Id: in.Id, RawAddress: in.RawAddress, Warnings: warnings, Status: api.Unmatched}
 	// Reference entity mentions are candidates, not independent votes for every
 	// homonym. Resolve hierarchy first and abstain if several identities remain.
-	mentions := e.Reference.Matches(work)
+	administrative := administrativeText(work)
+	signals = administrativeSignals(work, administrative, signals)
+	districts, districtModel, cityText, signals := e.districtMentions(administrative, signals)
+	mentions := e.Reference.Matches(cityText)
 	explicitCities := map[string]bool{}
-	for _, segment := range strings.Split(work, ",") {
+	for _, segment := range strings.Split(cityText, ",") {
 		value := strings.TrimSpace(segment)
 		if len(e.Reference.Exact(value, "city")) > 0 {
 			explicitCities[reference.Canon(value)] = true
@@ -268,6 +222,13 @@ func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, e
 	var cityID string
 	cities := map[string]reference.Entity{}
 	preliminary := resolve(signals)
+	if preliminary["street_name"].Value == "" && preliminary["house"].Value != "" {
+		if street := e.streetWithExplicitHouse(work); street != "" {
+			signals = append(signals, evidence{"street_name", street, "reference", 0.86})
+			preliminary = resolve(signals)
+		}
+	}
+
 	for _, m := range mentions {
 		if m.Entity.Kind == "city" {
 			if street := preliminary["street_name"].Value; street != "" && contains(street, m.Surface) && !e.equivalent(preliminary["city"].Value, m.Entity.Name, "city") {
@@ -282,6 +243,34 @@ func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, e
 				}
 			}
 			cities[m.Entity.ID] = m.Entity
+		}
+	}
+	if e.selectedCity != "" {
+		city, _ := e.Reference.Entity(e.selectedCity)
+		cities = map[string]reference.Entity{city.ID: city}
+		// Identity chosen by the operator replaces parser guesses for administrative fields.
+		kept := signals[:0]
+		for _, signal := range signals {
+			if signal.Field != "city" && signal.Field != "province" {
+				kept = append(kept, signal)
+			}
+		}
+		signals = kept
+	}
+	// A street name in a partial directory is insufficient to choose a city.
+	// A positive exact street+house fact can refine an explicitly mentioned
+	// settlement identity (e.g. a city and a village sharing the same name).
+	if len(cities) > 1 && len(explicitCities) <= 1 {
+		cities = e.citiesInDistricts(cities, districts)
+		addressCities := e.Reference.AddressCities(preliminary["street_name"].Value, preliminary["house"].Value, preliminary["street_type"].Value)
+		compatible := map[string]reference.Entity{}
+		for id, city := range cities {
+			if addressCities[id] {
+				compatible[id] = city
+			}
+		}
+		if len(compatible) == 1 {
+			cities = compatible
 		}
 	}
 	if len(cities) == 1 {
@@ -324,10 +313,15 @@ func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, e
 	if len(provinces) > 1 {
 		r.Warnings = append(r.Warnings, "ambiguous_province")
 	}
-	for _, kind := range []string{"street", "district", "living_area"} {
+	for _, kind := range []string{"street", "living_area"} {
 		matches := map[string]reference.Match{}
 		for _, m := range mentions {
 			if m.Entity.Kind == kind && (cityID == "" || m.Entity.CityID == "" || m.Entity.CityID == cityID) {
+				// An alias that only matches a fragment (e.g. "Street" within an
+				// unknown "Smoke Street") cannot contradict a complete extraction.
+				if kind == "street" && preliminary["street_name"].Value != "" && !e.equivalent(preliminary["street_name"].Value, m.Entity.Name, "street") {
+					continue
+				}
 				if m.Entity.CityID != "" && preliminary["city"].Value != "" {
 					if c, ok := e.Reference.Entity(m.Entity.CityID); ok && !e.equivalent(preliminary["city"].Value, c.Name, "city") {
 						continue
@@ -356,40 +350,7 @@ func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, e
 			r.Warnings = append(r.Warnings, "ambiguous_reference_"+kind)
 		}
 	}
-	// Confirmed/demo-opted-in building cities are explicit-text signals too.
-	buildingCities := map[string]string{}
-	for _, c := range entries {
-		if isDemo(c) && !e.AllowDemo {
-			continue
-		}
-		name := catalog.Text(c.Fields.City)
-		if contains(work, name) {
-			buildingCities[reference.Canon(name)] = name
-		}
-	}
-	if len(cities) == 0 && len(buildingCities) == 1 {
-		for _, name := range buildingCities {
-			signals = append(signals, evidence{"city", name, "building", 0.86})
-		}
-	}
-	if len(buildingCities) > 1 && len(cities) == 0 {
-		r.Warnings = append(r.Warnings, "ambiguous_city")
-	}
-	reduced := work
-	for _, d := range details {
-		reduced = d.re.ReplaceAllString(reduced, " ")
-	}
-	reduced = landmarkRE.ReplaceAllString(reduced, " ")
-	// Building facts can corroborate components, but only when their street and
-	// house actually occur in the working text. Demo facts require explicit opt-in.
-	for _, c := range entries {
-		if isDemo(c) && !e.AllowDemo {
-			continue
-		}
-		if contains(work, catalog.Text(c.Fields.StreetName)) && contains(reduced, catalog.Text(c.Fields.House)) {
-			signals = append(signals, evidence{"street_name", surface(work, catalog.Text(c.Fields.StreetName)), "building", 0.78}, evidence{"house", catalog.Text(c.Fields.House), "building", 0.78})
-		}
-	}
+	signals = e.reconcileDistrict(cityID, cities, districts, districtModel, signals, &r.Warnings)
 	fields := resolve(signals)
 	for field, v := range fields {
 		if v.Conflict {
@@ -397,68 +358,10 @@ func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, e
 		}
 	}
 	apply(&r, fields)
-	if hasWarning(r.Warnings, "ambiguous_city") || (len(cities) == 0 && len(buildingCities) > 1) {
+	if hasWarning(r.Warnings, "ambiguous_city") {
 		r.City = nil
 		r.Province = nil
 		fields["city"] = resolved{Conflict: true}
-	}
-	candidates := []api.CatalogEntry{}
-	for _, c := range entries {
-		if isDemo(c) && !e.AllowDemo {
-			continue
-		}
-		f := c.Fields
-		if r.StreetName == nil || r.House == nil || fields["street_name"].Conflict || fields["house"].Conflict {
-			continue
-		}
-		if !e.equivalent(*r.StreetName, catalog.Text(f.StreetName), "street") {
-			continue
-		}
-		if catalog.Canon(*r.House) != catalog.Canon(catalog.Text(f.House)) {
-			continue
-		}
-		if fields["city"].Conflict || hasWarning(r.Warnings, "ambiguous_city_reference") {
-			continue
-		}
-		if r.City != nil && !e.equivalent(*r.City, catalog.Text(f.City), "city") {
-			continue
-		}
-		if r.StreetType != nil && catalog.Canon(*r.StreetType) != catalog.Canon(catalog.Text(f.StreetType)) {
-			continue
-		}
-		candidates = append(candidates, c)
-	}
-	if len(candidates) == 1 {
-		c := candidates[0]
-		f := c.Fields
-		// Never overwrite explicit incompatible administrative evidence with a building default.
-		conflict := false
-		for _, pair := range [][2]*string{{r.Province, f.Province}, {r.District, f.District}, {r.LivingArea, f.LivingArea}} {
-			if pair[0] != nil && pair[1] != nil && reference.Canon(*pair[0]) != reference.Canon(*pair[1]) {
-				conflict = true
-			}
-		}
-		if !conflict {
-			for name, value := range map[string]*string{"city": f.City, "province": f.Province, "district": f.District, "living_area": f.LivingArea, "street_type": f.StreetType} {
-				if fields[name].Value == "" && value != nil {
-					fields[name] = resolved{Value: *value, Score: 0.85}
-				}
-			}
-			apply(&r, fields)
-			r.CatalogId = &c.Id
-			r.CatalogRevision = &c.Revision
-			r.Coordinates = &api.NullableCoordinates{Latitude: c.Coordinates.Latitude, Longitude: c.Coordinates.Longitude}
-			if isDemo(c) {
-				r.Warnings = append(r.Warnings, "synthetic_catalog_coordinates")
-			}
-		} else {
-			r.Warnings = append(r.Warnings, "building_reference_conflict")
-		}
-	} else if len(candidates) > 1 {
-		r.Warnings = append(r.Warnings, "ambiguous_catalog_match")
-	}
-	if r.Coordinates == nil {
-		r.Warnings = append(r.Warnings, "coordinates_unknown")
 	}
 	// Confidence aggregates actual field evidence, completeness and contradictions.
 	// Model scores are evidence strengths, not calibrated correctness probabilities.
@@ -494,21 +397,20 @@ func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, e
 		if strings.HasPrefix(warning, "ambiguous_") {
 			r.Confidence *= 0.7
 		}
-		if warning == "libpostal_unavailable" || warning == "gliner_unavailable" {
+		if warning == "libpostal_unavailable" {
 			r.Confidence *= 0.95
 		}
 	}
-	if r.Coordinates != nil && r.Confidence >= 0.72 && !hasWarning(r.Warnings, "synthetic_catalog_coordinates") {
+	uncertain := false
+	for _, warning := range r.Warnings {
+		if strings.HasPrefix(warning, "ambiguous_") || strings.HasPrefix(warning, "conflicting_") {
+			uncertain = true
+		}
+	}
+	if !uncertain && r.Province != nil && r.City != nil && r.StreetName != nil && r.House != nil && r.Confidence >= 0.72 {
 		r.Status = api.Matched
 	}
-	if hasWarning(r.Warnings, "synthetic_catalog_coordinates") {
-		r.Confidence = math.Min(r.Confidence, 0.69)
-		r.Status = api.NeedsReview
-	}
 	return r
-}
-func isDemo(c api.CatalogEntry) bool {
-	return !c.Confirmed && strings.HasPrefix(c.Source, "synthetic-")
 }
 func hasWarning(warnings []string, value string) bool {
 	for _, w := range warnings {

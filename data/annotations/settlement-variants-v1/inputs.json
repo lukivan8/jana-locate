@@ -1,0 +1,306 @@
+[
+  {
+    "id": "settlement_variant_001",
+    "raw_address": "г Караганда, улица Алалыкина дом 12"
+  },
+  {
+    "id": "settlement_variant_002",
+    "raw_address": "город Караганда, улица Алалыкина дом 12"
+  },
+  {
+    "id": "settlement_variant_003",
+    "raw_address": "Karaganda, улица Алалыкина дом 12"
+  },
+  {
+    "id": "settlement_variant_004",
+    "raw_address": "Караганды, улица Алалыкина дом 12"
+  },
+  {
+    "id": "settlement_variant_005",
+    "raw_address": "г.Караганда, улица Алалыкина дом 12"
+  },
+  {
+    "id": "settlement_variant_006",
+    "raw_address": "gorod Karaganda, улица Алалыкина дом 12"
+  },
+  {
+    "id": "settlement_variant_007",
+    "raw_address": "Қарағанды, улица Алалыкина дом 12"
+  },
+  {
+    "id": "settlement_variant_008",
+    "raw_address": "Карагaнда, улица Алалыкина дом 12"
+  },
+  {
+    "id": "settlement_variant_009",
+    "raw_address": "город Алматы, улица Макетная дом 21"
+  },
+  {
+    "id": "settlement_variant_010",
+    "raw_address": "г.Алматы, улица Макетная дом 21"
+  },
+  {
+    "id": "settlement_variant_011",
+    "raw_address": "Almaty, улица Макетная дом 21"
+  },
+  {
+    "id": "settlement_variant_012",
+    "raw_address": "Almatı, улица Макетная дом 21"
+  },
+  {
+    "id": "settlement_variant_013",
+    "raw_address": "АЛМАТЫ, улица Макетная дом 21"
+  },
+  {
+    "id": "settlement_variant_014",
+    "raw_address": "Алмaты, улица Макетная дом 21"
+  },
+  {
+    "id": "settlement_variant_015",
+    "raw_address": "Алмты, улица Макетная дом 21"
+  },
+  {
+    "id": "settlement_variant_016",
+    "raw_address": "gorod Almaty, улица Макетная дом 21"
+  },
+  {
+    "id": "settlement_variant_017",
+    "raw_address": "город Астана, улица Макетная дом 22"
+  },
+  {
+    "id": "settlement_variant_018",
+    "raw_address": "г Астана, улица Макетная дом 22"
+  },
+  {
+    "id": "settlement_variant_019",
+    "raw_address": "Astana, улица Макетная дом 22"
+  },
+  {
+    "id": "settlement_variant_020",
+    "raw_address": "ASTANA, улица Макетная дом 22"
+  },
+  {
+    "id": "settlement_variant_021",
+    "raw_address": "Астaна, улица Макетная дом 22"
+  },
+  {
+    "id": "settlement_variant_022",
+    "raw_address": "Астна, улица Макетная дом 22"
+  },
+  {
+    "id": "settlement_variant_023",
+    "raw_address": "gorod Astana, улица Макетная дом 22"
+  },
+  {
+    "id": "settlement_variant_024",
+    "raw_address": "Астнаа, улица Макетная дом 22"
+  },
+  {
+    "id": "settlement_variant_025",
+    "raw_address": "город Шымкент, улица Макетная дом 23"
+  },
+  {
+    "id": "settlement_variant_026",
+    "raw_address": "г.Шымкент, улица Макетная дом 23"
+  },
+  {
+    "id": "settlement_variant_027",
+    "raw_address": "Shymkent, улица Макетная дом 23"
+  },
+  {
+    "id": "settlement_variant_028",
+    "raw_address": "Shimkent, улица Макетная дом 23"
+  },
+  {
+    "id": "settlement_variant_029",
+    "raw_address": "ШЫМКЕНТ, улица Макетная дом 23"
+  },
+  {
+    "id": "settlement_variant_030",
+    "raw_address": "Шымкeнт, улица Макетная дом 23"
+  },
+  {
+    "id": "settlement_variant_031",
+    "raw_address": "Шымкнт, улица Макетная дом 23"
+  },
+  {
+    "id": "settlement_variant_032",
+    "raw_address": "gorod Shymkent, улица Макетная дом 23"
+  },
+  {
+    "id": "settlement_variant_033",
+    "raw_address": "город Актобе, улица Макетная дом 24"
+  },
+  {
+    "id": "settlement_variant_034",
+    "raw_address": "г.Актобе, улица Макетная дом 24"
+  },
+  {
+    "id": "settlement_variant_035",
+    "raw_address": "Aktobe, улица Макетная дом 24"
+  },
+  {
+    "id": "settlement_variant_036",
+    "raw_address": "Ақтөбе, улица Макетная дом 24"
+  },
+  {
+    "id": "settlement_variant_037",
+    "raw_address": "Aqtobe, улица Макетная дом 24"
+  },
+  {
+    "id": "settlement_variant_038",
+    "raw_address": "Актoбе, улица Макетная дом 24"
+  },
+  {
+    "id": "settlement_variant_039",
+    "raw_address": "Актбе, улица Макетная дом 24"
+  },
+  {
+    "id": "settlement_variant_040",
+    "raw_address": "gorod Aktobe, улица Макетная дом 24"
+  },
+  {
+    "id": "settlement_variant_041",
+    "raw_address": "город Костанай, улица Макетная дом 25"
+  },
+  {
+    "id": "settlement_variant_042",
+    "raw_address": "г Костанай, улица Макетная дом 25"
+  },
+  {
+    "id": "settlement_variant_043",
+    "raw_address": "Kostanay, улица Макетная дом 25"
+  },
+  {
+    "id": "settlement_variant_044",
+    "raw_address": "Kostanai, улица Макетная дом 25"
+  },
+  {
+    "id": "settlement_variant_045",
+    "raw_address": "Қостанай, улица Макетная дом 25"
+  },
+  {
+    "id": "settlement_variant_046",
+    "raw_address": "Костaнай, улица Макетная дом 25"
+  },
+  {
+    "id": "settlement_variant_047",
+    "raw_address": "Костнай, улица Макетная дом 25"
+  },
+  {
+    "id": "settlement_variant_048",
+    "raw_address": "gorod Kostanay, улица Макетная дом 25"
+  },
+  {
+    "id": "settlement_variant_049",
+    "raw_address": "Караганда"
+  },
+  {
+    "id": "settlement_variant_050",
+    "raw_address": "Karaganda"
+  },
+  {
+    "id": "settlement_variant_051",
+    "raw_address": "Караганды"
+  },
+  {
+    "id": "settlement_variant_052",
+    "raw_address": "Qaragandy"
+  },
+  {
+    "id": "settlement_variant_053",
+    "raw_address": "Актобе"
+  },
+  {
+    "id": "settlement_variant_054",
+    "raw_address": "Aktobe"
+  },
+  {
+    "id": "settlement_variant_055",
+    "raw_address": "Aktöbe"
+  },
+  {
+    "id": "settlement_variant_056",
+    "raw_address": "Ақтөбе"
+  },
+  {
+    "id": "settlement_variant_057",
+    "raw_address": "Астана, улица Макетная дом 30, кафе «Karaganda»"
+  },
+  {
+    "id": "settlement_variant_058",
+    "raw_address": "Астана, улица Макетная дом 30, магазин «город Караганда»"
+  },
+  {
+    "id": "settlement_variant_059",
+    "raw_address": "Астана, улица Макетная дом 30, напротив кафе «Караганды»"
+  },
+  {
+    "id": "settlement_variant_060",
+    "raw_address": "Астана, улица Макетная дом 30, у вывески «Aktobe»"
+  },
+  {
+    "id": "settlement_variant_061",
+    "raw_address": "Астана, улица Макетная дом 30, не в Караганду, доставить в Астану"
+  },
+  {
+    "id": "settlement_variant_062",
+    "raw_address": "Астана, улица Макетная дом 30, позвонить после отправки машины в Karaganda"
+  },
+  {
+    "id": "settlement_variant_063",
+    "raw_address": "Астана, улица Макетная дом 30, вход со стороны кафе «город Алматы»"
+  },
+  {
+    "id": "settlement_variant_064",
+    "raw_address": "Астана, улица Макетная дом 30, за магазином «Shymkent»"
+  },
+  {
+    "id": "settlement_variant_065",
+    "raw_address": "Қарағанды, Алалыкин кош дом 12"
+  },
+  {
+    "id": "settlement_variant_066",
+    "raw_address": "Қарағанды, Алалыкин көшесі, 12 үй"
+  },
+  {
+    "id": "settlement_variant_067",
+    "raw_address": "Қарағанды қаласы, Алалыкин көш., 12-үй"
+  },
+  {
+    "id": "settlement_variant_068",
+    "raw_address": "Қарағанды қ., Алалыкин көшесі, үй 12"
+  },
+  {
+    "id": "settlement_variant_069",
+    "raw_address": "Караганды, Алалыкин кош., дом12"
+  },
+  {
+    "id": "settlement_variant_070",
+    "raw_address": "Қарағанды Алалыкин көшесі 12 үй"
+  },
+  {
+    "id": "settlement_variant_071",
+    "raw_address": "Алалыкин көшесі, 12 үй, Қарағанды"
+  },
+  {
+    "id": "settlement_variant_072",
+    "raw_address": "Qaragandy, Alalykin koshesi, 12 ui"
+  },
+  {
+    "id": "settlement_variant_073",
+    "raw_address": "Karaganda, Алалыкин көш дом 12"
+  },
+  {
+    "id": "settlement_variant_074",
+    "raw_address": "Қарағанды, Алалыкина көшесі, 12 үй"
+  },
+  {
+    "id": "settlement_variant_075",
+    "raw_address": "ҚАРАҒАНДЫ, АЛАЛЫКИН КӨШЕСІ, 12 ҮЙ"
+  },
+  {
+    "id": "settlement_variant_076",
+    "raw_address": "Қарағанды, Алалыкин кошеси, дом 12"
+  }
+]

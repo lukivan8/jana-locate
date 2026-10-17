@@ -1,0 +1,2724 @@
+{
+  "schema_version": 1,
+  "method": "LLM semantic re-review with local KATO/OSM evidence; no normalizer; explicit per-record dispositions, no generator inversion",
+  "scope": "all 219 original review records only; annotation resolution does not assert a valid or unique delivery address",
+  "human_verified": false,
+  "entries": [
+    {
+      "id": "synthetic_080",
+      "original_review": "Два числа без маркеров; предполагаемый порядок дом, квартира неоднозначен.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_numeric_roles",
+      "resolution": "Числа без маркеров допускают разные роли дома и квартиры; текущая гипотеза не доказана.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_082",
+      "original_review": "Числа 36 и 12 без маркеров и в необычном порядке: роли дома и квартиры неоднозначны.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_numeric_roles",
+      "resolution": "Числа без маркеров допускают разные роли дома и квартиры; текущая гипотеза не доказана.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_083",
+      "original_review": "Указаны два разных города.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Указаны два разных города."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_084",
+      "original_review": "Город Алматы противоречит указанной Актюбинской области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Город и область явно размечены; несогласованность географической иерархии остаётся диагностикой ввода.",
+      "input_issues": [
+        {
+          "code": "city_province_conflict",
+          "detail": "Город Алматы противоречит указанной Актюбинской области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_085",
+      "original_review": "Ауэзовский район не соответствует городу Астана.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Город и район явно размечены. Локальный КАТО относит Ауэзовский район к Алматы; конфликт с Астаной сохранён.",
+      "input_issues": [
+        {
+          "code": "city_district_conflict",
+          "detail": "Ауэзовский район не соответствует городу Астана."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_086",
+      "original_review": "Указаны два разных города.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Указаны два разных города."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_087",
+      "original_review": "Город Тараз противоречит Павлодарской области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Город и область явно размечены; несогласованность географической иерархии остаётся диагностикой ввода.",
+      "input_issues": [
+        {
+          "code": "city_province_conflict",
+          "detail": "Город Тараз противоречит Павлодарской области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_093",
+      "original_review": "Пустой ввод.",
+      "annotation_status": "resolved",
+      "category": "clear_non_address",
+      "resolution": "Пустой/пробельный ввод однозначно не содержит адресных компонентов; пустая разметка корректна.",
+      "input_issues": [
+        {
+          "code": "empty_input",
+          "detail": "Пустой ввод."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_094",
+      "original_review": "Ввод состоит из пробельных символов.",
+      "annotation_status": "resolved",
+      "category": "clear_non_address",
+      "resolution": "Пустой/пробельный ввод однозначно не содержит адресных компонентов; пустая разметка корректна.",
+      "input_issues": [
+        {
+          "code": "empty_input",
+          "detail": "Ввод состоит из пробельных символов."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_095",
+      "original_review": "Сообщение без адреса.",
+      "annotation_status": "resolved",
+      "category": "clear_non_address",
+      "resolution": "Неадресное содержимое уже явно выделено как other, неоднозначности извлечения нет.",
+      "input_issues": [
+        {
+          "code": "non_address",
+          "detail": "Сообщение без адреса."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_096",
+      "original_review": "Только инструкция доставки, адрес отсутствует.",
+      "annotation_status": "resolved",
+      "category": "clear_non_address",
+      "resolution": "Инструкция доставки явно выделена; отсутствие самого адреса остаётся диагностикой.",
+      "input_issues": [
+        {
+          "code": "delivery_instruction_only",
+          "detail": "Только инструкция доставки, адрес отсутствует."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_097",
+      "original_review": "Нет интерпретируемого адресного содержимого.",
+      "annotation_status": "resolved",
+      "category": "clear_non_address",
+      "resolution": "Неадресное содержимое уже явно выделено как other, неоднозначности извлечения нет.",
+      "input_issues": [
+        {
+          "code": "non_address",
+          "detail": "Нет интерпретируемого адресного содержимого."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_103",
+      "original_review": "После улицы Рассветная8 указан отдельный дом; 8 сохранена в названии улицы, но может быть конфликтующим номером дома.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_number_role",
+      "resolution": "Рассветная8 рядом с отдельным явным домом: цифра 8 может входить в имя улицы, быть другим домом или лишним текстом. Сохранено предварительное решение.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_104",
+      "original_review": "После улицы Рассветная8 указан отдельный дом; 8 сохранена в названии улицы, но может быть конфликтующим номером дома.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_number_role",
+      "resolution": "Рассветная8 рядом с отдельным явным домом: цифра 8 может входить в имя улицы, быть другим домом или лишним текстом. Сохранено предварительное решение.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_106",
+      "original_review": "После улицы Рассветная8 указан отдельный дом; 8 сохранена в названии улицы, но может быть конфликтующим номером дома.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_number_role",
+      "resolution": "Рассветная8 рядом с отдельным явным домом: цифра 8 может входить в имя улицы, быть другим домом или лишним текстом. Сохранено предварительное решение.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_107",
+      "original_review": "После улицы Рассветная8 указан отдельный дом; 8 сохранена в названии улицы, но может быть конфликтующим номером дома.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_number_role",
+      "resolution": "Рассветная8 рядом с отдельным явным домом: цифра 8 может входить в имя улицы, быть другим домом или лишним текстом. Сохранено предварительное решение.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_108",
+      "original_review": "После улицы Рассветная8 указан отдельный дом; 8 сохранена в названии улицы, но может быть конфликтующим номером дома.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_number_role",
+      "resolution": "Рассветная8 рядом с отдельным явным домом: цифра 8 может входить в имя улицы, быть другим домом или лишним текстом. Сохранено предварительное решение.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_109",
+      "original_review": "После улицы Рассветная8 указан отдельный дом; 8 сохранена в названии улицы, но может быть конфликтующим номером дома.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_number_role",
+      "resolution": "Рассветная8 рядом с отдельным явным домом: цифра 8 может входить в имя улицы, быть другим домом или лишним текстом. Сохранено предварительное решение.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_110",
+      "original_review": "После улицы Рассветная8 указан отдельный дом; 8 сохранена в названии улицы, но может быть конфликтующим номером дома.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_number_role",
+      "resolution": "Рассветная8 рядом с отдельным явным домом: цифра 8 может входить в имя улицы, быть другим домом или лишним текстом. Сохранено предварительное решение.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_139",
+      "original_review": "После улицы Рассветная8 указан отдельный дом; 8 сохранена в названии улицы, но может быть конфликтующим номером дома.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_number_role",
+      "resolution": "Рассветная8 рядом с отдельным явным домом: цифра 8 может входить в имя улицы, быть другим домом или лишним текстом. Сохранено предварительное решение.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_143",
+      "original_review": "После улицы Рассветная8 указан отдельный дом; 8 сохранена в названии улицы, но может быть конфликтующим номером дома.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_number_role",
+      "resolution": "Рассветная8 рядом с отдельным явным домом: цифра 8 может входить в имя улицы, быть другим домом или лишним текстом. Сохранено предварительное решение.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_148",
+      "original_review": "После улицы Рассветная8 указан отдельный дом; 8 сохранена в названии улицы, но может быть конфликтующим номером дома.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_number_role",
+      "resolution": "Рассветная8 рядом с отдельным явным домом: цифра 8 может входить в имя улицы, быть другим домом или лишним текстом. Сохранено предварительное решение.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_152",
+      "original_review": "После улицы Рассветная8 указан отдельный дом; 8 сохранена в названии улицы, но может быть конфликтующим номером дома.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_number_role",
+      "resolution": "Рассветная8 рядом с отдельным явным домом: цифра 8 может входить в имя улицы, быть другим домом или лишним текстом. Сохранено предварительное решение.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_173",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_186",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_194",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_206",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_219",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_225",
+      "original_review": "Числовая часть названия улицы слита с домом; граница Астана 17 / 17 выбрана с опорой на справочник.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_house_boundary",
+      "resolution": "Справочник поддерживает выбранное имя, но не исключает другие границы слитного номера. Отсутствие альтернативы в неполном справочнике не доказывает однозначность.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_227",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_239",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_246",
+      "original_review": "Два явных обозначения типа улица и тұйық.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба явно написанных дорожных типа сохранены отдельными street_type spans; не требуется выбирать один для задачи извлечения.",
+      "input_issues": [
+        {
+          "code": "street_type_conflict",
+          "detail": "Два явных обозначения типа улица и тұйық."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_252",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_257",
+      "original_review": "Два явных обозначения типа улица и площадь.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба явно написанных дорожных типа сохранены отдельными street_type spans; не требуется выбирать один для задачи извлечения.",
+      "input_issues": [
+        {
+          "code": "street_type_conflict",
+          "detail": "Два явных обозначения типа улица и площадь."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_260",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_268",
+      "original_review": "Село Курылы семантически населённый пункт, хотя источник OSM использует его как имя улицы; возможна описка повторения Курылыс.",
+      "annotation_status": "resolved",
+      "category": "explicit_role_over_reference",
+      "resolution": "Явный маркер село задаёт роль населённого пункта. Сохраняем буквальную форму, не утверждаем идентичность двух названий и не подменяем роль полем из OSM.",
+      "input_issues": [
+        {
+          "code": "reference_role_mismatch",
+          "detail": "Село Курылы семантически населённый пункт, хотя источник OSM использует его как имя улицы; возможна описка повторения Курылыс."
+        }
+      ],
+      "evidence": [
+        "явный маркер село в raw_address",
+        "OSM хранит село Курылыс как адресное наименование; роль источника не авторитетнее текста"
+      ]
+    },
+    {
+      "id": "synthetic_269",
+      "original_review": "Село Курылыс семантически повтор населённого пункта, хотя источник OSM использует его как имя улицы.",
+      "annotation_status": "resolved",
+      "category": "explicit_role_over_reference",
+      "resolution": "Явный маркер село задаёт роль населённого пункта. Сохраняем буквальную форму, не утверждаем идентичность двух названий и не подменяем роль полем из OSM.",
+      "input_issues": [
+        {
+          "code": "reference_role_mismatch",
+          "detail": "Село Курылыс семантически повтор населённого пункта, хотя источник OSM использует его как имя улицы."
+        }
+      ],
+      "evidence": [
+        "явный маркер село в raw_address",
+        "OSM хранит село Курылыс как адресное наименование; роль источника не авторитетнее текста"
+      ]
+    },
+    {
+      "id": "synthetic_272",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_285",
+      "original_review": "Шымкент и Жосалы — разные населённые пункты, Шымкент противоречит Кызылординской области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Шымкент и Жосалы — разные населённые пункты, Шымкент противоречит Кызылординской области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_293",
+      "original_review": "Astana и Sadchikovka — разные населённые пункты; Astana противоречит Костанайской области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Astana и Sadchikovka — разные населённые пункты; Astana противоречит Костанайской области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_305",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_306",
+      "original_review": "Указаны два номера дома 41/1 и 41/2, один дом выбрать нельзя.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба номера после явного маркера дом выделены как house. Выбор единственного дома не входит в проверку корректности извлечения.",
+      "input_issues": [
+        {
+          "code": "house_conflict",
+          "detail": "Указаны два номера дома 41/1 и 41/2, один дом выбрать нельзя."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_307",
+      "original_review": "Указаны два номера дома 41/1 и 41/2, один дом выбрать нельзя.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба номера после явного маркера дом выделены как house. Выбор единственного дома не входит в проверку корректности извлечения.",
+      "input_issues": [
+        {
+          "code": "house_conflict",
+          "detail": "Указаны два номера дома 41/1 и 41/2, один дом выбрать нельзя."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_318",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_326",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_338",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_351",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_359",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_366",
+      "original_review": "Повторы Даулет могут быть повторениями населённого пункта; последнее употребление перед домом размечено как одноимённая улица с опорой на справочник.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_city_street_role",
+      "resolution": "В справочнике есть и населённый пункт, и одноимённая улица; текст допускает повтор города вместо улицы. Роль спорного упоминания не доказана.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_371",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_384",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_392",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_404",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_417",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_425",
+      "original_review": "Astana и Zhanakurylys — разные населённые пункты; Astana противоречит Алматинской области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Astana и Zhanakurylys — разные населённые пункты; Astana противоречит Алматинской области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_437",
+      "original_review": "Шымкент и Выдриха — разные населённые пункты; Шымкент противоречит Восточно-Казахстанской области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Шымкент и Выдриха — разные населённые пункты; Шымкент противоречит Восточно-Казахстанской области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_448",
+      "original_review": "Числовая часть названия улицы слита с домом; граница Улугбека 2 / 2 выбрана с опорой на справочник.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_house_boundary",
+      "resolution": "Справочник поддерживает выбранное имя, но не исключает другие границы слитного номера. Отсутствие альтернативы в неполном справочнике не доказывает однозначность.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_450",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_458",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_462",
+      "original_review": "Два явных обозначения типа переулок и улица.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба явно написанных дорожных типа сохранены отдельными street_type spans; не требуется выбирать один для задачи извлечения.",
+      "input_issues": [
+        {
+          "code": "street_type_conflict",
+          "detail": "Два явных обозначения типа переулок и улица."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_463",
+      "original_review": "Два явных обозначения типа переулок и улица.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба явно написанных дорожных типа сохранены отдельными street_type spans; не требуется выбирать один для задачи извлечения.",
+      "input_issues": [
+        {
+          "code": "street_type_conflict",
+          "detail": "Два явных обозначения типа переулок и улица."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_470",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_483",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_491",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_503",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_516",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_524",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_536",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_549",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_557",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_569",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_582",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_584",
+      "original_review": "Числовая часть названия улицы слита с домом; граница Асангали 35/1 / 35/1 выбрана с опорой на справочник.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_house_boundary",
+      "resolution": "Справочник поддерживает выбранное имя, но не исключает другие границы слитного номера. Отсутствие альтернативы в неполном справочнике не доказывает однозначность.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_586",
+      "original_review": "Слитое 33А неоднозначно: выбраны микрорайон 3 и дом 3А с опорой на справочник.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_house_boundary",
+      "resolution": "Справочник поддерживает выбранное имя, но не исключает другие границы слитного номера. Отсутствие альтернативы в неполном справочнике не доказывает однозначность.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_590",
+      "original_review": "Указаны две противоречащие области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две противоречащие области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_602",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_615",
+      "original_review": "Указаны два разных населенных пункта.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Указаны два разных населенных пункта."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_623",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_635",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_648",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_656",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_668",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_681",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_689",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_701",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_714",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_722",
+      "original_review": "Указаны два разных населенных пункта.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Указаны два разных населенных пункта."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_734",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_747",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_755",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_767",
+      "original_review": "Указаны два разных населенных пункта.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Указаны два разных населенных пункта."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_780",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_788",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_800",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_813",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_821",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_833",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_840",
+      "original_review": "<разлинчые> является неопределенным заполнителем вместо названия улицы; не размечено как известное название.",
+      "annotation_status": "resolved",
+      "category": "clear_role_source_placeholder",
+      "resolution": "Контекст и местный справочник указывают роль street_name. Выделен буквальный изменённый placeholder, без исправления текста и подтверждения реальности улицы.",
+      "input_issues": [
+        {
+          "code": "placeholder_street",
+          "detail": "Placeholder в позиции названия улицы размечен дословно; реальность названия не подтверждена. Исходное замечание сохранено в original_review."
+        }
+      ],
+      "labels_patch": {
+        "s": "<разлинчые>"
+      },
+      "evidence": [
+        "osm:kato:355630100:street:761fd94d2c8619372e66",
+        "исходный текст в позиции названия улицы; номер дома размечен отдельно"
+      ]
+    },
+    {
+      "id": "synthetic_841",
+      "original_review": "<различhые> является неопределенным заполнителем вместо названия улицы; не размечено как известное название.",
+      "annotation_status": "resolved",
+      "category": "clear_role_source_placeholder",
+      "resolution": "Контекст и местный справочник указывают роль street_name. Выделен буквальный изменённый placeholder, без исправления текста и подтверждения реальности улицы.",
+      "input_issues": [
+        {
+          "code": "placeholder_street",
+          "detail": "Placeholder в позиции названия улицы размечен дословно; реальность названия не подтверждена. Исходное замечание сохранено в original_review."
+        }
+      ],
+      "labels_patch": {
+        "s": "<различhые>"
+      },
+      "evidence": [
+        "osm:kato:355630100:street:761fd94d2c8619372e66",
+        "исходный текст в позиции названия улицы; номер дома размечен отдельно"
+      ]
+    },
+    {
+      "id": "synthetic_846",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_854",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_866",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_879",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_887",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_899",
+      "original_review": "Указаны два разных населенных пункта.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Указаны два разных населенных пункта."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_912",
+      "original_review": "Указаны два разных населенных пункта.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Указаны два разных населенных пункта."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_920",
+      "original_review": "Указаны два разных населенных пункта.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Указаны два разных населенных пункта."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_932",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_940",
+      "original_review": "В слитном Kараозек-150 граница улица/дом неоднозначна; справочник допускает Караозек-1 и дом 50.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_house_boundary",
+      "resolution": "Справочник поддерживает выбранное имя, но не исключает другие границы слитного номера. Отсутствие альтернативы в неполном справочнике не доказывает однозначность.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_941",
+      "original_review": "В слитном Rfhfjptr-150 граница улица/дом неоднозначна; справочник допускает улицу Караозек-1 и дом 50.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_house_boundary",
+      "resolution": "Справочник поддерживает выбранное имя, но не исключает другие границы слитного номера. Отсутствие альтернативы в неполном справочнике не доказывает однозначность.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_945",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_953",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_965",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_978",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_986",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_998",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1011",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1019",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1031",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1044",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1052",
+      "original_review": "Указаны два разных населенных пункта.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Указаны два разных населенных пункта."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1054",
+      "original_review": "Второе Ребровка может быть повтором поселка или адресным наименованием; справочник содержит одноименное адресное наименование.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_city_street_role",
+      "resolution": "В справочнике есть и населённый пункт, и одноимённая улица; текст допускает повтор города вместо улицы. Роль спорного упоминания не доказана.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_1055",
+      "original_review": "Второе Ребровка может быть повтором поселка или адресным наименованием; справочник содержит одноименное адресное наименование.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_city_street_role",
+      "resolution": "В справочнике есть и населённый пункт, и одноимённая улица; текст допускает повтор города вместо улицы. Роль спорного упоминания не доказана.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_1064",
+      "original_review": "Указаны два разных населенных пункта.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Указаны два разных населенных пункта."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1077",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1085",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1097",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1110",
+      "original_review": "Указаны два разных населенных пункта.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Указаны два разных населенных пункта."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1118",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1130",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1143",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1151",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1163",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1176",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1184",
+      "original_review": "Указаны два разных населенных пункта.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Указаны два разных населенных пункта."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1196",
+      "original_review": "Указаны две разные области.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1198",
+      "original_review": "Повтор Тущыбек может обозначать поселок либо одноименное адресное наименование; второе выбрано как адресное по справочнику.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_city_street_role",
+      "resolution": "В справочнике есть и населённый пункт, и одноимённая улица; текст допускает повтор города вместо улицы. Роль спорного упоминания не доказана.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_1199",
+      "original_review": "Повтор Tuschybek может обозначать поселок либо одноименное адресное наименование; второе выбрано как адресное по справочнику.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_city_street_role",
+      "resolution": "В справочнике есть и населённый пункт, и одноимённая улица; текст допускает повтор города вместо улицы. Роль спорного упоминания не доказана.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_1209",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1217",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1229",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1242",
+      "original_review": "Два разных населенных пункта в адресе",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Два разных населенных пункта в адресе"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1250",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1254",
+      "original_review": "Название улицы совпадает с поселением без маркера типа",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_city_street_role",
+      "resolution": "В справочнике есть и населённый пункт, и одноимённая улица; текст допускает повтор города вместо улицы. Роль спорного упоминания не доказана.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_1255",
+      "original_review": "Название улицы совпадает с поселением без маркера типа",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_city_street_role",
+      "resolution": "В справочнике есть и населённый пункт, и одноимённая улица; текст допускает повтор города вместо улицы. Роль спорного упоминания не доказана.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_1262",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1275",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1283",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1295",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1308",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1316",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1328",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1341",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1349",
+      "original_review": "Два разных населенных пункта",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Два разных населенных пункта"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1361",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1374",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1382",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1394",
+      "original_review": "Два разных населенных пункта",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Два разных населенных пункта"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1407",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1415",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1416",
+      "original_review": "Граница названия Новостройка 2 и дома 111 слита; использован справочный контекст",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_house_boundary",
+      "resolution": "Справочник поддерживает выбранное имя, но не исключает другие границы слитного номера. Отсутствие альтернативы в неполном справочнике не доказывает однозначность.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_1427",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1440",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1448",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1460",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1473",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1481",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1493",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1506",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1514",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1526",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1539",
+      "original_review": "Два разных населенных пункта",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Два разных населенных пункта"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1547",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1559",
+      "original_review": "Две явно указанные области; улица и поселение имеют варианты одного названия",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_city_street_role",
+      "resolution": "В справочнике есть и населённый пункт, и одноимённая улица; текст допускает повтор города вместо улицы. Роль спорного упоминания не доказана.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области сохранены, независимо от нерешённой неоднозначности разметки."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1560",
+      "original_review": "Два явно указанных номера квартиры: 2 и 219",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Два явных номера квартиры сохранены как apartment; разметка не подменяет их номером из OSM-основы.",
+      "input_issues": [
+        {
+          "code": "apartment_conflict",
+          "detail": "Два явно указанных номера квартиры: 2 и 219"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1561",
+      "original_review": "Два явно указанных номера квартиры: 2 и 220",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Два явных номера квартиры сохранены как apartment; разметка не подменяет их номером из OSM-основы.",
+      "input_issues": [
+        {
+          "code": "apartment_conflict",
+          "detail": "Два явно указанных номера квартиры: 2 и 220"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1572",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1580",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1592",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1605",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1613",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1625",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1638",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1646",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1658",
+      "original_review": "Конфликт Актюбинской области и отдельного региона Алматы",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Конфликт Актюбинской области и отдельного региона Алматы"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1671",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1679",
+      "original_review": "Два разных населенных пункта",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Два разных населенных пункта"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1691",
+      "original_review": "Два разных населенных пункта",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Два разных населенных пункта"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1704",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1712",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1724",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1737",
+      "original_review": "Два разных населенных пункта",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Два разных населенных пункта"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1745",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1757",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1770",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1778",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1790",
+      "original_review": "Две явно указанные области",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области"
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1803",
+      "original_review": "Указаны две разные области; не выбирать одну по происхождению примера.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Указаны две разные области; не выбирать одну по происхождению примера."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1808",
+      "original_review": "Сохранён буквальный составной номер дома 2/2/1б; не исправлять по исходной OSM-записи.",
+      "annotation_status": "resolved",
+      "category": "explicit_literal_house_number",
+      "resolution": "Явный маркер д задаёт номер дома; необычная форма номера не создаёт неоднозначности границ. Сохранён весь буквальный номер без исправления по генератору.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_1811",
+      "original_review": "Две разные области в строке; сохранить конфликт.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две разные области в строке; сохранить конфликт."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1823",
+      "original_review": "Две разные области в строке.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две разные области в строке."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1836",
+      "original_review": "Две разные области в строке.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две разные области в строке."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1844",
+      "original_review": "Две разные области в строке.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две разные области в строке."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1856",
+      "original_review": "Две разные области в строке.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две разные области в строке."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1869",
+      "original_review": "Указаны Астана и Аршалы; нет оснований молча выбрать населённый пункт.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Указаны Астана и Аршалы; нет оснований молча выбрать населённый пункт."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1877",
+      "original_review": "Две разные области в строке.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две разные области в строке."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1889",
+      "original_review": "Две разные области в строке.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две разные области в строке."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1902",
+      "original_review": "Две разные области в строке.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две разные области в строке."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1907",
+      "original_review": "Буквальный номер дома 30/Б/1б сохранён; не исправлять по OSM-основе.",
+      "annotation_status": "resolved",
+      "category": "explicit_literal_house_number",
+      "resolution": "Явный маркер д задаёт номер дома; необычная форма номера не создаёт неоднозначности границ. Сохранён весь буквальный номер без исправления по генератору.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_1910",
+      "original_review": "Конфликт областей и неоднозначная граница 3634: справочная основа содержит 36 в имени улицы; выбрано 36 + дом 34, требуется проверка.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_house_boundary",
+      "resolution": "Справочник поддерживает выбранное имя, но не исключает другие границы слитного номера. Отсутствие альтернативы в неполном справочнике не доказывает однозначность.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две явно указанные области сохранены, независимо от нерешённой неоднозначности разметки."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1911",
+      "original_review": "Неоднозначная граница 3634: справочная основа содержит 36 в имени улицы; выбрано 36 + дом 34, требуется проверка.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_house_boundary",
+      "resolution": "Справочник поддерживает выбранное имя, но не исключает другие границы слитного номера. Отсутствие альтернативы в неполном справочнике не доказывает однозначность.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_1922",
+      "original_review": "Две разные области в строке.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две разные области в строке."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1935",
+      "original_review": "Две разные области в строке.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две разные области в строке."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1943",
+      "original_review": "Две разные области в строке.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две разные области в строке."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1955",
+      "original_review": "Две разные области в строке.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две разные области в строке."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1961",
+      "original_review": "Слитная последовательность 34622a допускает разные границы; справочник поддерживает улицу 34, выбрано 34 + дом 622a.",
+      "annotation_status": "needs_review",
+      "category": "ambiguous_street_house_boundary",
+      "resolution": "Справочник поддерживает выбранное имя, но не исключает другие границы слитного номера. Отсутствие альтернативы в неполном справочнике не доказывает однозначность.",
+      "input_issues": []
+    },
+    {
+      "id": "synthetic_1968",
+      "original_review": "Две разные области в строке.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две разные области в строке."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1976",
+      "original_review": "Shymkent и Atameken указаны как разные населённые пункты; сохранить конфликт.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Явные упоминания разных населённых пунктов сохранены целиком. Их роли понятны; истинное место назначения не выбрано.",
+      "input_issues": [
+        {
+          "code": "city_conflict",
+          "detail": "Shymkent и Atameken указаны как разные населённые пункты; сохранить конфликт."
+        }
+      ]
+    },
+    {
+      "id": "synthetic_1988",
+      "original_review": "Две разные области в строке.",
+      "annotation_status": "resolved",
+      "category": "clear_spans_conflicting_input",
+      "resolution": "Оба региона явно присутствуют и размечены; проверка извлечения закрыта. Конфликт адреса сохранён, победитель не выбирался.",
+      "input_issues": [
+        {
+          "code": "province_conflict",
+          "detail": "Две разные области в строке."
+        }
+      ]
+    }
+  ],
+  "geographic_identity_resolution": "not_performed",
+  "resolved_review_implies_unambiguous_normalization": false
+}

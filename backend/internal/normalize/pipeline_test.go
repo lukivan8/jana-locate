@@ -1,12 +1,9 @@
 package normalize
 
 import (
-	"context"
 	"database/sql"
 	"errors"
 	"github.com/lukivan8/jana-address/internal/reference"
-	"net/http"
-	"net/http/httptest"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -20,16 +17,6 @@ type fakePostal []postal.Component
 
 func (f fakePostal) Parse(s string) ([]postal.Component, error) { return f, nil }
 
-type fakeExtractor struct {
-	rows  [][]Entity
-	texts []string
-	err   error
-}
-
-func (f *fakeExtractor) Extract(ctx context.Context, texts []string) ([][]Entity, error) {
-	f.texts = append([]string{}, texts...)
-	return f.rows, f.err
-}
 func TestExtractionDoesNotRequireBuilding(t *testing.T) {
 	e := engine(t)
 	e.AllowDemo = false
@@ -54,26 +41,28 @@ func TestApartmentCannotSupplyHouseForGeocoding(t *testing.T) {
 		t.Fatalf("apartment became house: %+v", r)
 	}
 }
-func TestGLiNERGetsUnmodifiedWorkingTextAndRulesWinMarkers(t *testing.T) {
+func TestPostalFailureKeepsRecordsAndReportsOnlyRemainingParser(t *testing.T) {
 	e := engine(t)
-	f := &fakeExtractor{rows: [][]Entity{{{Label: "house", Text: "1", Score: 0.9}, {Label: "street_name", Text: "Новая", Score: 0.9}}}}
-	e.GLiNER = f
-	r := e.Normalize(api.InputRecord{Id: "secret-id", RawAddress: "  улица\u200b Новая 12а кв 1 "})
-	if len(f.texts) != 1 || f.texts[0] != "улица Новая 12а кв 1" {
-		t.Fatalf("destructive model input: %#v", f.texts)
+	e.Postal = failedPostal{}
+	records := []api.InputRecord{{Id: "same", RawAddress: "  улица Новая 12а кв 1  "}, {Id: "same", RawAddress: ""}}
+	out := e.NormalizeBatch(records)
+	if len(out) != 2 || out[0].Id != records[0].Id || out[0].RawAddress != records[0].RawAddress || out[1].Id != records[1].Id || out[1].RawAddress != "" {
+		t.Fatal("input identity changed", out)
 	}
-	if catalog.Text(r.House) != "12а" || catalog.Text(r.Apartment) != "1" {
-		t.Fatalf("model overrode explicit structure: %+v", r)
+	if len(out[0].Warnings) != 1 || out[0].Warnings[0] != "libpostal_unavailable" || len(out[1].Warnings) != 0 {
+		t.Fatal("unexpected parser diagnostics", out)
+	}
+	if catalog.Text(out[0].House) != "12а" || catalog.Text(out[0].Apartment) != "1" {
+		t.Fatal("rules did not survive parser failure", out[0])
 	}
 }
-func TestModelFailureIsVisibleAndDoesNotDropRecords(t *testing.T) {
-	e := engine(t)
-	e.GLiNER = &fakeExtractor{err: errors.New("timeout")}
-	out := e.NormalizeBatch([]api.InputRecord{{Id: "1", RawAddress: "улица Новая 12а"}, {Id: "2", RawAddress: ""}})
-	if len(out) != 2 || !hasWarning(out[0].Warnings, "gliner_unavailable") || out[1].Id != "2" {
-		t.Fatal("failure was hidden or dropped inputs")
-	}
+
+type failedPostal struct{}
+
+func (failedPostal) Parse(string) ([]postal.Component, error) {
+	return nil, errors.New("parser failed")
 }
+
 func TestConfidenceRespondsToCorroboration(t *testing.T) {
 	e := engine(t)
 	e.AllowDemo = false
@@ -85,28 +74,109 @@ func TestConfidenceRespondsToCorroboration(t *testing.T) {
 		t.Fatalf("confidence ignores actual agreement: %f <= %f", b.Confidence, a.Confidence)
 	}
 }
-func TestGLiNERValidatesCodepointSpansAndBatchCount(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"results":[[{"start":0,"end":6,"text":"Алматы","label":"city","score":0.9}]]}`))
-	}))
-	defer srv.Close()
-	g := GLiNER{URL: srv.URL}
-	rows, err := g.Extract(context.Background(), []string{"Алматы"})
-	if err != nil || rows[0][0].Text != "Алматы" {
-		t.Fatal(err)
-	}
-	if _, err = g.Extract(context.Background(), []string{"Астана"}); err == nil {
-		t.Fatal("ungrounded span accepted")
-	}
-	if _, err = g.Extract(context.Background(), []string{"Алматы", "Алматы"}); err == nil {
-		t.Fatal("wrong batch count accepted")
+func TestFieldConflictAbstains(t *testing.T) {
+	v := resolve([]evidence{{"city", "Алматы", "rules", 0.85}, {"city", "Астана", "libpostal", 0.8}})["city"]
+	if !v.Conflict || strings.TrimSpace(v.Value) != "" {
+		t.Fatal("conflicting parser and rule claims did not abstain")
 	}
 }
-func TestFieldConflictAbstains(t *testing.T) {
-	v := resolve([]evidence{{"city", "Алматы", "gliner", 0.85}, {"city", "Астана", "libpostal", 0.8}})["city"]
-	if !v.Conflict || strings.TrimSpace(v.Value) != "" {
-		t.Fatal("conflicting model claims did not abstain")
+
+func TestStructuredAddressRefinesHomonymWithoutInventingCoordinates(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "reference.sqlite")
+	db, err := sql.Open("sqlite", path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = db.Exec(`CREATE TABLE metadata(key TEXT,value TEXT); INSERT INTO metadata VALUES('schema_version','2');
+ CREATE TABLE entities(id TEXT,kind TEXT,name TEXT,parent_id TEXT,city_id TEXT,province_id TEXT,district_id TEXT,street_type TEXT,source TEXT);
+ CREATE TABLE aliases(entity_id TEXT,alias TEXT);
+ CREATE TABLE addresses(id TEXT,street_id TEXT,city_id TEXT,house TEXT,source TEXT);
+ INSERT INTO entities VALUES
+ ('p1','province','Карагандинская область','','','p1','','','test'),
+ ('p2','province','Актюбинская область','','','p2','','','test'),
+ ('c1','city','Караганда','p1','c1','p1','','','test'),
+ ('c2','city','Караганда','p2','c2','p2','','','test'),
+ ('s1','street','Алалыкина','c1','c1','p1','','улица','test'),
+ ('s2','street','Алалыкина','c2','c2','p2','','улица','test');
+ INSERT INTO aliases VALUES('p1','Карагандинская область'),('p2','Актюбинская область'),
+ ('c1','Караганда'),('c2','Караганда'),('s1','Алалыкина'),('s2','Алалыкина');
+ INSERT INTO addresses VALUES('a1','s1','c1','12','test');`)
+	if err != nil {
+		t.Fatal(err)
+	}
+	db.Close()
+	e := engine(t)
+	e.AllowDemo = false
+	e.Reference, err = reference.Open(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, tt := range []struct {
+		raw, house, province string
+		ambiguous            bool
+	}{
+		{"Караганда, Алалыкина 12", "12", "Карагандинская область", false},
+		{"Караганда, Алалыкина д12", "12", "Карагандинская область", false},
+		{"Караганда, Алалыкина д 12", "12", "Карагандинская область", false},
+		{"Караганда, Алалыкина д.12", "12", "Карагандинская область", false},
+		{"Караганда, Алалыкина 13", "13", "", true},
+		{"Караганда, Алалыкина 12/1", "12/1", "", true},
+	} {
+		t.Run(tt.raw, func(t *testing.T) {
+			e.Postal = fakePostal{{Label: "city", Value: "караганда"}, {Label: "road", Value: "алалыкина"}, {Label: "house_number", Value: tt.house}}
+			if houseRE.MatchString(tt.raw) {
+				// Native libpostal can miss the road when the house marker is glued.
+				e.Postal = fakePostal{{Label: "city", Value: "караганда"}, {Label: "house_number", Value: tt.house}}
+			}
+
+			r := e.Normalize(api.InputRecord{Id: "case", RawAddress: tt.raw})
+			if catalog.Text(r.Province) != tt.province || hasWarning(r.Warnings, "ambiguous_city_reference") != tt.ambiguous || r.Coordinates != nil || r.CatalogId != nil || r.RawAddress != tt.raw {
+				t.Fatalf("unsafe reference result: %+v", r)
+			}
+		})
+	}
+	// Positive facts in both settlements must still abstain.
+	db, err = sql.Open("sqlite", path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err = db.Exec("INSERT INTO addresses VALUES('a2','s2','c2','12','test')"); err != nil {
+		t.Fatal(err)
+	}
+	db.Close()
+	e.Reference, err = reference.Open(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	e.Postal = fakePostal{{Label: "road", Value: "алалыкина"}, {Label: "house_number", Value: "12"}}
+	r := e.Normalize(api.InputRecord{Id: "case", RawAddress: "Караганда, Алалыкина 12"})
+	if r.Province != nil || !hasWarning(r.Warnings, "ambiguous_city_reference") {
+		t.Fatalf("duplicate structured addresses chose a city: %+v", r)
+	}
+	r = e.Normalize(api.InputRecord{Id: "case", RawAddress: "Алалыкина 12"})
+	if r.City != nil || r.Province != nil || r.Coordinates != nil {
+		t.Fatalf("partial reference invented city: %+v", r)
+	}
+	db, err = sql.Open("sqlite", path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = db.Exec(`INSERT INTO entities VALUES
+ ('g1','street','Street','c1','c1','p1','','улица','test'),
+ ('g2','street','Street','c2','c2','p2','','улица','test');
+ INSERT INTO aliases VALUES('g1','Street'),('g2','Street');`)
+	if err != nil {
+		t.Fatal(err)
+	}
+	db.Close()
+	e.Reference, err = reference.Open(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	e.Postal = fakePostal{{Label: "road", Value: "smoke street"}, {Label: "house_number", Value: "12"}}
+	r = e.Normalize(api.InputRecord{Id: "fragment", RawAddress: "Караганда, Smoke Street 12"})
+	if catalog.Text(r.StreetName) != "Smoke Street" || hasWarning(r.Warnings, "ambiguous_reference_street") || r.StreetType != nil {
+		t.Fatalf("fragment alias polluted complete street extraction: %+v", r)
 	}
 }
 

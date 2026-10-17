@@ -1,14 +1,18 @@
+import { useEffect, useState } from 'react'
 import { Link, Outlet } from '@tanstack/react-router'
+import { isLocalWorkspace } from '../../api/client'
 
 export function DemoLayout() {
+  const [local, setLocal] = useState(false)
+  useEffect(() => { setLocal(isLocalWorkspace()) }, [])
   return <div className="demo-shell">
     <a className="skip-link" href="#main">К содержимому</a>
-    <header><Link className="brand" to="/">jana<span>locate</span></Link><span className="tag">ADDRESS INTELLIGENCE / API v1</span></header>
-    <nav className="demo-nav" aria-label="Сценарии демонстрации">
-      <Link to="/api" activeProps={{ 'aria-current': 'page' }}><span>1</span> API и архитектура</Link>
-      <Link to="/" activeOptions={{ exact: true }} activeProps={{ 'aria-current': 'page' }}><span>2</span> Пакетная обработка</Link>
-      <Link to="/geocoder" activeProps={{ 'aria-current': 'page' }}><span>3</span> Свободный ввод</Link>
-    </nav>
+    <header><Link className="brand" to="/">jana<span>locate</span></Link>
+      <nav className="header-nav" aria-label="Сценарии демонстрации">
+        {local ? <a href="/openapi.json">Документация</a> : <Link to="/api" activeProps={{ 'aria-current': 'page' }}>Документация</Link>}
+        {local ? <a href="/?new=true">Тестовый запуск</a> : <Link to="/geocoder" activeProps={{ 'aria-current': 'page' }}>Тестовый запуск</Link>}
+      </nav>
+    </header>
     <Outlet />
     <footer className="shell-footer">Jana Locate · Офлайн-обработка · Независимый HTTP API</footer>
   </div>

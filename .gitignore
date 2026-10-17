@@ -1,21 +1,34 @@
 .DS_Store
 .env
-.env.*
-!.env.example
 .deploy/
-.artifacts/
 node_modules/
 dist/
 .output/
 .tanstack/
-bin/
-var/
+backend/bin/
+backend/var/
 playwright-report/
 test-results/
 backups/
 __pycache__/
+.artifacts/
 .venv/
 *.sqlite
 *.sqlite-journal
 *.sqlite-wal
-*.sqlite-shm
+
+# Organizer materials: local only; remove after the hackathon defence.
+docs/hackathon/private/
+
+# CLI local profiles and worker metadata
+connection.json
+*.connection.json
+*.sqlite.web.json
+*.sqlite.serve.lock
+
+# Local CLI state and journals
+cli/var/
+
+# Local organizer research and operational history are not public documentation.
+docs/hackathon/
+docs/hackathon.md

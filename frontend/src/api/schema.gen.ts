@@ -85,6 +85,127 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/normalization-jobs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Recent jobs, newest first. Retained for seven days since last update; at most 50 jobs. */
+        get: operations["listJobs"];
+        put?: never;
+        /** @description Persist input before processing in a single background worker. Interrupted work is restarted on server startup. Existing synchronous normalize is unchanged. */
+        post: operations["createJob"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/normalization-jobs/{job_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Retrieve original input, saved results and review state. Poll queued/running jobs. */
+        get: operations["getJob"];
+        put?: never;
+        post?: never;
+        /** @description Delete a completed or failed job. Active work cannot be deleted. */
+        delete: operations["deleteJob"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/normalization-jobs/{job_id}/records/{record_index}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Save fields and mark one record reviewed without requiring coordinates. Changed building fields clear obsolete catalog links and coordinates unless an explicitly confirmed matching catalog building is supplied. Confidence is not raised. */
+        post: operations["reviewJobRecord"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/normalization-jobs/{job_id}/records/{record_index}/candidates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Read settlement identities grounded in the original input, constrained by explicit province mentions. No network geocoding. Version identifies the current immutable reference snapshot. */
+        get: operations["getCityCandidates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/normalization-jobs/{job_id}/records/{record_index}/selections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Choose a settlement from current candidates, reparse the original record and recompute dependent fields. Replaces manual corrections for this record, clears its reviewed flag, and does not confirm a building. Exact retry of the last selection is idempotent; other stale writes return 409. */
+        post: operations["selectJobCity"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/normalize/candidates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Stateless settlement resolution using the same normalization engine as saved jobs. No job, answer cache, or building confirmation is created. */
+        post: operations["getRecordCityCandidates"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/normalize/selections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Stateless settlement resolution using the same normalization engine as saved jobs. No job, answer cache, or building confirmation is created. */
+        post: operations["selectRecordCity"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -139,12 +260,30 @@ export interface components {
             /** @description String or int64 identifier. Use strings for integers outside JavaScript safe range. Never used for matching. */
             id: string | number;
             raw_address: string;
-            /** Format: double */
+            /**
+             * Format: double
+             * @description Heuristic score of address component evidence and completeness, not a calibrated probability. Coordinates and building catalog contents have no effect.
+             */
             confidence: number;
+            /**
+             * @deprecated
+             * @description Legacy compatibility field. Normalization always returns null; building geocoding is not performed.
+             */
             coordinates: components["schemas"]["NullableCoordinates"];
+            /**
+             * @deprecated
+             * @description Legacy compatibility field. Normalization always returns null; building geocoding is not performed.
+             */
             catalog_id: string | null;
+            /**
+             * @deprecated
+             * @description Legacy compatibility field. Normalization always returns null; building geocoding is not performed.
+             */
             catalog_revision: number | null;
-            /** @enum {string} */
+            /**
+             * @description matched: province, city, street_name and house parsed with confidence >= 0.72 and no ambiguous/conflicting evidence; needs_review: incomplete or uncertain parsed address; unmatched: no address fields. Independent of coordinates or catalog membership.
+             * @enum {string}
+             */
             status: "matched" | "needs_review" | "unmatched";
             warnings: string[];
         };
@@ -174,6 +313,86 @@ export interface components {
         } | null;
         NormalizeArrayRequest: components["schemas"]["InputRecord"][];
         NormalizeArrayResponse: components["schemas"]["Result"][];
+        JobSummary: {
+            id: string;
+            revision: number;
+            /** @enum {string} */
+            status: "queued" | "running" | "completed" | "failed";
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            /** Format: date-time */
+            expires_at: string;
+            total: number;
+            reviewed_count: number;
+            error: string;
+        };
+        NormalizationJob: {
+            id: string;
+            revision: number;
+            /** @enum {string} */
+            status: "queued" | "running" | "completed" | "failed";
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            /** Format: date-time */
+            expires_at: string;
+            total: number;
+            reviewed_count: number;
+            error: string;
+            records: components["schemas"]["InputRecord"][];
+            results: components["schemas"]["Result"][];
+            reviewed: boolean[];
+            /** @description Administrative choices only; these do not mark records fully reviewed. Missing in jobs created before this feature. */
+            city_selections?: components["schemas"]["CitySelection"][];
+        };
+        JobList: {
+            jobs: components["schemas"]["JobSummary"][];
+        };
+        ReviewRequest: {
+            expected_revision: number;
+            fields: components["schemas"]["AddressFields"];
+            /** @description Optional confirmed building ID. Must match all submitted building fields. Coordinates are read from the catalog, never supplied here. */
+            confirmed_catalog_id?: string;
+        };
+        CityCandidate: {
+            entity_id: string;
+            name: string;
+            settlement_type: string | null;
+            province: string | null;
+            province_id: string;
+            source: string;
+        };
+        CitySelection: {
+            record_index: number;
+            entity_id: string;
+            reference_version: string;
+            applied_revision: number;
+        };
+        CityCandidates: {
+            revision: number;
+            reference_version: string;
+            candidates: components["schemas"]["CityCandidate"][];
+        };
+        CitySelectionRequest: {
+            expected_revision: number;
+            reference_version: string;
+            entity_id: string;
+        };
+        RecordCityCandidatesRequest: {
+            record: components["schemas"]["InputRecord"];
+        };
+        RecordCityCandidates: {
+            reference_version: string;
+            candidates: components["schemas"]["CityCandidate"][];
+        };
+        RecordCitySelectionRequest: {
+            record: components["schemas"]["InputRecord"];
+            reference_version: string;
+            entity_id: string;
+        };
     };
     responses: never;
     parameters: never;
@@ -452,6 +671,679 @@ export interface operations {
                 };
             };
             /** @description Storage or internal failure */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    listJobs: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobList"];
+                };
+            };
+            /** @description Invalid request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unknown or expired job */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Revision conflict or job not completed */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request too large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unsupported media type */
+            415: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Storage error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Job storage limit reached */
+            507: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    createJob: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NormalizeRequest"] | components["schemas"]["NormalizeArrayRequest"];
+            };
+        };
+        responses: {
+            /** @description Success */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NormalizationJob"];
+                };
+            };
+            /** @description Invalid request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unknown or expired job */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Revision conflict or job not completed */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request too large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unsupported media type */
+            415: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Storage error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Job storage limit reached */
+            507: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    getJob: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NormalizationJob"];
+                };
+            };
+            /** @description Invalid request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unknown or expired job */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Revision conflict or job not completed */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request too large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unsupported media type */
+            415: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Storage error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Job storage limit reached */
+            507: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    deleteJob: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Deleted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unknown or expired job */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Job still active */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Storage error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    reviewJobRecord: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+                /** @description Zero-based source position; duplicate input IDs are permitted. */
+                record_index: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NormalizationJob"];
+                };
+            };
+            /** @description Invalid request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unknown or expired job */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Revision conflict or job not completed */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request too large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unsupported media type */
+            415: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Storage error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Job storage limit reached */
+            507: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    getCityCandidates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+                /** @description Zero-based source position; duplicate input IDs are permitted. */
+                record_index: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CityCandidates"];
+                };
+            };
+            /** @description Invalid request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unknown or expired job */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Revision conflict or job not completed */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request too large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unsupported media type */
+            415: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Storage error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Job storage limit reached */
+            507: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    selectJobCity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+                /** @description Zero-based source position; duplicate input IDs are permitted. */
+                record_index: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CitySelectionRequest"];
+            };
+        };
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NormalizationJob"];
+                };
+            };
+            /** @description Invalid request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unknown or expired job */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Revision conflict or job not completed */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Request too large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Unsupported media type */
+            415: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Storage error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Job storage limit reached */
+            507: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    getRecordCityCandidates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RecordCityCandidatesRequest"];
+            };
+        };
+        responses: {
+            /** @description Settlement resolution */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordCityCandidates"];
+                };
+            };
+            /** @description Invalid input or incompatible entity */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Reference version changed */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Normalization failed */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    selectRecordCity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RecordCitySelectionRequest"];
+            };
+        };
+        responses: {
+            /** @description Settlement resolution */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Result"];
+                };
+            };
+            /** @description Invalid input or incompatible entity */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Reference version changed */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Normalization failed */
             500: {
                 headers: {
                     [name: string]: unknown;

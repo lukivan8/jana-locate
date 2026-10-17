@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "human_verified": false,
+  "scope": "district span extraction supplement; proposed reference-enrichment scenarios are separate synthetic fixtures, not actual spatial enrichment",
+  "reference_source": "backend/data/reference/entities.jsonl",
+  "reference_source_sha256": "677115b8f8527e7bae6ea38c85ec179a056dab90fbfe978b245a4a7de4a0c4ce",
+  "reference_snapshot": "KATO:18.09.2026 with public OSM snapshot context",
+  "attribution": "KATO public local snapshot; synthetic street/building/delivery components authored by LLM; no verified street-to-district assignments",
+  "original_corpus": {
+    "inputs": "frontend/src/data/address-anomalies.json",
+    "inputs_sha256": "337a41bd76c651839ecf3d2cc8c8d5adad4d5beb2ac9b9c8627380df667ae95b",
+    "annotations": "data/annotations/address-anomalies-v1/annotations.jsonl",
+    "annotations_sha256": "c566943b2b0bf7d403f9a489207e690086e8bf3e3821c88ad14a7a9d2d6cf6f3",
+    "records": 2000
+  },
+  "supervision_policy": {
+    "target": "text_span_extraction",
+    "district_not_in_text": "no_district_span_even_if_geographically_inferable",
+    "reference_ids": "context_not_mandatory_unique_targets",
+    "expected_input_issues": "deliberately_authored_properties_not_exhaustive_runtime_diagnostics",
+    "resolved_annotation_implies_unique_identity": false,
+    "family_split": "all_variants_of_one_family_in_same_partition"
+  }
+}

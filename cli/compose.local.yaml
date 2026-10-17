@@ -1,0 +1,52 @@
+# Local API + embedded review site/CLI; database connections are user supplied.
+name: jana-cli-local
+services:
+  workspace:
+    image: jana-cli:local
+    build:
+      context: .
+    ports:
+      - "127.0.0.1:${CLI_PORT:-8095}:8095"
+    environment:
+      JANA_API_URL: http://normalizer:8080
+      JANA_API_TOKEN: "${JANA_API_TOKEN:-}"
+      JANA_WEB_AUTH: "${JANA_WEB_AUTH:-password}"
+      JANA_WEB_TOKEN: "${JANA_WEB_TOKEN:-local-example-password}"
+      JANA_DATABASE_URL: "${JANA_DATABASE_URL:-}"
+      PGHOST: "${PGHOST:-host.docker.internal}"
+      PGPORT: "${PGPORT:-5432}"
+      PGDATABASE: "${PGDATABASE:-postgres}"
+      PGUSER: "${PGUSER:-postgres}"
+      PGPASSWORD: "${PGPASSWORD:-}"
+      JANA_BROWSER_URL: "${JANA_BROWSER_URL:-http://localhost:${CLI_PORT:-8095}/}"
+      JANA_PUBLIC_ORIGIN: "${JANA_PUBLIC_ORIGIN:-}"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - workspace-data:/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    restart: unless-stopped
+    depends_on:
+      normalizer:
+        condition: service_healthy
+  normalizer:
+    image: jana-address-api:local
+    build:
+      context: ../backend
+    ports:
+      - "127.0.0.1:${CLI_API_PORT:-8080}:8080"
+    environment:
+      MODELS_REQUIRED: "false"
+      ALLOW_DEMO_CATALOG: "false"
+    volumes:
+      - normalizer-data:/data
+    restart: unless-stopped
+volumes:
+  workspace-data:
+  normalizer-data:

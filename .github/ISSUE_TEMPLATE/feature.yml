@@ -1,0 +1,23 @@
+name: Предложение
+description: Пользовательская задача и ожидаемое улучшение
+title: "[Предложение]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Какую задачу нужно решить?
+      description: Кто использует инструмент, что делает и где возникает трудность.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Ожидаемое поведение
+      description: Конкретный пример до и после; только синтетические данные.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Альтернативы и ограничения
+      description: Offline, география, совместимость API, объём данных и другие условия.

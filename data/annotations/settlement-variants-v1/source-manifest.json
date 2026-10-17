@@ -1,0 +1,11 @@
+{
+  "reference_source": "backend/data/reference/entities.jsonl",
+  "reference_sha256": "677115b8f8527e7bae6ea38c85ec179a056dab90fbfe978b245a4a7de4a0c4ce",
+  "annotation_source": "explicit LLM-authored components and selections",
+  "canonical_names": "hypotheses separate from literal spans; not unique entity IDs",
+  "preserved_corpora": {
+    "address-anomalies-v1": "c566943b2b0bf7d403f9a489207e690086e8bf3e3821c88ad14a7a9d2d6cf6f3",
+    "districts-v1": "43b5f73f1ba396144d3349d0da1413ec448e30cfc7073bcc764c282e979c0d52",
+    "kazakhstan-multilingual-v1": "23a871a2e85a7d216552e81b6e7395237ac025877f614a91179be1687480e275"
+  }
+}

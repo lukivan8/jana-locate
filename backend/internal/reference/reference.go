@@ -3,9 +3,12 @@
 package reference
 
 import (
+	"crypto/sha256"
 	"database/sql"
 	"fmt"
+	"io"
 	"net/url"
+	"os"
 	"strings"
 	"unicode"
 
@@ -17,19 +20,34 @@ type Entity struct {
 	Aliases                                                                      []string
 }
 type Match struct {
-	Entity  Entity
-	Surface string
+	Entity     Entity
+	Surface    string
+	Start, End int // UTF-8 byte offsets in the supplied text.
 }
 type Directory struct {
-	entities map[string]Entity
-	aliases  map[string][]string
-	maxWords int
+	version         string
+	entities        map[string]Entity
+	aliases         map[string][]string
+	maxWords        int
+	addresses       map[string]map[string]districtEvidence
+	streetDistricts map[string]districtEvidence
 }
 
 func Canon(s string) string {
 	return strings.Join(strings.FieldsFunc(strings.ToLower(s), func(r rune) bool { return !unicode.IsLetter(r) && !unicode.IsDigit(r) && r != '/' && r != '-' }), " ")
 }
 func Open(path string) (*Directory, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	hash := sha256.New()
+	_, err = io.Copy(hash, f)
+	f.Close()
+	if err != nil {
+		return nil, err
+	}
+	fingerprint := fmt.Sprintf("sha256:%x", hash.Sum(nil))
 	uri := url.URL{Scheme: "file", Path: path}
 	q := uri.Query()
 	q.Set("mode", "ro")
@@ -44,10 +62,10 @@ func Open(path string) (*Directory, error) {
 	if err = db.QueryRow("SELECT value FROM metadata WHERE key='schema_version'").Scan(&version); err != nil {
 		return nil, err
 	}
-	if version != "1" {
+	if version != "1" && version != "2" && version != "3" {
 		return nil, fmt.Errorf("unsupported reference schema %q", version)
 	}
-	d := &Directory{entities: map[string]Entity{}, aliases: map[string][]string{}, maxWords: 1}
+	d := &Directory{version: fingerprint, entities: map[string]Entity{}, aliases: map[string][]string{}, maxWords: 1, addresses: map[string]map[string]districtEvidence{}, streetDistricts: map[string]districtEvidence{}}
 	rows, err := db.Query("SELECT id,kind,name,parent_id,city_id,province_id,district_id,street_type,source FROM entities ORDER BY id")
 	if err != nil {
 		return nil, err
@@ -92,7 +110,78 @@ func Open(path string) (*Directory, error) {
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
+	rows.Close()
+	if version == "2" || version == "3" {
+		query := "SELECT street_id,city_id,house,0,'' FROM addresses"
+		if version == "3" {
+			query = `SELECT a.street_id,a.city_id,a.house,COALESCE(o.complete,0),COALESCE(l.district_id,'')
+ FROM addresses a LEFT JOIN district_objects o ON o.object_kind='address' AND o.object_id=a.id
+ LEFT JOIN district_links l ON l.object_kind=o.object_kind AND l.object_id=o.object_id`
+		}
+		rows, err = db.Query(query)
+		if err != nil {
+			return nil, err
+		}
+		defer rows.Close()
+		for rows.Next() {
+			var streetID, cityID, house, districtID string
+			var complete bool
+			if err = rows.Scan(&streetID, &cityID, &house, &complete, &districtID); err != nil {
+				return nil, err
+			}
+			street, ok := d.entities[streetID]
+			city, cityOK := d.entities[cityID]
+			if !ok || !cityOK || city.Kind != "city" || street.CityID != cityID || (street.Kind != "street" && street.Kind != "living_area") || Canon(house) == "" {
+				return nil, fmt.Errorf("invalid address hierarchy for %s", streetID)
+			}
+			if d.addresses[streetID] == nil {
+				d.addresses[streetID] = map[string]districtEvidence{}
+			}
+			if districtID != "" && !d.validDistrict(cityID, districtID) {
+				return nil, fmt.Errorf("invalid address district %s", districtID)
+			}
+			key := Canon(house)
+			value, seen := d.addresses[streetID][key]
+			if !seen {
+				value.Complete = true
+			}
+			value.Complete = value.Complete && complete
+			value.add(districtID)
+			d.addresses[streetID][key] = value
+		}
+		if err = rows.Err(); err != nil {
+			return nil, err
+		}
+		rows.Close()
+	}
+	if version == "3" {
+		if err = d.loadDistricts(db); err != nil {
+			return nil, err
+		}
+	}
 	return d, nil
+}
+
+// AddressCities returns positive structured address evidence, never coordinates.
+// Missing data cannot disprove another city; callers only use a unique positive
+// identity to refine cities already explicitly mentioned in the input.
+func (d *Directory) AddressCities(street, house, streetType string) map[string]bool {
+	out := map[string]bool{}
+	if d == nil || street == "" || house == "" {
+		return out
+	}
+	for _, entity := range d.Exact(street, "") {
+		if entity.Kind != "street" && entity.Kind != "living_area" {
+			continue
+		}
+		if streetType != "" && entity.StreetType != "" && Canon(streetType) != Canon(entity.StreetType) {
+			continue
+		}
+		if _, ok := d.addresses[entity.ID][Canon(house)]; ok {
+			out[entity.CityID] = true
+		}
+	}
+	return out
 }
 func (d *Directory) Entity(id string) (Entity, bool) {
 	if d == nil {
@@ -109,7 +198,7 @@ func (d *Directory) Exact(value, kind string) []Entity {
 	seen := map[string]bool{}
 	for _, id := range d.aliases[Canon(value)] {
 		e := d.entities[id]
-		if (kind == "" || kind == e.Kind) && !seen[id] {
+		if (kind == "" || kind == e.Kind || kind == "district" && e.IsDistrict()) && !seen[id] {
 			out = append(out, e)
 			seen[id] = true
 		}
@@ -118,21 +207,50 @@ func (d *Directory) Exact(value, kind string) []Entity {
 }
 func (d *Directory) Matches(text string) []Match {
 	out := []Match{}
+	seen := map[string]bool{}
+	for _, match := range d.Mentions(text) {
+		if !seen[match.Entity.ID] {
+			out = append(out, match)
+			seen[match.Entity.ID] = true
+		}
+	}
+	return out
+}
+
+// Mentions retains repeated occurrences so a name in a street/venue can be
+// excluded without deleting an independent administrative mention elsewhere.
+func (d *Directory) Mentions(text string) []Match {
+	out := []Match{}
 	if d == nil {
 		return out
 	}
 	// Token slices retain original case/spelling. Punctuation and bilingual slashes
 	// between words are separators; a fractional numeric house stays untouched elsewhere.
-	words := strings.FieldsFunc(text, func(r rune) bool { return !unicode.IsLetter(r) && !unicode.IsDigit(r) && r != '-' })
-	seen := map[string]bool{}
+	words := []string{}
+	starts, ends := []int{}, []int{}
+	start := -1
+	for offset, char := range text {
+		if unicode.IsLetter(char) || unicode.IsDigit(char) || char == '-' {
+			if start < 0 {
+				start = offset
+			}
+		} else if start >= 0 {
+			words = append(words, text[start:offset])
+			starts = append(starts, start)
+			ends = append(ends, offset)
+			start = -1
+		}
+	}
+	if start >= 0 {
+		words = append(words, text[start:])
+		starts = append(starts, start)
+		ends = append(ends, len(text))
+	}
 	for i := range words {
 		for n := 1; n <= d.maxWords && i+n <= len(words); n++ {
 			surface := strings.Join(words[i:i+n], " ")
 			for _, id := range d.aliases[Canon(surface)] {
-				if !seen[id] {
-					out = append(out, Match{Entity: d.entities[id], Surface: surface})
-					seen[id] = true
-				}
+				out = append(out, Match{Entity: d.entities[id], Surface: surface, Start: starts[i], End: ends[i+n-1]})
 			}
 		}
 	}
@@ -143,4 +261,31 @@ func (d *Directory) Count() int {
 		return 0
 	}
 	return len(d.entities)
+}
+
+// Version identifies the bytes of the immutable snapshot, including aliases and addresses.
+func (d *Directory) Version() string {
+	if d == nil {
+		return "unavailable"
+	}
+	return d.version
+}
+
+// SettlementType uses explicit source qualifiers only; no inference from popularity.
+func (e Entity) SettlementType() *string {
+	types := map[string]bool{}
+	for _, alias := range e.Aliases {
+		a := strings.ToLower(strings.TrimSpace(alias))
+		for prefix, kind := range map[string]string{"г.": "город", "город ": "город", "с.": "село", "село ": "село", "п.": "посёлок", "поселок ": "посёлок"} {
+			if strings.HasPrefix(a, prefix) {
+				types[kind] = true
+			}
+		}
+	}
+	if len(types) == 1 {
+		for kind := range types {
+			return &kind
+		}
+	}
+	return nil
 }

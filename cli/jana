@@ -1,0 +1,68 @@
+#!/bin/sh
+# Local Docker launcher. No PostgreSQL service is started by this command.
+set -eu
+cli_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+cd "$cli_dir"
+project=${JANA_LOCAL_PROJECT:-jana-cli-local}
+case "$project" in
+  ''|[!a-z0-9]*|*[!a-z0-9_-]*) printf 'Недопустимое имя проекта JANA_LOCAL_PROJECT\n' >&2; exit 2 ;;
+esac
+compose() {
+  mode=${JANA_NETWORK_MODE:-auto}
+  if [ "$mode" = auto ]; then
+    mode=bridge
+    if [ "$(uname -s)" = Linux ]; then
+      engine_os=$(docker info --format '{{.OperatingSystem}}')
+      case "$engine_os" in *"Docker Desktop"*) ;; *) mode=host ;; esac
+    fi
+  fi
+  case "$mode" in
+    host) docker compose -p "$project" -f compose.local.yaml -f compose.host.yaml "$@" ;;
+    bridge) docker compose -p "$project" -f compose.local.yaml "$@" ;;
+    *) printf 'JANA_NETWORK_MODE должен быть auto, host или bridge\n' >&2; exit 2 ;;
+  esac
+}
+usage() {
+  cat <<'HELP'
+Jana локально через Docker:
+  ./cli/jana up                 Собрать и запустить API + сайт и CLI
+  ./cli/jana connect            Настроить подключение к своей базе
+  ./cli/jana normalize          Обработка, проверка; A — публикация, W — браузер
+  ./cli/jana <команда> --help    Справка по команде
+  ./cli/jana status             Показать контейнеры
+  ./cli/jana logs               Смотреть логи (Ctrl+C оставляет сервисы работать)
+  ./cli/jana down               Остановить сервисы с сохранением данных
+  ./cli/jana compose <аргументы> Другие операции Docker Compose
+
+Сайт: http://localhost:8095/ (по умолчанию вход jana / local-example-password)
+API: http://localhost:8080/
+Порты: CLI_PORT и CLI_API_PORT; пароль сайта: JANA_WEB_TOKEN.
+На обычном Linux localhost указывает на компьютер с вашей базой.
+В Docker Desktop для базы на компьютере используйте host.docker.internal.
+Режим сети: JANA_NETWORK_MODE=host или bridge. База данных не запускается.
+HELP
+}
+command=${1:-help}
+if [ "$#" -gt 0 ]; then shift; fi
+case "$command" in
+  help|--help|-h) usage ;;
+  up)
+    compose up --build -d --wait --wait-timeout 240 "$@"
+    web_url=$(docker inspect --format '{{range .Config.Env}}{{if eq (index (split . "=") 0) "JANA_BROWSER_URL"}}{{join (slice (split . "=") 1) "="}}{{end}}{{end}}' "$(compose ps -q workspace)")
+    printf '\nСайт: %s\n' "$web_url"
+    printf 'API: http://%s/\n' "$(compose port normalizer 8080)"
+    printf 'Далее: %s connect\n' "$cli_dir/jana"
+    ;;
+  down) compose down "$@" ;;
+  status) compose ps "$@" ;;
+  logs) compose logs -f "$@" ;;
+  compose) compose "$@" ;;
+  connect|normalize|land|serve|postgres|import|publish|runs|export|healthcheck)
+    if [ -t 0 ] && [ -t 1 ]; then
+      compose exec workspace /jana "$command" "$@"
+    else
+      compose exec -T workspace /jana "$command" "$@"
+    fi
+    ;;
+  *) printf 'Неизвестная команда: %s\nСправка: %s help.\n' "$command" "$cli_dir/jana" >&2; exit 2 ;;
+esac

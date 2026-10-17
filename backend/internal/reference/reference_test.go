@@ -42,3 +42,19 @@ func TestReadOnlyDirectoryResolvesAliasesAndRelations(t *testing.T) {
 		t.Fatal("missing reference silently created")
 	}
 }
+
+func TestSettlementTypeRequiresConsistentSourceQualifiers(t *testing.T) {
+	for _, tt := range []struct {
+		aliases []string
+		want    string
+	}{
+		{[]string{"Караганда", "г.Караганда"}, "город"},
+		{[]string{"Караганда", "с.Караганда"}, "село"},
+		{[]string{"Караганда"}, ""},
+		{[]string{"г.Караганда", "с.Караганда"}, ""},
+	} {
+		if got := (Entity{Aliases: tt.aliases}).SettlementType(); (got == nil && tt.want != "") || (got != nil && *got != tt.want) {
+			t.Fatalf("type from %v: %v", tt.aliases, got)
+		}
+	}
+}

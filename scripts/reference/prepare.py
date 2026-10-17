@@ -1,7 +1,7 @@
 """Build-time preparation from an official KATO workbook and an OSM Overpass JSON snapshot.
 Raw sources are local inputs; this script never makes runtime network requests.
 """
-import argparse, hashlib, json, re
+import argparse, hashlib, json, re, subprocess, sys, tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 import openpyxl
@@ -11,7 +11,7 @@ def strip_name(s):
     s=re.sub(r'^(?:г\.|с\.|п\.|город\s+|село\s+|пос[её]лок\s+)\s*','',s,flags=re.I)
     s=re.sub(r'\s+(?:қ\.|а\.|к\.)$','',s)
     return s.strip()
-def prepare(kato,osm,output,manifest):
+def kato_entities(kato):
     wb=openpyxl.load_workbook(kato,read_only=True,data_only=True)
     rows=list(wb.active.iter_rows(values_only=True)); header=list(rows.pop(0))
     raw={str(r[0]).zfill(9):dict(zip(header,r)) for r in rows if r[0]}
@@ -32,6 +32,11 @@ def prepare(kato,osm,output,manifest):
             if cur['kind']=='city' and not e['city_id']:e['city_id']=cur['id']
             if cur['kind']=='district' and not e['district_id']:e['district_id']=cur['id']
             cur=entities.get(cur['parent_id'])
+    wb.close()
+    return entities
+
+def prepare(kato,osm,output,manifest):
+    entities=kato_entities(kato)
     astana=next(e for e in entities.values() if e['kind']=='city' and e['name']=='Астана' and e['parent_id']=='')
     street_prefix=re.compile(r'^(улица|проспект|переулок|проезд|бульвар|шоссе)\s+|\s+(көшесі|даңғылы)$',re.I)
     osm_data=json.loads(Path(osm).read_text())
@@ -57,13 +62,29 @@ def prepare(kato,osm,output,manifest):
     output=Path(output);output.parent.mkdir(parents=True,exist_ok=True)
     with output.open('w') as f:
         for e in sorted(entities.values(),key=lambda e:e['id']):f.write(json.dumps(e,ensure_ascii=False,separators=(',',':'))+'\n')
-    facts={'prepared_at':datetime.now(timezone.utc).isoformat(),'kato':{'url':KATO_URL,'sha256':hashlib.sha256(Path(kato).read_bytes()).hexdigest(),'rows':len(raw)},
+    facts={'prepared_at':datetime.now(timezone.utc).isoformat(),'kato':{'url':KATO_URL,'sha256':hashlib.sha256(Path(kato).read_bytes()).hexdigest(),'rows':sum(e['source'].startswith('KATO:') for e in entities.values())},
         'osm':{'url':'https://overpass-api.de/api/interpreter','bbox':[51.00,71.20,51.25,71.65], 'scope':'Intersection of Astana administrative area (name:ru=Астана, admin_level=4) and bbox; NOT nationwide street coverage',
             'timestamp':osm_data.get('osm3s',{}).get('timestamp_osm_base'),'sha256':hashlib.sha256(Path(osm).read_bytes()).hexdigest(),'objects':len(osm_data['elements']),
             'attribution':'© OpenStreetMap contributors','license':'ODbL-1.0','license_url':'https://www.openstreetmap.org/copyright'},
         'entity_count':len(entities),'jsonl_sha256':hashlib.sha256(output.read_bytes()).hexdigest(),'building_coordinates':False}
     Path(manifest).write_text(json.dumps(facts,ensure_ascii=False,indent=2)+'\n')
     print('Prepared reference:',len(entities),'entities')
+def prepare_pbf(kato,pbf,output,addresses,manifest):
+    entities=kato_entities(kato)
+    with tempfile.TemporaryDirectory() as temporary:
+        base=Path(temporary)/'kato.jsonl'
+        base.write_text(''.join(json.dumps(e,ensure_ascii=False)+'\n' for e in entities.values()))
+        tool=Path(__file__).resolve().parents[2]/'backend/tools/import_osm.py'
+        subprocess.run([sys.executable,str(tool),'--base',str(base),'--pbf',pbf,'--output',output,
+                        '--addresses',addresses,'--manifest',manifest],check=True)
+    facts=json.loads(Path(manifest).read_text())
+    facts['kato']={'url':KATO_URL,'sha256':hashlib.sha256(Path(kato).read_bytes()).hexdigest(),'rows':len(entities)}
+    Path(manifest).write_text(json.dumps(facts,ensure_ascii=False,indent=2)+'\n')
+
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--kato',required=True);p.add_argument('--osm',required=True);p.add_argument('--output',required=True);p.add_argument('--manifest',required=True)
-    a=p.parse_args();prepare(a.kato,a.osm,a.output,a.manifest)
+    p=argparse.ArgumentParser();p.add_argument('--kato',required=True)
+    source=p.add_mutually_exclusive_group(required=True);source.add_argument('--osm');source.add_argument('--pbf')
+    p.add_argument('--output',required=True);p.add_argument('--manifest',required=True);p.add_argument('--addresses')
+    a=p.parse_args()
+    if a.pbf:prepare_pbf(a.kato,a.pbf,a.output,a.addresses or str(Path(a.output).with_name('addresses.jsonl.gz')),a.manifest)
+    else:prepare(a.kato,a.osm,a.output,a.manifest)

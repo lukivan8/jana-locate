@@ -19,7 +19,7 @@ RUN go test -tags libpostal ./... && go build -tags libpostal -trimpath -ldflags
 FROM python:3.11-slim-bookworm AS reference
 WORKDIR /prepare
 COPY data/reference /input
-COPY tools/build_reference.py ./
+COPY tools/build_reference.py tools/district_context.py ./
 RUN python build_reference.py --input /input/entities.jsonl --manifest /input/manifest.json --output /out/reference.sqlite
 
 FROM debian:bookworm-slim

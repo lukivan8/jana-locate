@@ -1,6 +1,9 @@
 import { useRef, useState } from 'react'
 import dataset from '../../data/address-anomalies.json'
 import datasetUrl from '../../data/address-anomalies.json?url'
+import basesUrl from '../../data/address-bases.json?url'
+import partOneUrl from '../../data/address-anomalies-part-1.json?url'
+import partTwoUrl from '../../data/address-anomalies-part-2.json?url'
 import { Button, SelectField, TextField } from '../../ui/material'
 import type { InputRecord, Result } from '../../api/client'
 
@@ -41,7 +44,10 @@ export function AnomalyExamples({ busy, results, onNormalize }: { busy: boolean;
 
   return <section className="panel examples" aria-labelledby="examples-heading" lang="ru">
     <div className="section-title"><h2 id="examples-heading">Проверить на примерах</h2><a href={datasetUrl} download="address-anomalies.json">Скачать набор JSON</a></div>
-    <p className="muted">{examples.length} синтетический пример: 9 групп из презентации, дополнительные случаи и комбинации. Адреса и география не проверены; это набор для исследования, а не эталон точности.</p>
+    <p className="muted">{examples.length.toLocaleString('ru-RU')} сценариев без эталонной разметки. {dataset.handcrafted_count} придуманный пример и {dataset.source_based_count} изменённых вариантов {dataset.base_count} адресных записей OSM. Опечатки, транслит, детали доставки и комбинации искусственные; это набор для исследования, не оценка точности.</p>
+    <p className="muted">Основа: <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors · ODbL</a>, снимок Казахстана. <a href={basesUrl} download="address-bases.json">Исходные записи и происхождение</a>.</p>
+    <div className="actions"><a href={partOneUrl} download="address-anomalies-part-1.json">Скачать пакет 1 · 1000 адресов</a><a href={partTwoUrl} download="address-anomalies-part-2.json">Скачать пакет 2 · 1000 адресов</a></div>
+    <p className="muted">Каждый пакет можно загрузить через основной мастер. Лимит API — 1000 записей на запрос.</p>
     <div className="example-filters">
       <SelectField label="Тип аномалии" value={category} onChange={event => { setCategory(event.target.value); reset() }}>
         <option value="all">Все типы</option>
@@ -71,6 +77,7 @@ export function AnomalyExamples({ busy, results, onNormalize }: { busy: boolean;
         <p className="example-meta">{selected.id} · {selected.anomalies.map(tag => categoryLabels.get(tag)).join(' · ')}</p>
         <pre className="example-raw" role="group" aria-label="Исходный тестовый адрес">{visibleAddress(selected.raw_address)}</pre>
         <p className="muted">{selected.note}</p>
+        {'source_url' in selected && typeof selected.source_url === 'string' && <p className="muted"><a href={selected.source_url} target="_blank" rel="noreferrer">Объект OSM, использованный как основа</a>. Изменённая строка не является проверенным адресом доставки.</p>}
         <p className="muted">Обозначения в квадратных скобках показывают скрытые символы. В обработку уходит исходная строка, включая пробелы и переносы.</p>
         <Button variant="filled" disabled={busy} onClick={() => onNormalize([{ id: selected.id, raw_address: selected.raw_address }])}>{busy ? 'Обработка…' : 'Нормализовать адрес'}</Button>
         <nav className="example-pagination" aria-label="Переключение адресов">
@@ -82,7 +89,7 @@ export function AnomalyExamples({ busy, results, onNormalize }: { busy: boolean;
           <p className="muted">Уверенность: {Math.round(result.confidence * 100)}% · {result.status.replaceAll('_', ' ')}</p>
           <dl>{resultFields.map(field => <div key={field}><dt>{field}</dt><dd>{result[field] ?? <span className="muted">null</span>}</dd></div>)}</dl>
           {result.warnings.length > 0 && <p className="muted">Предупреждения: {result.warnings.join(' · ')}</p>}
-        </section> : <p className="muted">Нажмите «Нормализовать адрес», чтобы увидеть поля здесь. Результат также появится в очереди проверки и экспорте.</p>}
+        </section> : <p className="muted">Нажмите «Нормализовать адрес», чтобы увидеть поля здесь. Результат появится под выбранным примером.</p>}
       </section>}
     </div>
   </section>

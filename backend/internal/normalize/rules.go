@@ -27,9 +27,9 @@ var details = []struct {
 	{regexp.MustCompile(`(?i)(?:подъезд|подьезд|подезд|пд\.?)\s*([0-9]+)`), "entrance"},
 	{regexp.MustCompile(`(?i)(?:этаж|эт\.?)\s*([0-9]+)`), "floor"},
 }
-var houseRE = regexp.MustCompile(`(?i)(?:дом|д\.)\s*` + number)
+var houseRE = regexp.MustCompile(`(?i)(?:^|[,;\s])(?:дом|д\.?)\s*` + number)
 var reverseHouseRE = regexp.MustCompile(`(?i)` + number + `\s*дом`)
-var typedStreetRE = regexp.MustCompile(`(?i)(?:^|[,\s])(?:улица|ул\.?|проспект|пр\.?|пр-т|переулок|пер\.?|квартал|микрорайон|мкр\.?)\s*\.?\s*([^,;]+)`)
+var typedStreetRE = regexp.MustCompile(`(?i)(?:^|[,\s])(?:улица|ул|проспект|пр-т|пр|переулок|пер|квартал|микрорайон|мкр)(?:\s*\.\s*|\s+)([^,;]+)`)
 var tailHouseRE = regexp.MustCompile(`\s+` + number + `\s*$`)
 var quarterRE = regexp.MustCompile(`(?i)([0-9]+)\s*(квартал|микрорайон)`)
 var landmarkRE = regexp.MustCompile(`(?i)(магазин|школа|аптека)\s+([^,;0-9]+)`)

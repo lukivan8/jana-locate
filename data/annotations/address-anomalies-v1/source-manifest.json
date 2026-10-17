@@ -1,0 +1,35 @@
+{
+  "source": "frontend/src/data/address-anomalies.json",
+  "source_sha256": "337a41bd76c651839ecf3d2cc8c8d5adad4d5beb2ac9b9c8627380df667ae95b",
+  "records": 2000,
+  "synthetic": true,
+  "source_metadata": {
+    "description": "Public source components for synthetic mutations, not expected normalization answers or verified delivery addresses.",
+    "attribution": "© OpenStreetMap contributors",
+    "license": "ODbL-1.0",
+    "license_url": "https://www.openstreetmap.org/copyright",
+    "source_url": "https://download.geofabrik.de/asia/kazakhstan-latest.osm.pbf",
+    "source_timestamp": "2026-10-15T20:21:00Z",
+    "source_sha256": "6fbb73b1b247dc2241993cebdb54549d453e354e275da132fb1c5657b4f9b2d2",
+    "entities_sha256": "677115b8f8527e7bae6ea38c85ec179a056dab90fbfe978b245a4a7de4a0c4ce",
+    "addresses_sha256": "49a3411d6e3a5f16e846f835762cab0f71c219793cdd190f9a29b1cb4a7051ec",
+    "selection": "SHA-256 ranked address samples; largest 30 settlement inventories first, then settlement-balanced sampling. Not representative of traffic frequency.",
+    "settlement_count": 748
+  },
+  "method": "LLM semantic annotation; no normalization engine outputs; source base is a reference hint, never the expected answer",
+  "annotation_revision": 2,
+  "review_audit": "review-audit.json",
+  "supervision_policy": {
+    "target": "text_span_extraction",
+    "city_label_semantics": "settlement_of_any_type_including_city_and_village",
+    "geographic_identity_annotation": "not_performed",
+    "geographic_ambiguity_annotation": "not_exhaustive",
+    "llm_selected_interpretation": "hypothesis_not_unique_normalization_target",
+    "annotation_resolved_implies_unique_geographic_identity": false,
+    "empty_input_issues_implies_unambiguous_normalization": false,
+    "reference_hint_ids_are_unique_supervised_targets": false,
+    "runtime_ambiguity_policy": "preserve_compatible_parse_and_reference_candidates_and_expose_unresolved_ambiguity",
+    "evaluation_policy": "measure_ambiguity_preservation_and_false_confident_resolution_separately_from_span_accuracy",
+    "data_split_policy": "keep_all_mutations_of_each_source_base_in_one_partition"
+  }
+}

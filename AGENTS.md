@@ -1,0 +1,11 @@
+# Agent working rules
+
+- Treat backend/, frontend/ and cli/ as independent applications in one repository. Read scoped `AGENTS.md` files before changes.
+- Backend owns the authoritative normalization OpenAPI spec. CLI owns its local orchestration API and explicitly adopts normalization schema snapshots. Change it first, then regenerate; never hand-edit generated DTOs.
+- Frontend must build with only `frontend/` available and only know an external API URL. No Go source imports, relative backend file reads, shared-source workspaces, BFF/server functions or API calls during shell prerender.
+- Persist verified building components in the catalog. Never add raw-address/ID answer caching or delivery details as building defaults.
+- Keep runtime offline. libpostal assets must be prepared before startup. Immutable KATO/OSM references are separate from the writable building overlay. Seed data and coordinates in this scaffold are synthetic; preserve labeling until replaced by verified data.
+- Preserving and exposing ambiguity is correct normalizer behavior. A chosen LLM annotation is a hypothesis, not authority to suppress competing parses or reference identities. The `city` label covers settlements, including villages; homonyms such as Караганда must retain all compatible entities until input evidence or explicit operator selection resolves them. Synthetic source IDs and closed annotation reviews must never become forced unique normalization targets.
+- Geographic scope remains Kazakhstan. Kyrgyz, Uzbek, Tajik, Mongolian, Russian/Kazakh and transliterated input describe user languages, not additional destination countries. Extend language coverage using Kazakhstan references; language/script must never select a destination country or suppress Kazakhstan homonyms. Foreign names inside landmarks or delivery instructions are not destination geography.
+- For cross-contract changes: `make generate`, `make check`, and review generated diffs. For Docker/persistence changes: `make smoke` where a daemon exists. Browser changes: run the Playwright flow against a temporary overlay.
+- Do not commit organizer-private data, secrets, operational overlays or backups. A GitHub module path/remote must come from the user; the placeholder is intentional.

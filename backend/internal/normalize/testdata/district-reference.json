@@ -1,0 +1,548 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "human_verified": false,
+  "scope": "Proposed offline-reference enrichment contract; not current runtime API; no real street/district assignment or coordinates",
+  "geometry_precomputed": true,
+  "geometry_coordinates_exported": false,
+  "runtime_evaluated": false,
+  "reference": {
+    "cities": [
+      {
+        "id": "fixture:city:a",
+        "name": "Учебный",
+        "kind": "city"
+      },
+      {
+        "id": "fixture:city:b",
+        "name": "Другой",
+        "kind": "city"
+      },
+      {
+        "id": "fixture:village:a",
+        "name": "Учебный",
+        "kind": "village"
+      }
+    ],
+    "districts": [
+      {
+        "id": "fixture:district:north",
+        "name": "Учебный Север",
+        "city_id": "fixture:city:a",
+        "level": "city_district"
+      },
+      {
+        "id": "fixture:district:south",
+        "name": "Учебный Юг",
+        "city_id": "fixture:city:a",
+        "level": "city_district"
+      },
+      {
+        "id": "fixture:district:other",
+        "name": "Учебный Другой",
+        "city_id": "fixture:city:b",
+        "level": "city_district"
+      },
+      {
+        "id": "fixture:district:rural",
+        "name": "Учебный Сельский",
+        "city_id": null,
+        "level": "province_district"
+      }
+    ],
+    "settlement_districts": [
+      {
+        "city_id": "fixture:village:a",
+        "district_ids": [
+          "fixture:district:rural"
+        ],
+        "source": "synthetic_hierarchy"
+      }
+    ],
+    "streets": [
+      {
+        "id": "fixture:street:crossing",
+        "name": "Учебная Сквозная",
+        "city_id": "fixture:city:a",
+        "district_ids": [
+          "fixture:district:north",
+          "fixture:district:south"
+        ],
+        "coverage": "complete_synthetic_geometry"
+      },
+      {
+        "id": "fixture:street:single",
+        "name": "Учебная Тихая",
+        "city_id": "fixture:city:a",
+        "district_ids": [
+          "fixture:district:north"
+        ],
+        "coverage": "complete_synthetic_geometry"
+      },
+      {
+        "id": "fixture:street:partial",
+        "name": "Учебная Частичная",
+        "city_id": "fixture:city:a",
+        "district_ids": [
+          "fixture:district:north"
+        ],
+        "coverage": "partial_address_sample_only"
+      },
+      {
+        "id": "fixture:street:unknown",
+        "name": "Учебная Без Границ",
+        "city_id": "fixture:city:a",
+        "district_ids": [],
+        "coverage": "missing"
+      },
+      {
+        "id": "fixture:street:other",
+        "name": "Учебная Сквозная",
+        "city_id": "fixture:city:b",
+        "district_ids": [
+          "fixture:district:other"
+        ],
+        "coverage": "complete_synthetic_geometry"
+      },
+      {
+        "id": "fixture:street:village",
+        "name": "Учебная Сквозная",
+        "city_id": "fixture:village:a",
+        "district_ids": [
+          "fixture:district:rural"
+        ],
+        "coverage": "complete_synthetic_geometry"
+      }
+    ],
+    "address_evidence": [
+      {
+        "id": "fixture:address:10",
+        "street_id": "fixture:street:crossing",
+        "city_id": "fixture:city:a",
+        "house": "10",
+        "district_ids": [
+          "fixture:district:north"
+        ],
+        "source": "synthetic_point_inside_polygon"
+      },
+      {
+        "id": "fixture:address:90",
+        "street_id": "fixture:street:crossing",
+        "city_id": "fixture:city:a",
+        "house": "90",
+        "district_ids": [
+          "fixture:district:south"
+        ],
+        "source": "synthetic_point_inside_polygon"
+      },
+      {
+        "id": "fixture:address:50",
+        "street_id": "fixture:street:crossing",
+        "city_id": "fixture:city:a",
+        "house": "50",
+        "district_ids": [
+          "fixture:district:north",
+          "fixture:district:south"
+        ],
+        "source": "synthetic_boundary_point"
+      },
+      {
+        "id": "fixture:address:12a",
+        "street_id": "fixture:street:crossing",
+        "city_id": "fixture:city:a",
+        "house": "12",
+        "district_ids": [
+          "fixture:district:north"
+        ],
+        "source": "synthetic_duplicate_source_a"
+      },
+      {
+        "id": "fixture:address:12b",
+        "street_id": "fixture:street:crossing",
+        "city_id": "fixture:city:a",
+        "house": "12",
+        "district_ids": [
+          "fixture:district:south"
+        ],
+        "source": "synthetic_duplicate_source_b"
+      },
+      {
+        "id": "fixture:address:10fraction",
+        "street_id": "fixture:street:crossing",
+        "city_id": "fixture:city:a",
+        "house": "10/1",
+        "district_ids": [
+          "fixture:district:south"
+        ],
+        "source": "synthetic_point_inside_polygon"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "id": "district_reference_01",
+      "description": "Длинная улица проходит через два района, дом отсутствует.",
+      "query": {
+        "city_candidates": [
+          "fixture:city:a"
+        ],
+        "street_candidates": [
+          "fixture:street:crossing"
+        ],
+        "house": null,
+        "explicit_district_ids": []
+      },
+      "expected": {
+        "district_status": "ambiguous",
+        "district_candidates": [
+          "fixture:district:north",
+          "fixture:district:south"
+        ],
+        "diagnostics": [
+          "ambiguous_district_reference"
+        ]
+      }
+    },
+    {
+      "id": "district_reference_02",
+      "description": "Точный дом10 находится в северном районе.",
+      "query": {
+        "city_candidates": [
+          "fixture:city:a"
+        ],
+        "street_candidates": [
+          "fixture:street:crossing"
+        ],
+        "house": "10",
+        "explicit_district_ids": []
+      },
+      "expected": {
+        "district_status": "resolved",
+        "district_candidates": [
+          "fixture:district:north"
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "district_reference_03",
+      "description": "Точный дом90 находится в южном районе той же улицы.",
+      "query": {
+        "city_candidates": [
+          "fixture:city:a"
+        ],
+        "street_candidates": [
+          "fixture:street:crossing"
+        ],
+        "house": "90",
+        "explicit_district_ids": []
+      },
+      "expected": {
+        "district_status": "resolved",
+        "district_candidates": [
+          "fixture:district:south"
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "district_reference_04",
+      "description": "Неизвестный дом200 не позволяет интерполировать район по соседним домам.",
+      "query": {
+        "city_candidates": [
+          "fixture:city:a"
+        ],
+        "street_candidates": [
+          "fixture:street:crossing"
+        ],
+        "house": "200",
+        "explicit_district_ids": []
+      },
+      "expected": {
+        "district_status": "ambiguous",
+        "district_candidates": [
+          "fixture:district:north",
+          "fixture:district:south"
+        ],
+        "diagnostics": [
+          "ambiguous_district_reference",
+          "address_evidence_missing"
+        ]
+      }
+    },
+    {
+      "id": "district_reference_05",
+      "description": "Дом50 на границе двух районов.",
+      "query": {
+        "city_candidates": [
+          "fixture:city:a"
+        ],
+        "street_candidates": [
+          "fixture:street:crossing"
+        ],
+        "house": "50",
+        "explicit_district_ids": []
+      },
+      "expected": {
+        "district_status": "ambiguous",
+        "district_candidates": [
+          "fixture:district:north",
+          "fixture:district:south"
+        ],
+        "diagnostics": [
+          "ambiguous_district_reference"
+        ]
+      }
+    },
+    {
+      "id": "district_reference_06",
+      "description": "Разные источники связывают один точный адрес12 с разными районами.",
+      "query": {
+        "city_candidates": [
+          "fixture:city:a"
+        ],
+        "street_candidates": [
+          "fixture:street:crossing"
+        ],
+        "house": "12",
+        "explicit_district_ids": []
+      },
+      "expected": {
+        "district_status": "conflicting",
+        "district_candidates": [
+          "fixture:district:north",
+          "fixture:district:south"
+        ],
+        "diagnostics": [
+          "conflicting_district_reference"
+        ]
+      }
+    },
+    {
+      "id": "district_reference_07",
+      "description": "Явный южный район противоречит северному району точного дома10.",
+      "query": {
+        "city_candidates": [
+          "fixture:city:a"
+        ],
+        "street_candidates": [
+          "fixture:street:crossing"
+        ],
+        "house": "10",
+        "explicit_district_ids": [
+          "fixture:district:south"
+        ]
+      },
+      "expected": {
+        "district_status": "conflicting",
+        "district_candidates": [
+          "fixture:district:north",
+          "fixture:district:south"
+        ],
+        "diagnostics": [
+          "conflicting_district"
+        ]
+      }
+    },
+    {
+      "id": "district_reference_08",
+      "description": "Полная геометрия улицы целиком в одном районе; дом не обязателен.",
+      "query": {
+        "city_candidates": [
+          "fixture:city:a"
+        ],
+        "street_candidates": [
+          "fixture:street:single"
+        ],
+        "house": null,
+        "explicit_district_ids": []
+      },
+      "expected": {
+        "district_status": "resolved",
+        "district_candidates": [
+          "fixture:district:north"
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "district_reference_09",
+      "description": "Полная геометрия улицы целиком в одном районе, дом не найден.",
+      "query": {
+        "city_candidates": [
+          "fixture:city:a"
+        ],
+        "street_candidates": [
+          "fixture:street:single"
+        ],
+        "house": "999",
+        "explicit_district_ids": []
+      },
+      "expected": {
+        "district_status": "resolved",
+        "district_candidates": [
+          "fixture:district:north"
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "district_reference_10",
+      "description": "Частичная выборка домов в одном районе не доказывает район всей улицы.",
+      "query": {
+        "city_candidates": [
+          "fixture:city:a"
+        ],
+        "street_candidates": [
+          "fixture:street:partial"
+        ],
+        "house": null,
+        "explicit_district_ids": []
+      },
+      "expected": {
+        "district_status": "unknown",
+        "district_candidates": [],
+        "diagnostics": [
+          "district_coverage_incomplete"
+        ]
+      }
+    },
+    {
+      "id": "district_reference_11",
+      "description": "Для известной улицы нет районных границ или связей.",
+      "query": {
+        "city_candidates": [
+          "fixture:city:a"
+        ],
+        "street_candidates": [
+          "fixture:street:unknown"
+        ],
+        "house": "1",
+        "explicit_district_ids": []
+      },
+      "expected": {
+        "district_status": "unknown",
+        "district_candidates": [],
+        "diagnostics": [
+          "district_reference_unavailable"
+        ]
+      }
+    },
+    {
+      "id": "district_reference_12",
+      "description": "Одноимённая улица в другом городе не может поставлять район.",
+      "query": {
+        "city_candidates": [
+          "fixture:city:a"
+        ],
+        "street_candidates": [
+          "fixture:street:other"
+        ],
+        "house": "10",
+        "explicit_district_ids": []
+      },
+      "expected": {
+        "district_status": "unknown",
+        "district_candidates": [],
+        "diagnostics": [
+          "incompatible_reference_context"
+        ]
+      }
+    },
+    {
+      "id": "district_reference_13",
+      "description": "Название поселения имеет кандидатов город и село; район не должен выбирать популярный город.",
+      "query": {
+        "city_candidates": [
+          "fixture:city:a",
+          "fixture:village:a"
+        ],
+        "street_candidates": [
+          "fixture:street:crossing",
+          "fixture:street:village"
+        ],
+        "house": null,
+        "explicit_district_ids": []
+      },
+      "expected": {
+        "district_status": "ambiguous",
+        "district_candidates": [
+          "fixture:district:north",
+          "fixture:district:south",
+          "fixture:district:rural"
+        ],
+        "diagnostics": [
+          "ambiguous_city_reference",
+          "ambiguous_district_reference"
+        ]
+      }
+    },
+    {
+      "id": "district_reference_14",
+      "description": "Однозначно определённое село получает административный район из КАТО.",
+      "query": {
+        "city_candidates": [
+          "fixture:village:a"
+        ],
+        "street_candidates": [
+          "fixture:street:village"
+        ],
+        "house": null,
+        "explicit_district_ids": []
+      },
+      "expected": {
+        "district_status": "resolved",
+        "district_candidates": [
+          "fixture:district:rural"
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "district_reference_15",
+      "description": "Дом10/1 отличается от дома10, район нельзя перенести после усечения дроби.",
+      "query": {
+        "city_candidates": [
+          "fixture:city:a"
+        ],
+        "street_candidates": [
+          "fixture:street:crossing"
+        ],
+        "house": "10/1",
+        "explicit_district_ids": []
+      },
+      "expected": {
+        "district_status": "resolved",
+        "district_candidates": [
+          "fixture:district:south"
+        ],
+        "diagnostics": []
+      }
+    },
+    {
+      "id": "district_reference_16",
+      "description": "Район явно указан; отсутствие геометрии не стирает извлечённый компонент.",
+      "query": {
+        "city_candidates": [
+          "fixture:city:a"
+        ],
+        "street_candidates": [
+          "fixture:street:unknown"
+        ],
+        "house": "1",
+        "explicit_district_ids": [
+          "fixture:district:north"
+        ]
+      },
+      "expected": {
+        "district_status": "explicit_unverified",
+        "district_candidates": [
+          "fixture:district:north"
+        ],
+        "diagnostics": [
+          "district_reference_unavailable"
+        ]
+      }
+    }
+  ]
+}

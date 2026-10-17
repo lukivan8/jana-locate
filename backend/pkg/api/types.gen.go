@@ -5,6 +5,23 @@ package api
 
 import (
 	"encoding/json"
+	"time"
+)
+
+// Defines values for JobSummaryStatus.
+const (
+	JobSummaryStatusCompleted JobSummaryStatus = "completed"
+	JobSummaryStatusFailed    JobSummaryStatus = "failed"
+	JobSummaryStatusQueued    JobSummaryStatus = "queued"
+	JobSummaryStatusRunning   JobSummaryStatus = "running"
+)
+
+// Defines values for NormalizationJobStatus.
+const (
+	NormalizationJobStatusCompleted NormalizationJobStatus = "completed"
+	NormalizationJobStatusFailed    NormalizationJobStatus = "failed"
+	NormalizationJobStatusQueued    NormalizationJobStatus = "queued"
+	NormalizationJobStatusRunning   NormalizationJobStatus = "running"
 )
 
 // Defines values for ResultStatus.
@@ -44,6 +61,38 @@ type CatalogResponse struct {
 	Entries []CatalogEntry `json:"entries"`
 }
 
+// CityCandidate defines model for CityCandidate.
+type CityCandidate struct {
+	EntityId       string  `json:"entity_id"`
+	Name           string  `json:"name"`
+	Province       *string `json:"province"`
+	ProvinceId     string  `json:"province_id"`
+	SettlementType *string `json:"settlement_type"`
+	Source         string  `json:"source"`
+}
+
+// CityCandidates defines model for CityCandidates.
+type CityCandidates struct {
+	Candidates       []CityCandidate `json:"candidates"`
+	ReferenceVersion string          `json:"reference_version"`
+	Revision         int             `json:"revision"`
+}
+
+// CitySelection defines model for CitySelection.
+type CitySelection struct {
+	AppliedRevision  int    `json:"applied_revision"`
+	EntityId         string `json:"entity_id"`
+	RecordIndex      int    `json:"record_index"`
+	ReferenceVersion string `json:"reference_version"`
+}
+
+// CitySelectionRequest defines model for CitySelectionRequest.
+type CitySelectionRequest struct {
+	EntityId         string `json:"entity_id"`
+	ExpectedRevision int    `json:"expected_revision"`
+	ReferenceVersion string `json:"reference_version"`
+}
+
 // ConfirmationRequest defines model for ConfirmationRequest.
 type ConfirmationRequest struct {
 	Coordinates      Coordinates   `json:"coordinates"`
@@ -75,6 +124,48 @@ type InputRecord struct {
 	RawAddress string      `json:"raw_address"`
 }
 
+// JobList defines model for JobList.
+type JobList struct {
+	Jobs []JobSummary `json:"jobs"`
+}
+
+// JobSummary defines model for JobSummary.
+type JobSummary struct {
+	CreatedAt     time.Time        `json:"created_at"`
+	Error         string           `json:"error"`
+	ExpiresAt     time.Time        `json:"expires_at"`
+	Id            string           `json:"id"`
+	ReviewedCount int              `json:"reviewed_count"`
+	Revision      int              `json:"revision"`
+	Status        JobSummaryStatus `json:"status"`
+	Total         int              `json:"total"`
+	UpdatedAt     time.Time        `json:"updated_at"`
+}
+
+// JobSummaryStatus defines model for JobSummary.Status.
+type JobSummaryStatus string
+
+// NormalizationJob defines model for NormalizationJob.
+type NormalizationJob struct {
+	// CitySelections Administrative choices only; these do not mark records fully reviewed. Missing in jobs created before this feature.
+	CitySelections *[]CitySelection       `json:"city_selections,omitempty"`
+	CreatedAt      time.Time              `json:"created_at"`
+	Error          string                 `json:"error"`
+	ExpiresAt      time.Time              `json:"expires_at"`
+	Id             string                 `json:"id"`
+	Records        []InputRecord          `json:"records"`
+	Results        []Result               `json:"results"`
+	Reviewed       []bool                 `json:"reviewed"`
+	ReviewedCount  int                    `json:"reviewed_count"`
+	Revision       int                    `json:"revision"`
+	Status         NormalizationJobStatus `json:"status"`
+	Total          int                    `json:"total"`
+	UpdatedAt      time.Time              `json:"updated_at"`
+}
+
+// NormalizationJobStatus defines model for NormalizationJob.Status.
+type NormalizationJobStatus string
+
 // NormalizeArrayRequest defines model for NormalizeArrayRequest.
 type NormalizeArrayRequest = []InputRecord
 
@@ -97,33 +188,74 @@ type NullableCoordinates struct {
 	Longitude float64 `json:"longitude"`
 }
 
+// RecordCityCandidates defines model for RecordCityCandidates.
+type RecordCityCandidates struct {
+	Candidates       []CityCandidate `json:"candidates"`
+	ReferenceVersion string          `json:"reference_version"`
+}
+
+// RecordCityCandidatesRequest defines model for RecordCityCandidatesRequest.
+type RecordCityCandidatesRequest struct {
+	Record InputRecord `json:"record"`
+}
+
+// RecordCitySelectionRequest defines model for RecordCitySelectionRequest.
+type RecordCitySelectionRequest struct {
+	EntityId         string      `json:"entity_id"`
+	Record           InputRecord `json:"record"`
+	ReferenceVersion string      `json:"reference_version"`
+}
+
 // Result defines model for Result.
 type Result struct {
-	Apartment       *string              `json:"apartment"`
-	CatalogId       *string              `json:"catalog_id"`
-	CatalogRevision *int                 `json:"catalog_revision"`
-	City            *string              `json:"city"`
-	Confidence      float64              `json:"confidence"`
-	Coordinates     *NullableCoordinates `json:"coordinates"`
-	District        *string              `json:"district"`
-	Entrance        *string              `json:"entrance"`
-	Floor           *string              `json:"floor"`
-	House           *string              `json:"house"`
+	Apartment *string `json:"apartment"`
+
+	// CatalogId Legacy compatibility field. Normalization always returns null; building geocoding is not performed.
+	// Deprecated:
+	CatalogId *string `json:"catalog_id"`
+
+	// CatalogRevision Legacy compatibility field. Normalization always returns null; building geocoding is not performed.
+	// Deprecated:
+	CatalogRevision *int    `json:"catalog_revision"`
+	City            *string `json:"city"`
+
+	// Confidence Heuristic score of address component evidence and completeness, not a calibrated probability. Coordinates and building catalog contents have no effect.
+	Confidence  float64              `json:"confidence"`
+	Coordinates *NullableCoordinates `json:"coordinates"`
+	District    *string              `json:"district"`
+	Entrance    *string              `json:"entrance"`
+	Floor       *string              `json:"floor"`
+	House       *string              `json:"house"`
 
 	// Id String or int64 identifier. Use strings for integers outside JavaScript safe range. Never used for matching.
-	Id         interface{}  `json:"id"`
-	Landmark   *string      `json:"landmark"`
-	LivingArea *string      `json:"living_area"`
-	Province   *string      `json:"province"`
-	RawAddress string       `json:"raw_address"`
+	Id         interface{} `json:"id"`
+	Landmark   *string     `json:"landmark"`
+	LivingArea *string     `json:"living_area"`
+	Province   *string     `json:"province"`
+	RawAddress string      `json:"raw_address"`
+
+	// Status matched: province, city, street_name and house parsed with confidence >= 0.72 and no ambiguous/conflicting evidence; needs_review: incomplete or uncertain parsed address; unmatched: no address fields. Independent of coordinates or catalog membership.
 	Status     ResultStatus `json:"status"`
 	StreetName *string      `json:"street_name"`
 	StreetType *string      `json:"street_type"`
 	Warnings   []string     `json:"warnings"`
 }
 
-// ResultStatus defines model for Result.Status.
+// ResultStatus matched: province, city, street_name and house parsed with confidence >= 0.72 and no ambiguous/conflicting evidence; needs_review: incomplete or uncertain parsed address; unmatched: no address fields. Independent of coordinates or catalog membership.
 type ResultStatus string
+
+// ReviewRequest defines model for ReviewRequest.
+type ReviewRequest struct {
+	// ConfirmedCatalogId Optional confirmed building ID. Must match all submitted building fields. Coordinates are read from the catalog, never supplied here.
+	ConfirmedCatalogId *string       `json:"confirmed_catalog_id,omitempty"`
+	ExpectedRevision   int           `json:"expected_revision"`
+	Fields             AddressFields `json:"fields"`
+}
+
+// CreateJobJSONBody defines parameters for CreateJob.
+type CreateJobJSONBody struct {
+	union json.RawMessage
+}
 
 // NormalizeJSONBody defines parameters for Normalize.
 type NormalizeJSONBody struct {
@@ -133,5 +265,20 @@ type NormalizeJSONBody struct {
 // ConfirmJSONRequestBody defines body for Confirm for application/json ContentType.
 type ConfirmJSONRequestBody = ConfirmationRequest
 
+// CreateJobJSONRequestBody defines body for CreateJob for application/json ContentType.
+type CreateJobJSONRequestBody CreateJobJSONBody
+
+// ReviewJobRecordJSONRequestBody defines body for ReviewJobRecord for application/json ContentType.
+type ReviewJobRecordJSONRequestBody = ReviewRequest
+
+// SelectJobCityJSONRequestBody defines body for SelectJobCity for application/json ContentType.
+type SelectJobCityJSONRequestBody = CitySelectionRequest
+
 // NormalizeJSONRequestBody defines body for Normalize for application/json ContentType.
 type NormalizeJSONRequestBody NormalizeJSONBody
+
+// GetRecordCityCandidatesJSONRequestBody defines body for GetRecordCityCandidates for application/json ContentType.
+type GetRecordCityCandidatesJSONRequestBody = RecordCityCandidatesRequest
+
+// SelectRecordCityJSONRequestBody defines body for SelectRecordCity for application/json ContentType.
+type SelectRecordCityJSONRequestBody = RecordCitySelectionRequest

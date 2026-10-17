@@ -1,0 +1,13 @@
+.git
+.env
+var
+bin
+node_modules
+test-results
+playwright-report
+*.sqlite
+*.sqlite-*
+connection.json
+*.connection.json
+*.web.json
+*.serve.lock

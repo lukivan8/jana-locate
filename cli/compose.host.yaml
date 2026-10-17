@@ -1,0 +1,13 @@
+# Native Linux: CLI shares the host network, so localhost reaches the user's DB.
+# API stays in its own container and publishes only its loopback port.
+services:
+  workspace:
+    network_mode: host
+    ports: !reset []
+    command: ["serve"]
+    environment:
+      JANA_LISTEN: "127.0.0.1:${CLI_PORT:-8095}"
+      JANA_API_URL: "http://normalizer:${CLI_API_PORT:-8080}"
+      PGHOST: "${PGHOST:-localhost}"
+    extra_hosts:
+      - "normalizer:127.0.0.1"

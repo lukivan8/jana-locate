@@ -13,9 +13,11 @@ import (
 
 	"github.com/lukivan8/jana-address/internal/catalog"
 	"github.com/lukivan8/jana-address/internal/httpapi"
+	"github.com/lukivan8/jana-address/internal/jobs"
 	"github.com/lukivan8/jana-address/internal/normalize"
 	"github.com/lukivan8/jana-address/internal/postal"
 	"github.com/lukivan8/jana-address/internal/reference"
+	"path/filepath"
 )
 
 func env(key, fallback string) string {
@@ -43,7 +45,7 @@ func main() {
 		slog.Error("load catalog", "error", err)
 		os.Exit(1)
 	}
-	engine := normalize.Engine{Catalog: store, AllowDemo: env("ALLOW_DEMO_CATALOG", "false") == "true"}
+	engine := normalize.Engine{}
 	engine.Postal, err = postal.Open(env("LIBPOSTAL_DATA_DIR", ""))
 	if err != nil {
 		if env("MODELS_REQUIRED", "false") == "true" {
@@ -59,27 +61,18 @@ func main() {
 			os.Exit(1)
 		}
 	}
-	if endpoint := os.Getenv("GLINER_URL"); endpoint != "" {
-		model := &normalize.GLiNER{URL: endpoint}
-		probe, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-		err = model.Ready(probe)
-		cancel()
-		if err != nil && env("MODELS_REQUIRED", "false") == "true" {
-			slog.Error("required GLiNER unavailable", "error", err)
-			os.Exit(1)
-		}
-		if err != nil {
-			slog.Warn("GLiNER not ready; requests will expose degraded warnings", "error", err)
-		}
-		engine.GLiNER = model
-	} else if env("MODELS_REQUIRED", "false") == "true" {
-		slog.Error("GLINER_URL is required in model-enabled mode")
+
+	slog.Info("normalization configuration", "reference_entities", engine.Reference.Count())
+	jobStore, err := catalog.OpenJobs(env("JOBS_PATH", filepath.Join(filepath.Dir(env("CATALOG_OVERLAY_PATH", "var/catalog.confirmed.json")), "normalization-jobs.json")))
+	if err != nil {
+		slog.Error("load normalization jobs", "error", err)
 		os.Exit(1)
 	}
-	slog.Info("normalization configuration", "reference_entities", engine.Reference.Count(), "allow_demo_catalog", engine.AllowDemo)
-	server := &http.Server{Addr: env("HTTP_ADDR", ":8080"), Handler: httpapi.New(store, strings.Split(env("CORS_ORIGINS", "http://localhost:3000"), ","), engine), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 15 * time.Second, WriteTimeout: 300 * time.Second, IdleTimeout: 60 * time.Second, MaxHeaderBytes: 1 << 16}
+	server := &http.Server{Addr: env("HTTP_ADDR", ":8080"), Handler: httpapi.NewWithJobs(store, jobStore, strings.Split(env("CORS_ORIGINS", "http://localhost:3000"), ","), engine), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 15 * time.Second, WriteTimeout: 300 * time.Second, IdleTimeout: 60 * time.Second, MaxHeaderBytes: 1 << 16}
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
+	workerDone := make(chan struct{})
+	go func() { defer close(workerDone); jobs.Run(ctx, jobStore, engine) }()
 	go func() {
 		<-ctx.Done()
 		shutdown, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -93,4 +86,7 @@ func main() {
 		slog.Error("serve", "error", err)
 		os.Exit(1)
 	}
+
+	stop()
+	<-workerDone
 }

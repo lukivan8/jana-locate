@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiRouteImport } from './routes/api'
+import { Route as ExamplesRouteImport } from './routes/examples'
 import { Route as GeocoderRouteImport } from './routes/geocoder'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const ApiRoute = ApiRouteImport.update({
   path: '/api',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExamplesRoute = ExamplesRouteImport.update({
+  id: '/examples',
+  path: '/examples',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GeocoderRoute = GeocoderRouteImport.update({
   id: '/geocoder',
   path: '/geocoder',
@@ -32,30 +38,34 @@ const GeocoderRoute = GeocoderRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api': typeof ApiRoute
+  '/examples': typeof ExamplesRoute
   '/geocoder': typeof GeocoderRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api': typeof ApiRoute
+  '/examples': typeof ExamplesRoute
   '/geocoder': typeof GeocoderRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api': typeof ApiRoute
+  '/examples': typeof ExamplesRoute
   '/geocoder': typeof GeocoderRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api' | '/geocoder'
+  fullPaths: '/' | '/api' | '/examples' | '/geocoder'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api' | '/geocoder'
-  id: '__root__' | '/' | '/api' | '/geocoder'
+  to: '/' | '/api' | '/examples' | '/geocoder'
+  id: '__root__' | '/' | '/api' | '/examples' | '/geocoder'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiRoute: typeof ApiRoute
+  ExamplesRoute: typeof ExamplesRoute
   GeocoderRoute: typeof GeocoderRoute
 }
 
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/examples': {
+      id: '/examples'
+      path: '/examples'
+      fullPath: '/examples'
+      preLoaderRoute: typeof ExamplesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/geocoder': {
       id: '/geocoder'
       path: '/geocoder'
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiRoute: ApiRoute,
+  ExamplesRoute: ExamplesRoute,
   GeocoderRoute: GeocoderRoute,
 }
 export const routeTree = rootRouteImport

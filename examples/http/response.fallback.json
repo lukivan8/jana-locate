@@ -1,0 +1,28 @@
+{
+  "results": [
+    {
+      "apartment": "99",
+      "catalog_id": null,
+      "catalog_revision": null,
+      "city": "Астана",
+      "confidence": 0.6184499999999999,
+      "coordinates": null,
+      "district": null,
+      "entrance": null,
+      "floor": null,
+      "house": "55/6",
+      "id": "order-1",
+      "landmark": null,
+      "living_area": null,
+      "province": "Астана",
+      "raw_address": "Астана, проспект Туран 55/6 кв 99",
+      "status": "needs_review",
+      "street_name": "Туран",
+      "street_type": "проспект",
+      "warnings": [
+        "libpostal_unavailable",
+        "ambiguous_reference_street"
+      ]
+    }
+  ]
+}

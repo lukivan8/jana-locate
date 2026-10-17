@@ -5,9 +5,6 @@ set -eu
 repo=$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)
 postal_prefix="${LIBPOSTAL_PREFIX:-/tmp/jana-libpostal-runtime}"
 case "$postal_prefix" in *' '*) echo 'LIBPOSTAL_PREFIX must not contain spaces' >&2; exit 1;; esac
-uv venv --python 3.11 "$repo/nlp/.venv"
-uv pip install --python "$repo/nlp/.venv/bin/python" -r "$repo/nlp/requirements.lock" -r "$repo/nlp/requirements-test.txt" --extra-index-url https://download.pytorch.org/whl/cpu
-HF_HUB_DISABLE_XET=1 "$repo/nlp/.venv/bin/python" "$repo/nlp/prepare_model.py" --output "$repo/.artifacts/gliner"
 source_dir=$(mktemp -d /tmp/jana-postal-build.XXXXXX)
 trap 'rm -rf "$source_dir"' EXIT INT TERM
 git clone https://github.com/openvenues/libpostal "$source_dir"

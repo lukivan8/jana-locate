@@ -1,0 +1,1934 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Jana CLI local workspace API",
+    "version": "0.1.0",
+    "description": "Local orchestration. Explicit browser connection setup sends credentials only to this local service; credentials never appear in responses or normalization requests."
+  },
+  "paths": {
+    "/v1/runs": {
+      "get": {
+        "operationId": "listRuns",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Revision or source conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Local operation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "importPostgres",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Run"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Revision or source conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Local operation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/runs/{id}": {
+      "get": {
+        "operationId": "getRun",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Run"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Revision or source conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Local operation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/runs/{id}/rows": {
+      "get": {
+        "operationId": "getRows",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "review_only",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rows"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Revision or source conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Local operation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/runs/{id}/rows/{position}/review": {
+      "post": {
+        "operationId": "reviewRow",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "position",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Row"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Revision or source conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Local operation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/runs/{id}/resume": {
+      "post": {
+        "operationId": "resumeRun",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Run"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Revision or source conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Local operation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevisionRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/runs/{id}/publish": {
+      "post": {
+        "operationId": "publishRun",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Run"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Revision or source conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Local operation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevisionRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/runs/{id}/export": {
+      "get": {
+        "operationId": "exportRun",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Rows"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Revision or source conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Local operation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/runs/input": {
+      "post": {
+        "operationId": "importInput",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Run"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Revision or source conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Local operation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InputRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/events": {
+      "get": {
+        "operationId": "watchWorkspace",
+        "description": "SSE journal snapshots. Named runs events contain RunList JSON on connect and whenever persisted run state changes. Reconnect receives a fresh snapshot; comment heartbeats keep proxies alive.",
+        "responses": {
+          "200": {
+            "description": "Persistent event stream; data payloads follow RunList.",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required"
+          }
+        }
+      }
+    },
+    "/v1/connection/catalog": {
+      "post": {
+        "operationId": "inspectDatabase",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatabaseCatalog"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectionRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/connection/save": {
+      "post": {
+        "operationId": "saveConnection",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Source"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectionRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/runs/{id}/summary": {
+      "get": {
+        "operationId": "getRunSummary",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunSummary"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/runs/{id}/table": {
+      "get": {
+        "operationId": "getPublishedTable",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishedTable"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/connection": {
+      "get": {
+        "operationId": "getConnectionProfile",
+        "description": "Saved local defaults only, with no password or DSN. configured means a saved profile exists, not a live connectivity check.",
+        "responses": {
+          "200": {
+            "description": "Non-secret profile defaults",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionProfile"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/runs/{id}/rows/{position}/candidates": {
+      "get": {
+        "operationId": "getLocalCityCandidates",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "position",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Local settlement resolution",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CityCandidates"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid selection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown row",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Run, row or reference changed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Normalizer unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/runs/{id}/rows/{position}/selections": {
+      "post": {
+        "operationId": "selectLocalCity",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "position",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Local settlement resolution",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Row"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid selection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown row",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Run, row or reference changed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Normalizer unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CitySelectionRequest"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Result": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "province",
+          "city",
+          "district",
+          "living_area",
+          "street_type",
+          "street_name",
+          "house",
+          "apartment",
+          "entrance",
+          "floor",
+          "landmark",
+          "id",
+          "raw_address",
+          "confidence",
+          "coordinates",
+          "catalog_id",
+          "catalog_revision",
+          "status",
+          "warnings"
+        ],
+        "properties": {
+          "province": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "district": {
+            "type": "string",
+            "nullable": true
+          },
+          "living_area": {
+            "type": "string",
+            "nullable": true
+          },
+          "street_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "street_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "house": {
+            "type": "string",
+            "nullable": true
+          },
+          "apartment": {
+            "type": "string",
+            "nullable": true
+          },
+          "entrance": {
+            "type": "string",
+            "nullable": true
+          },
+          "floor": {
+            "type": "string",
+            "nullable": true
+          },
+          "landmark": {
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer",
+                "format": "int64"
+              }
+            ],
+            "x-go-type": "interface{}",
+            "description": "String or int64 identifier. Use strings for integers outside JavaScript safe range. Never used for matching."
+          },
+          "raw_address": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "format": "double",
+            "description": "Heuristic score of address component evidence and completeness, not a calibrated probability. Coordinates and building catalog contents have no effect."
+          },
+          "coordinates": {
+            "$ref": "#/components/schemas/NullableCoordinates",
+            "deprecated": true,
+            "description": "Legacy compatibility field. Normalization always returns null; building geocoding is not performed."
+          },
+          "catalog_id": {
+            "type": "string",
+            "nullable": true,
+            "deprecated": true,
+            "description": "Legacy compatibility field. Normalization always returns null; building geocoding is not performed."
+          },
+          "catalog_revision": {
+            "type": "integer",
+            "nullable": true,
+            "deprecated": true,
+            "description": "Legacy compatibility field. Normalization always returns null; building geocoding is not performed."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "matched",
+              "needs_review",
+              "unmatched"
+            ],
+            "description": "matched: province, city, street_name and house parsed with confidence >= 0.72 and no ambiguous/conflicting evidence; needs_review: incomplete or uncertain parsed address; unmatched: no address fields. Independent of coordinates or catalog membership."
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "InputRecord": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "raw_address"
+        ],
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer",
+                "format": "int64"
+              }
+            ],
+            "x-go-type": "interface{}",
+            "description": "String or int64 identifier. Use strings for integers outside JavaScript safe range. Never used for matching."
+          },
+          "raw_address": {
+            "type": "string",
+            "maxLength": 4096
+          }
+        }
+      },
+      "AddressFields": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "province",
+          "city",
+          "district",
+          "living_area",
+          "street_type",
+          "street_name",
+          "house",
+          "apartment",
+          "entrance",
+          "floor",
+          "landmark"
+        ],
+        "properties": {
+          "province": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "district": {
+            "type": "string",
+            "nullable": true
+          },
+          "living_area": {
+            "type": "string",
+            "nullable": true
+          },
+          "street_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "street_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "house": {
+            "type": "string",
+            "nullable": true
+          },
+          "apartment": {
+            "type": "string",
+            "nullable": true
+          },
+          "entrance": {
+            "type": "string",
+            "nullable": true
+          },
+          "floor": {
+            "type": "string",
+            "nullable": true
+          },
+          "landmark": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "NullableCoordinates": {
+        "type": "object",
+        "nullable": true,
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "format": "double"
+          },
+          "longitude": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "format": "double"
+          }
+        }
+      },
+      "Source": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schema",
+          "table",
+          "key",
+          "column",
+          "key_type",
+          "target_schema",
+          "target_table"
+        ],
+        "properties": {
+          "schema": {
+            "type": "string"
+          },
+          "table": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "column": {
+            "type": "string"
+          },
+          "key_type": {
+            "type": "string"
+          },
+          "target_schema": {
+            "type": "string"
+          },
+          "target_table": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "description": "postgres (default for older runs) or file"
+          },
+          "file_name": {
+            "type": "string",
+            "description": "Input file basename; input bytes live in the local snapshot."
+          },
+          "foreign_key": {
+            "type": "boolean",
+            "description": "Create a physical source_id foreign key for PostgreSQL publication; false for legacy runs."
+          },
+          "connection_id": {
+            "type": "string",
+            "description": "Hash of PostgreSQL endpoint/database identity; contains no credentials."
+          }
+        }
+      },
+      "Run": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "source",
+          "status",
+          "total",
+          "processed",
+          "reviewed",
+          "revision",
+          "created_at",
+          "updated_at",
+          "error",
+          "api_url"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/components/schemas/Source"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "normalizing",
+              "review",
+              "failed",
+              "published"
+            ]
+          },
+          "total": {
+            "type": "integer"
+          },
+          "processed": {
+            "type": "integer"
+          },
+          "reviewed": {
+            "type": "integer"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "api_url": {
+            "type": "string"
+          },
+          "normalization_completed_at": {
+            "type": "string",
+            "description": "RFC3339 timestamp saved when all snapshot rows finish normalization; immutable across operator reviews and publication. Absent for unfinished and legacy runs. Full elapsed time is this timestamp minus created_at, including input snapshot creation, queue wait and any interruption; average throughput is full elapsed time divided by total."
+          },
+          "published_count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of rows written by the latest successful publication of this journal run. Ready-only partial publications keep the run in review so unresolved records can be reviewed and republished to the same target without duplicate run/source keys."
+          },
+          "last_published_at": {
+            "type": "string",
+            "description": "RFC3339 timestamp of the latest successful publication. Absent until publication succeeds."
+          }
+        }
+      },
+      "Row": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "position",
+          "source_id",
+          "raw_address",
+          "result",
+          "reviewed",
+          "revision"
+        ],
+        "properties": {
+          "position": {
+            "type": "integer"
+          },
+          "source_id": {
+            "type": "string"
+          },
+          "raw_address": {
+            "type": "string",
+            "nullable": true
+          },
+          "result": {
+            "$ref": "#/components/schemas/Result"
+          },
+          "reviewed": {
+            "type": "boolean"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "input_id": {
+            "type": "string",
+            "description": "Exact original file ID rendered as text, safe for browser display."
+          },
+          "normalized": {
+            "type": "boolean",
+            "description": "Whether a normalization result has been checkpointed."
+          },
+          "city_selection": {
+            "$ref": "#/components/schemas/CitySelection"
+          }
+        }
+      },
+      "Rows": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "rows",
+          "total"
+        ],
+        "properties": {
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Row"
+            }
+          },
+          "total": {
+            "type": "integer"
+          }
+        }
+      },
+      "RunList": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "runs"
+        ],
+        "properties": {
+          "runs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Run"
+            }
+          }
+        }
+      },
+      "ImportRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schema",
+          "table",
+          "key",
+          "column",
+          "target_schema",
+          "target_table"
+        ],
+        "properties": {
+          "schema": {
+            "type": "string"
+          },
+          "table": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "column": {
+            "type": "string"
+          },
+          "target_schema": {
+            "type": "string"
+          },
+          "target_table": {
+            "type": "string"
+          }
+        }
+      },
+      "ReviewRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "expected_revision",
+          "fields"
+        ],
+        "properties": {
+          "expected_revision": {
+            "type": "integer"
+          },
+          "fields": {
+            "$ref": "#/components/schemas/AddressFields"
+          }
+        }
+      },
+      "RevisionRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "expected_revision"
+        ],
+        "properties": {
+          "expected_revision": {
+            "type": "integer"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "InputRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "records"
+        ],
+        "properties": {
+          "records": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000,
+            "items": {
+              "$ref": "#/components/schemas/InputRecord"
+            }
+          }
+        }
+      },
+      "RunSummary": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "automatic",
+          "reviewed",
+          "needs_review",
+          "pending"
+        ],
+        "properties": {
+          "automatic": {
+            "type": "integer"
+          },
+          "reviewed": {
+            "type": "integer"
+          },
+          "needs_review": {
+            "type": "integer"
+          },
+          "pending": {
+            "type": "integer"
+          }
+        }
+      },
+      "DatabaseTable": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schema",
+          "name",
+          "key",
+          "columns"
+        ],
+        "properties": {
+          "schema": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "DatabaseCatalog": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "tables"
+        ],
+        "properties": {
+          "tables": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DatabaseTable"
+            }
+          }
+        }
+      },
+      "ConnectionRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "host",
+          "port",
+          "database",
+          "user",
+          "password",
+          "sslmode"
+        ],
+        "properties": {
+          "host": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer"
+          },
+          "database": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "writeOnly": true
+          },
+          "sslmode": {
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/components/schemas/ImportRequest"
+          },
+          "use_saved_password": {
+            "type": "boolean",
+            "description": "Reuse the local saved secret only for the same host, port, database and user. Never returned in responses."
+          }
+        }
+      },
+      "PublishedTable": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "columns",
+          "rows",
+          "total"
+        ],
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "total": {
+            "type": "integer"
+          }
+        }
+      },
+      "ConnectionProfile": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "configured",
+          "host",
+          "port",
+          "database",
+          "user",
+          "sslmode",
+          "has_password",
+          "verified_at"
+        ],
+        "properties": {
+          "configured": {
+            "type": "boolean"
+          },
+          "host": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer"
+          },
+          "database": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "sslmode": {
+            "type": "string"
+          },
+          "has_password": {
+            "type": "boolean"
+          },
+          "verified_at": {
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/components/schemas/Source"
+          }
+        }
+      },
+      "CityCandidate": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "entity_id",
+          "name",
+          "settlement_type",
+          "province",
+          "province_id",
+          "source"
+        ],
+        "properties": {
+          "entity_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "settlement_type": {
+            "type": "string",
+            "nullable": true
+          },
+          "province": {
+            "type": "string",
+            "nullable": true
+          },
+          "province_id": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          }
+        }
+      },
+      "CityCandidates": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "revision",
+          "reference_version",
+          "candidates"
+        ],
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "reference_version": {
+            "type": "string"
+          },
+          "candidates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CityCandidate"
+            }
+          }
+        }
+      },
+      "CitySelection": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "record_index",
+          "entity_id",
+          "reference_version",
+          "applied_revision"
+        ],
+        "properties": {
+          "record_index": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "entity_id": {
+            "type": "string"
+          },
+          "reference_version": {
+            "type": "string"
+          },
+          "applied_revision": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "CitySelectionRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "expected_revision",
+          "reference_version",
+          "entity_id"
+        ],
+        "properties": {
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "reference_version": {
+            "type": "string"
+          },
+          "entity_id": {
+            "type": "string"
+          }
+        }
+      },
+      "RecordCityCandidatesRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "record"
+        ],
+        "properties": {
+          "record": {
+            "$ref": "#/components/schemas/InputRecord"
+          }
+        }
+      },
+      "RecordCityCandidates": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "reference_version",
+          "candidates"
+        ],
+        "properties": {
+          "reference_version": {
+            "type": "string"
+          },
+          "candidates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CityCandidate"
+            }
+          }
+        }
+      },
+      "RecordCitySelectionRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "record",
+          "reference_version",
+          "entity_id"
+        ],
+        "properties": {
+          "record": {
+            "$ref": "#/components/schemas/InputRecord"
+          },
+          "reference_version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "entity_id": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}
