@@ -13,7 +13,10 @@ def main():
     request = Request(
         base + "/v1/normalize",
         data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
-        headers={"Content-Type": "application/json"}, method="POST",
+        headers={
+            "Content-Type": "application/json",
+            "User-Agent": "JanaLocate/0.1.0 (+https://github.com/lukivan8/jana-locate)",
+        }, method="POST",
     )
     try:
         with urlopen(request, timeout=300) as response:
