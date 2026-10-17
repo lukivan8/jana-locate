@@ -162,27 +162,6 @@ func Open(path string) (*Directory, error) {
 	return d, nil
 }
 
-// AddressCities returns positive structured address evidence, never coordinates.
-// Missing data cannot disprove another city; callers only use a unique positive
-// identity to refine cities already explicitly mentioned in the input.
-func (d *Directory) AddressCities(street, house, streetType string) map[string]bool {
-	out := map[string]bool{}
-	if d == nil || street == "" || house == "" {
-		return out
-	}
-	for _, entity := range d.Exact(street, "") {
-		if entity.Kind != "street" && entity.Kind != "living_area" {
-			continue
-		}
-		if streetType != "" && entity.StreetType != "" && Canon(streetType) != Canon(entity.StreetType) {
-			continue
-		}
-		if _, ok := d.addresses[entity.ID][Canon(house)]; ok {
-			out[entity.CityID] = true
-		}
-	}
-	return out
-}
 func (d *Directory) Entity(id string) (Entity, bool) {
 	if d == nil {
 		return Entity{}, false

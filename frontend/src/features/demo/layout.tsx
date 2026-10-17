@@ -13,6 +13,6 @@ export function DemoLayout() {
       </nav>
     </header>
     <Outlet />
-    <footer className="shell-footer">Jana Locate · Офлайн-обработка · Независимый HTTP API</footer>
+    <footer className="shell-footer">Jana Locate · Офлайн-обработка · Независимый HTTP API · <a href="https://github.com/lukivan8/jana-locate">GitHub</a></footer>
   </div>
 }

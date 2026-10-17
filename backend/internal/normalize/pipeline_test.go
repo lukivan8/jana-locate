@@ -1,6 +1,7 @@
 package normalize
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"github.com/lukivan8/jana-address/internal/reference"
@@ -81,7 +82,7 @@ func TestFieldConflictAbstains(t *testing.T) {
 	}
 }
 
-func TestStructuredAddressRefinesHomonymWithoutInventingCoordinates(t *testing.T) {
+func TestStructuredAddressPreservesHomonymsWithoutInventingCoordinates(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "reference.sqlite")
 	db, err := sql.Open("sqlite", path)
 	if err != nil {
@@ -99,7 +100,7 @@ func TestStructuredAddressRefinesHomonymWithoutInventingCoordinates(t *testing.T
  ('s1','street','Алалыкина','c1','c1','p1','','улица','test'),
  ('s2','street','Алалыкина','c2','c2','p2','','улица','test');
  INSERT INTO aliases VALUES('p1','Карагандинская область'),('p2','Актюбинская область'),
- ('c1','Караганда'),('c2','Караганда'),('s1','Алалыкина'),('s2','Алалыкина');
+ ('c1','Караганда'),('c1','г.Караганда'),('c2','Караганда'),('c2','с.Караганда'),('s1','Алалыкина'),('s2','Алалыкина');
  INSERT INTO addresses VALUES('a1','s1','c1','12','test');`)
 	if err != nil {
 		t.Fatal(err)
@@ -115,10 +116,10 @@ func TestStructuredAddressRefinesHomonymWithoutInventingCoordinates(t *testing.T
 		raw, house, province string
 		ambiguous            bool
 	}{
-		{"Караганда, Алалыкина 12", "12", "Карагандинская область", false},
-		{"Караганда, Алалыкина д12", "12", "Карагандинская область", false},
-		{"Караганда, Алалыкина д 12", "12", "Карагандинская область", false},
-		{"Караганда, Алалыкина д.12", "12", "Карагандинская область", false},
+		{"Караганда, Алалыкина 12", "12", "", true},
+		{"Караганда, Алалыкина д12", "12", "", true},
+		{"Караганда, Алалыкина д 12", "12", "", true},
+		{"Караганда, Алалыкина д.12", "12", "", true},
 		{"Караганда, Алалыкина 13", "13", "", true},
 		{"Караганда, Алалыкина 12/1", "12/1", "", true},
 	} {
@@ -130,10 +131,25 @@ func TestStructuredAddressRefinesHomonymWithoutInventingCoordinates(t *testing.T
 			}
 
 			r := e.Normalize(api.InputRecord{Id: "case", RawAddress: tt.raw})
-			if catalog.Text(r.Province) != tt.province || hasWarning(r.Warnings, "ambiguous_city_reference") != tt.ambiguous || r.Coordinates != nil || r.CatalogId != nil || r.RawAddress != tt.raw {
+			if r.Status != api.NeedsReview || r.District != nil || catalog.Text(r.Province) != tt.province || hasWarning(r.Warnings, "ambiguous_city_reference") != tt.ambiguous || r.Coordinates != nil || r.CatalogId != nil || r.RawAddress != tt.raw {
 				t.Fatalf("unsafe reference result: %+v", r)
 			}
 		})
+	}
+	// Explicit province/type still resolves identity, independently of address coverage.
+	e.Postal = fakePostal{{Label: "road", Value: "алалыкина"}, {Label: "house_number", Value: "12"}}
+	for _, qualified := range []struct{ raw, city, province string }{
+		{"Карагандинская область, Караганда, Алалыкина 12", "c1", "Карагандинская область"},
+		{"Актюбинская область, Караганда, Алалыкина 12", "c2", "Актюбинская область"},
+		{"г.Караганда, Алалыкина 12", "c1", "Карагандинская область"},
+		{"с.Караганда, Алалыкина 12", "c2", "Актюбинская область"},
+	} {
+		in := api.InputRecord{Id: "qualified", RawAddress: qualified.raw}
+		r := e.Normalize(in)
+		choices := e.CityCandidates(context.Background(), in)
+		if r.Status != api.Matched || catalog.Text(r.Province) != qualified.province || len(choices) != 1 || choices[0].EntityId != qualified.city {
+			t.Fatalf("explicit administrative evidence lost: %+v %+v", r, choices)
+		}
 	}
 	// Positive facts in both settlements must still abstain.
 	db, err = sql.Open("sqlite", path)

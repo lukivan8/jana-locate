@@ -101,7 +101,7 @@ for (const width of [1440, 390]) {
     await expect(page.getByLabel('Город', { exact: true })).toHaveValue('Сарань')
     // Opening a unique match must not re-normalize or overwrite operator corrections.
     await page.getByLabel('Квартира', { exact: true }).fill('99')
-    await page.getByRole('button', { name: 'Сохранить исправления', exact: true }).click()
+    await page.getByRole('button', { name: 'Подтвердить адрес', exact: true }).click()
     await page.reload()
     await expect(page.locator('tbody > tr').first().getByRole('button')).toHaveAttribute('aria-expanded', 'true')
     await expect(picker).toContainText('Сарань · город')

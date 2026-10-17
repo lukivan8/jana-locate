@@ -19,7 +19,7 @@
 [**Открыть приложение ↗**](https://jana.linker.kz) · [Быстрый запуск](#быстрый-запуск-готовые-контейнеры) · [Подключение API](docs/integration.md) · [Примеры кода](examples/http/README.md) · [Документация](docs/README.md) · [Сообщить об ошибке](https://github.com/lukivan8/jana-locate/issues/new/choose)
 
 > [!TIP]
-> **Проверяющим: начните с [jana.linker.kz](https://jana.linker.kz).** Вставьте синтетические адреса, нажмите «Нормализовать пакет», откройте результат и попробуйте проверку полей и экспорт JSON. Установка Docker для знакомства не нужна.
+> **Организаторам: [запустите Docker API](#только-api--скачать-и-запустить-одной-командой), затем [отправьте batch JSON](#первый-batch-запрос-после-запуска).** OpenAPI запущенного контейнера: [`http://localhost:8080/openapi.json`](http://localhost:8080/openapi.json). Для знакомства в браузере доступен [jana.linker.kz](https://jana.linker.kz).
 
 ## Что можно сделать
 
@@ -40,6 +40,23 @@
 
 Для API достаточно **Docker Engine или Docker Desktop**. Для комплектов с установщиком дополнительно нужны Compose v2, curl и shell. Текущий выпуск — **[0.1.0](https://github.com/lukivan8/jana-locate/releases/tag/v0.1.0)** для `linux/amd64`. На ARM используется эмуляция amd64 средствами Docker; нативный ARM-образ пока не выпускается.
 
+### API + Web + CLI — комплект по умолчанию
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/lukivan8/jana-locate/main/scripts/install.sh | sh -s -- full
+```
+
+Полный комплект включает автономный API на `http://localhost:8080`, встроенный веб-интерфейс на `http://localhost:8095` и CLI для файлов и PostgreSQL. Локальный интерфейс открывается без логина и пароля. PostgreSQL автоматически не устанавливается: можно подключить свою базу или работать с файлами. Порты по умолчанию доступны только на этой машине.
+
+После установки в терминале появятся URL OpenAPI и команда batch-запроса, а в `jana-locate/` — готовый `batch.example.json`. [Проверить свои адреса через API →](#первый-batch-запрос-после-запуска)
+
+```sh
+cd jana-locate
+./jana status      # состояние контейнеров
+./jana down        # остановить с сохранением данных
+./jana up          # снова запустить установленные образы, без скачивания и сборки
+```
+
 ### Только API — скачать и запустить одной командой
 
 ```sh
@@ -53,33 +70,63 @@ Docker сам скачает готовый образ и запустит API �
 
 Если нужен единый launcher для управления контейнерами, используйте [установщик](docs/quickstart.md) в режиме `api`. [Исходник установщика](scripts/install.sh).
 
+### Первый batch-запрос после запуска
+
+Команды выполняются **на вашем компьютере**, рядом с Docker; клонировать репозиторий и заходить в контейнер не нужно. Понадобятся curl и shell (Linux, macOS или WSL).
+
+**1. Дождитесь готовности и скачайте OpenAPI именно запущенного API:**
+
 ```sh
 curl --fail --retry 30 --retry-all-errors --retry-delay 2 http://localhost:8080/readyz
-curl --fail-with-body http://localhost:8080/v1/normalize \
+curl --fail-with-body http://localhost:8080/openapi.json -o openapi.json
+```
+
+Контракт также можно открыть по [`http://localhost:8080/openapi.json`](http://localhost:8080/openapi.json) или импортировать этот URL/файл в Postman. В исходниках он лежит в [`backend/api/openapi.json`](backend/api/openapi.json).
+
+**2. Создайте `batch.example.json` с несколькими адресами:**
+
+Если использовали установщик, выполните `cd jana-locate` (или перейдите в выбранный каталог установки): пример уже лежит там, этот шаг можно пропустить.
+
+```sh
+cat > batch.example.json <<'JSON'
+{
+  "records": [
+    {
+      "id": "test-1",
+      "raw_address": "Астана, проспект Туран 55/6 кв 99"
+    },
+    {
+      "id": "test-2",
+      "raw_address": "Алматы, улица Абая 10, подъезд 2, этаж 3"
+    },
+    {
+      "id": "test-3",
+      "raw_address": "Караганда"
+    }
+  ]
+}
+JSON
+```
+
+Примеры синтетические; последняя строка намеренно неоднозначна. Для своей проверки замените записи на тестовые адреса, сохранив поля `id` и `raw_address`.
+
+**3. Отправьте файл и сохраните ответ:**
+
+```sh
+curl --fail-with-body --max-time 310 http://localhost:8080/v1/normalize \
   -H 'Content-Type: application/json' \
-  -d '{"records":[{"id":"order-1","raw_address":"Астана, проспект Туран 55/6 кв 99"}]}'
+  --data-binary @batch.example.json \
+  --output batch-results.json
+cat batch-results.json
 ```
 
-Ответ — `{"results":[...]}`, одна запись на каждый входной адрес. Исходные `id` и `raw_address` сохраняются. [Формат ответа](backend/docs/consumer-guide.md).
+Это синхронный batch endpoint: ответ `{"results":[...]}` сразу содержит по одному результату на каждую запись в исходном порядке, с теми же `id` и `raw_address`. В установке через скрипт `batch.example.json` уже находится в каталоге `jana-locate/`, а команда печатается после запуска. Если меняли порт, замените `8080` в URL.
 
-### API с интерфейсом или полный комплект с CLI
+Для оценки качества сравните адресные поля из `results` со своим эталоном по ID/позиции. HTTP 200 означает успешную обработку, а `status`, `warnings` и `null` показывают полноту и неоднозначность; `confidence` не является измеренной точностью. **[Лимиты, поля результата и ошибки →](docs/quickstart.md#первый-batch-запрос-после-запуска)**
 
-```sh
-# Автономный API + веб-интерфейс на http://localhost:3000
-curl -fsSL https://raw.githubusercontent.com/lukivan8/jana-locate/main/scripts/install.sh | sh -s -- web
+### Другие комплекты
 
-# Автономный API + встроенный веб-интерфейс и CLI на http://localhost:8095
-curl -fsSL https://raw.githubusercontent.com/lukivan8/jana-locate/main/scripts/install.sh | sh -s -- full
-```
-
-В полном комплекте пользователь сайта — `jana`, случайный пароль находится в `jana-locate/.env` (`JANA_WEB_TOKEN`). PostgreSQL автоматически не устанавливается: можно подключить свою базу или работать с файлами. Порты по умолчанию доступны только на этой машине.
-
-```sh
-cd jana-locate
-./jana status      # состояние контейнеров
-./jana down        # остановить с сохранением данных
-./jana up          # снова запустить установленные образы, без скачивания и сборки
-```
+Укажите `api` для одного нормализатора или `web` для API и отдельного веб-интерфейса на `http://localhost:3000`. Без аргумента установщик выбирает `full`.
 
 ### Hosted API — без локального нормализатора
 

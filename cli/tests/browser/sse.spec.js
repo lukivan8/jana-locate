@@ -20,8 +20,9 @@ for(const viewport of [{width:1440,height:1000},{width:390,height:844}]) {
   await page.locator('#rows tr').nth(1).getByRole('button').click();
   await expect(page.getByLabel('Квартира',{exact:true})).toHaveValue('88');
   await page.getByLabel('Подъезд',{exact:true}).fill('3');
-  await page.getByRole('button',{name:'Сохранить исправления',exact:true}).click();
-  await expect(page.locator('#editor')).toBeHidden();
+  await page.getByRole('button',{name:'Подтвердить адрес',exact:true}).click();
+  await expect(page.locator('#editor')).toBeVisible();
+  await expect(page.getByRole('button',{name:'Подтвердить адрес',exact:true})).toBeEnabled();
   const persisted=await (await page.request.get(`/v1/runs/${run.id}/rows`)).json();expect(persisted.rows[1].result.entrance).toBe('3');
   await page.reload();await expect(page.locator('#rows tr')).toHaveCount(2);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);

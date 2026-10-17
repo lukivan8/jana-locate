@@ -15,8 +15,11 @@ var ErrInvalidCitySelection = errors.New("settlement is not a compatible candida
 // Explicit province mentions constrain choices; street/house absence is not negative evidence.
 func (e Engine) CityCandidates(ctx context.Context, in api.InputRecord) []api.CityCandidate {
 	out := []api.CityCandidate{}
-	administrative := administrativeText(Working(in.RawAddress))
-	districts, _, cityText, _ := e.districtMentions(administrative, ruleSignals(administrative))
+	work := Working(in.RawAddress)
+	administrative := administrativeText(work)
+	signals, _ := e.extractionSignals(work)
+	signals = administrativeSignals(work, administrative, signals)
+	districts, _, cityText, _ := e.districtMentions(administrative, signals)
 	mentions := e.Reference.Matches(cityText)
 	provinces := map[string]bool{}
 	cities := map[string]reference.Entity{}
@@ -47,26 +50,7 @@ func (e Engine) CityCandidates(ctx context.Context, in api.InputRecord) []api.Ci
 		}
 		cities[c.ID] = c
 	}
-	// Every retained city mention must support the identity. This distinguishes
-	// homonyms sharing one alias from two different settlements in the same input,
-	// and honors explicit source qualifiers such as г.Караганда.
-	surfaces := []string{}
-	for _, m := range mentions {
-		if _, eligible := cities[m.Entity.ID]; eligible {
-			surfaces = append(surfaces, m.Surface)
-		}
-	}
-	for _, surface := range surfaces {
-		ids := map[string]bool{}
-		for _, entity := range e.Reference.Exact(surface, "city") {
-			ids[entity.ID] = true
-		}
-		for id := range cities {
-			if !ids[id] {
-				delete(cities, id)
-			}
-		}
-	}
+	cities = compatibleMentionedCities(e.Reference, mentions, cities)
 	cities = e.citiesInDistricts(cities, districts)
 	for _, c := range cities {
 		var province *string
@@ -78,6 +62,31 @@ func (e Engine) CityCandidates(ctx context.Context, in api.InputRecord) []api.Ci
 	sort.Slice(out, func(i, j int) bool { return out[i].EntityId < out[j].EntityId })
 	return out
 }
+
+// All retained settlement mentions must support the same identity. In particular,
+// a source-qualified alias (г.Караганда) constrains its shorter bare-name match.
+// Share this rule between normalization and selectable candidates.
+func compatibleMentionedCities(directory *reference.Directory, mentions []reference.Match, cities map[string]reference.Entity) map[string]reference.Entity {
+	surfaces := []string{}
+	for _, m := range mentions {
+		if _, eligible := cities[m.Entity.ID]; eligible {
+			surfaces = append(surfaces, m.Surface)
+		}
+	}
+	for _, surface := range surfaces {
+		ids := map[string]bool{}
+		for _, entity := range directory.Exact(surface, "city") {
+			ids[entity.ID] = true
+		}
+		for id := range cities {
+			if !ids[id] {
+				delete(cities, id)
+			}
+		}
+	}
+	return cities
+}
+
 func (e Engine) SelectCity(ctx context.Context, in api.InputRecord, id string) (api.Result, error) {
 	if err := ctx.Err(); err != nil {
 		return api.Result{}, err

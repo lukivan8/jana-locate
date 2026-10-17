@@ -29,7 +29,9 @@ func TestNativeHouseMarkers(t *testing.T) {
 	}
 	var baseline float64
 	for _, marker := range []string{"12", "д12", "д 12", "д.12", "д. 12", "дом12", "дом 12"} {
-		raw := "Караганда, Алалыкина " + marker
+		raw := "г.Караганда, Алалыкина " + marker
+		parts, _ := e.Postal.Parse(raw)
+		t.Logf("native components for %s: %+v", marker, parts)
 		r := e.Normalize(api.InputRecord{Id: marker, RawAddress: raw})
 		if marker == "12" {
 			baseline = r.Confidence

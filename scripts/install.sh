@@ -3,7 +3,7 @@
 set -eu
 umask 077
 version=${JANA_VERSION:-0.1.0}
-mode=${1:-api}
+mode=${1:-full}
 case "$mode" in api|web|full|hosted) ;; *) echo 'Режим: api, web, full или hosted' >&2; exit 2;; esac
 case "$version" in ''|*[!a-zA-Z0-9._-]*) echo 'Некорректная версия' >&2; exit 2;; esac
 command -v docker >/dev/null 2>&1 || { echo 'Установите Docker Engine или Docker Desktop.' >&2; exit 1; }
@@ -17,6 +17,10 @@ mkdir -p "$install_dir"
 cd "$install_dir"
 fetch() { curl --fail --location --retry 3 "$1" -o "$2.part" && mv "$2.part" "$2"; }
 fetch "$source/deploy/compose.release.yaml" compose.yaml
+# Older release manifests hard-code password mode. Apply the local installer default
+# without changing the pinned application images or removing existing credentials.
+sed 's/^      JANA_WEB_AUTH:.*/      JANA_WEB_AUTH: "${JANA_WEB_AUTH:-none}"/; s/^      JANA_WEB_TOKEN:.*/      JANA_WEB_TOKEN: "${JANA_WEB_TOKEN:-}"/' compose.yaml > compose.yaml.next
+mv compose.yaml.next compose.yaml
 fetch "$source/deploy/compose.release.host.yaml" compose.host.yaml
 fetch "$source/scripts/jana" jana
 chmod 700 jana
@@ -24,7 +28,6 @@ if [ -f .jana-mode ] && [ "$(cat .jana-mode)" != "$mode" ]; then ./jana down; fi
 if [ ! -f .env ]; then
   project=${JANA_PROJECT_NAME:-jana-locate}
   case "$project" in ''|[!a-z0-9]*|*[!a-z0-9_-]*) echo 'Некорректное имя проекта.' >&2; exit 2;; esac
-  token=$(od -An -N24 -tx1 /dev/urandom | tr -d ' \n')
   api_port=${JANA_API_PORT:-8080}
   web_port=${JANA_WEB_PORT:-3000}
   cli_port=${JANA_CLI_PORT:-8095}
@@ -40,7 +43,7 @@ WEB_PORT=$web_port
 CLI_PORT=$cli_port
 JANA_BROWSER_API_URL=http://localhost:$api_port
 CORS_ORIGINS=http://localhost:$web_port
-JANA_WEB_TOKEN=$token
+JANA_WEB_AUTH=none
 ENV
 fi
 # Preserve user configuration and credentials; only select the release version.
@@ -89,16 +92,56 @@ case "$mode" in
   full) load_image api; load_image cli ;;
   hosted) load_image cli ;;
 esac
+# Keep a ready-to-send synthetic batch without replacing the user's file.
+if [ ! -e batch.example.json ]; then
+  cat > batch.example.json <<'JSON'
+{
+  "records": [
+    {
+      "id": "test-1",
+      "raw_address": "Астана, проспект Туран 55/6 кв 99"
+    },
+    {
+      "id": "test-2",
+      "raw_address": "Алматы, улица Абая 10, подъезд 2, этаж 3"
+    },
+    {
+      "id": "test-3",
+      "raw_address": "Караганда"
+    }
+  ]
+}
+JSON
+fi
 ./jana up
 printf '\nГотово. Каталог установки: %s\n' "$install_dir"
 if [ "$mode" = hosted ]; then
-  printf 'Нормализация: https://jana.linker.kz (адреса отправляются на hosted API).\n'
+  api_url=https://jana.linker.kz
+  printf 'Нормализация: %s (адреса отправляются на hosted API).\n' "$api_url"
 else
   api_port=$(sed -n 's/^API_PORT=//p' .env)
-  printf 'Автономный API: http://localhost:%s\n' "$api_port"
+  api_url="http://localhost:$api_port"
+  printf 'Автономный API: %s\n' "$api_url"
 fi
 case "$mode" in
   web) web_port=$(sed -n 's/^WEB_PORT=//p' .env); printf 'Интерфейс: http://localhost:%s\n' "$web_port" ;;
-  full|hosted) cli_port=$(sed -n 's/^CLI_PORT=//p' .env); printf 'Интерфейс: http://localhost:%s (пользователь jana, пароль JANA_WEB_TOKEN в .env).\n' "$cli_port" ;;
+  full|hosted) cli_port=$(sed -n 's/^CLI_PORT=//p' .env); printf 'Интерфейс: http://localhost:%s\n' "$cli_port" ;;
 esac
 printf 'Управление: cd "%s" && ./jana help\n' "$install_dir"
+printf '\nOpenAPI запущенного API: %s/openapi.json\n' "$api_url"
+# Quote the directory for a pasteable shell command, including spaces/apostrophes.
+quoted_install_dir=$(printf '%s' "$install_dir" | sed "s/'/'\\\\''/g")
+cat <<HELP
+
+Первый batch-запрос (curl на вашем компьютере):
+  cd '$quoted_install_dir'
+  curl --fail-with-body '$api_url/openapi.json' -o openapi.json
+  curl --fail-with-body --max-time 310 '$api_url/v1/normalize' -H 'Content-Type: application/json' --data-binary @batch.example.json --output batch-results.json
+  cat batch-results.json
+
+batch.example.json — синтетический пример; замените записи своими id/raw_address.
+Лимиты: 1–1000 записей, 4096 байт UTF-8 на адрес, 2 MiB на запрос.
+Ответ: results в исходном порядке, с теми же id и raw_address.
+Сравните поля с эталоном; status/warnings показывают причины проверки.
+confidence — эвристика, не измеренная точность. HTTP 200 — пакет обработан.
+HELP

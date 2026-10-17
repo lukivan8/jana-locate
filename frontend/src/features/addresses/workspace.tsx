@@ -1,3 +1,4 @@
+import { nextReview } from './review-navigation'
 import { PublishedWorkspace } from './published'
 import { RunTiming } from './run-timing'
 import { Fragment, useEffect, useRef, useState } from 'react'
@@ -7,7 +8,21 @@ import { createJob, getJob, reviewRecord, isLocalWorkspace, importLocalSource, l
 import { addressLines, readAddressFile } from './import-addresses'
 import { ImportColumnDialog } from './import-column-dialog'
 import { CityCandidatePicker } from './city-candidates'
-import { fieldLabels, isReviewed, ReviewStatus, ResultWarnings, ResultDetails } from './result-details'
+import { fieldLabels, displayFieldValue, isReviewed, ReviewStatus, ResultWarnings, ResultDetails } from './result-details'
+
+// Synthetic inputs checked against the normalizer; no expected answers or coordinates.
+const exampleAddresses = [
+  'Көкшетау, Әуезов 15 кв6, 2подъезд 3этаж, магазин Береке',
+  'Астана, Үркер, ул.Дулат Бабатайұлы 15 кв6, 2подъезд 3этаж, магазин Береке',
+  'Алматы, Алмалинский район, ул.Курильская 9 кв1, 3подъезд 2этаж, магазин Береке',
+  'Almaty, Kurilskaya 9 kv1',
+  'Pavlodar, Lenina 18 kv9',
+  'Астана, Kenesary 20 kv4',
+  'кв1, 3подъезд 2этаж, ул.Курильская 9, Алматы, магазин Береке',
+  'ул.Кенесары 20 кв4, Астана, район Сарыарка, 2подъезд 5этаж',
+  'ул.Шугаева 15кв7, Семей, 4подъезд 9этаж, аптека Айболит',
+  'Астана, Пригородный, ул.Арнасай 18 кв9, 2подьезд 3этаж, звонить за 10 минут',
+].join('\n')
 
 const fieldNames: (keyof Fields)[] = ['province', 'city', 'district', 'living_area', 'street_type', 'street_name', 'house', 'apartment', 'entrance', 'floor', 'landmark']
 const empty: Fields = { province: null, city: null, district: null, living_area: null, street_type: null, street_name: null, house: null, apartment: null, entrance: null, floor: null, landmark: null }
@@ -18,7 +33,7 @@ const localLaunchModes = [
 ] as const
 
 function LocalLaunch() {
-  const [mode, setMode] = useState<(typeof localLaunchModes)[number]>(localLaunchModes[0])
+  const [mode, setMode] = useState<(typeof localLaunchModes)[number]>(localLaunchModes[2])
   const [copyStatus, setCopyStatus] = useState('')
   const command = `curl -fsSL https://raw.githubusercontent.com/lukivan8/jana-locate/main/scripts/install.sh | sh -s -- ${mode.id}`
   async function copyCommand() {
@@ -70,6 +85,7 @@ export function AddressWorkspace() {
   const [readingFile, setReadingFile] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const wizard = useRef<HTMLDialogElement>(null)
+  const adoptedPage = useRef<{ id: string; offset: number; reviewOnly: boolean } | null>(null)
   const published = job?.local?.run.status === 'published' && job.local.run.source.kind !== 'file'
   const [summary, setSummary] = useState<RunSummary | null>(null)
   useEffect(() => {
@@ -99,6 +115,10 @@ export function AddressWorkspace() {
   function adopt(saved: Job) { setJob(saved); setResults(saved.results); setDirty(false) }
   useEffect(() => {
     if (!jobId) { setJob(null); setResults([]); setSelected(null); setText(''); setUpload(null); setDirty(false); setError(''); setLoadingJob(false); return }
+    if (adoptedPage.current?.id === jobId && adoptedPage.current.offset === offset && adoptedPage.current.reviewOnly === reviewOnly) {
+      adoptedPage.current = null
+      return
+    }
     let active = true
     let timer: ReturnType<typeof setTimeout>
     setLoadingJob(true); setJob(null); setResults([]); setSelected(null); setError('')
@@ -151,7 +171,7 @@ export function AddressWorkspace() {
     if (id === jobId) setLoadAttempt(value => value + 1)
     else await navigate({ search: { job: id } })
   }
-  useEffect(() => { if (selected !== null) document.getElementById('correction-heading')?.focus() }, [selected])
+  useEffect(() => { if (selected !== null) document.getElementById('correction-heading')?.focus() }, [selected, job?.local?.rows[selected ?? -1]?.position])
   function select(index: number) {
     if (!leaveDraft()) return
     setDirty(false)
@@ -191,8 +211,24 @@ export function AddressWorkspace() {
   }
   async function saveFields() {
     if (!job || selected === null) return
-    setBusy(true); setError(''); try { adopt(await reviewRecord(job, selected, draft)); setSelected(null) }
-    catch (e) { setError(e instanceof Error ? e.message : String(e)) }
+    setBusy(true); setError('')
+    try {
+      const position = job.local?.rows[selected].position ?? selected
+      const saved = await reviewRecord(job, selected, draft)
+      adopt(saved); setSelected(null)
+      if (saved.local) { setUpload(saved.records); setText(addressLines(saved.records)) }
+      try {
+        const next = await nextReview(saved, position)
+        if (next) {
+          if (next.job.local) {
+            const page = next.job.local
+            if (page.offset !== offset) adoptedPage.current = { id: saved.id, offset: page.offset, reviewOnly }
+            setOffset(page.offset); setUpload(next.job.records); setText(addressLines(next.job.records))
+          }
+          adopt(next.job); editResult(next.index, next.job.results[next.index])
+        }
+      } catch (e) { setError(`Адрес подтверждён, но следующий адрес загрузить не удалось. ${e instanceof Error ? e.message : String(e)}`) }
+    } catch (e) { setError(e instanceof Error ? e.message : String(e)) }
     finally { setBusy(false) }
   }
   async function importSource() {
@@ -224,6 +260,7 @@ export function AddressWorkspace() {
     <dialog ref={wizard} className={`panel address-wizard${expanded ? ' address-wizard--expanded' : ''}`} aria-labelledby="wizard-heading" onCancel={event => { event.preventDefault(); setExpanded(false); document.getElementById('expand-wizard')?.focus() }}>
       <div className="section-title"><h1 id="wizard-heading">Нормализация адресов</h1><Button id="expand-wizard" className="icon-button" variant="text" aria-label={expanded ? 'Свернуть' : 'На весь экран'} title={expanded ? 'Свернуть' : 'На весь экран'} aria-expanded={expanded} onClick={() => setExpanded(value => !value)}><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={expanded ? 'M4 9h5V4M15 4v5h5M20 15h-5v5M9 20v-5H4' : 'M9 4H4v5M15 4h5v5M20 15v5h-5M9 20H4v-5'} /></svg></Button></div>
       <TextArea label="Один адрес на строку" id="addresses" value={text} disabled={working || readingFile} readOnly={!!job?.local} onChange={e => setText(e.target.value)} rows={5} placeholder="Например: Караганда, улица Алалыкина 12" />
+      {!job?.local && <button type="button" className="wizard-examples" disabled={working || readingFile} title="10 синтетических примеров: казахские написания, транслит, разный порядок, районы, жилые массивы, ориентиры, подъезды и этажи" onClick={() => { setUpload(null); setText(exampleAddresses); setError(''); document.getElementById('addresses')?.focus() }}>Подставить примеры</button>}
       <div className="wizard-meta"><span>{job?.local ? `${job.local.run.processed} / ${job.total} адресов` : `${text.split('\n').filter(line => line.trim()).length} / 1 000 адресов`}</span>{!job?.local && <span>Проверьте список перед запуском</span>}</div>
       <div className="wizard-actions"><Button variant="filled" disabled={working || readingFile || !!job?.local || !text.trim()} onClick={run}>{working ? 'Обработка…' : 'Нормализовать пакет'}</Button>
         <div className="wizard-upload"><label className={`md-button md-button--text${working || readingFile ? ' upload-disabled' : ''}`} htmlFor="file">Загрузить файл<input id="file" aria-label="Загрузить JSON, TXT, CSV или XLSX" type="file" accept=".txt,.json,.csv,.xlsx,text/plain,application/json,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" disabled={working || readingFile || !!job?.local} onChange={async e => {
@@ -254,7 +291,7 @@ export function AddressWorkspace() {
         const index=position===undefined ? selected : saved.local?.rows.findIndex(row=>row.position===position) ?? -1
         if(index<0 || !saved.results[index]) { setSelected(null); return }
         editResult(index,saved.results[index])
-      }} />}<ResultDetails result={results[selected]} showWarnings={false} showStatus={false} /><div className="field-grid">{fieldNames.map(key => <TextField key={key} label={fieldLabels[key]} value={draft[key] ?? ''} disabled={working || job?.local?.run.status === 'published'} onChange={e => { setDraft({ ...draft, [key]: e.target.value || null }); setDirty(true) }} />)}</div><div className="actions"><Button variant="filled" onClick={saveFields} disabled={working || job?.local?.run.status === 'published'}>Сохранить исправления</Button></div></section></td></tr>}</Fragment>)}</tbody></table>{reviewOnly && !needsReview && <p className="empty">Все адреса обработаны. Очередь проверки пуста.</p>}</div>}
+      }} />}<ResultDetails result={results[selected]} showWarnings={false} showStatus={false} /><div className="field-grid">{fieldNames.map(key => <TextField key={key} label={fieldLabels[key]} value={displayFieldValue(key, draft[key]) ?? ''} disabled={working || job?.local?.run.status === 'published'} onChange={e => { setDraft({ ...draft, [key]: e.target.value || null }); setDirty(true) }} />)}</div><div className="actions"><Button variant="filled" onClick={saveFields} disabled={working || job?.local?.run.status === 'published'}>Подтвердить адрес</Button></div></section></td></tr>}</Fragment>)}</tbody></table>{reviewOnly && !needsReview && <p className="empty">Все адреса обработаны. Очередь проверки пуста.</p>}</div>}
       {job?.local && <nav className="actions pagination" aria-label="Страницы результатов"><Button disabled={working || offset === 0} onClick={() => { if (leaveDraft()) { setDirty(false); setOffset(value => Math.max(0, value - 50)) } }}>Назад</Button><span>{results.length ? `Позиции в очереди: ${offset + 1}–${offset + results.length}` : 'Записей нет'}</span><Button disabled={working || results.length < 50} onClick={() => { if (leaveDraft()) { setDirty(false); setOffset(value => value + 50) } }}>Далее</Button></nav>}
     </section>}
 

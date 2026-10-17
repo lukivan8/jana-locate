@@ -159,10 +159,18 @@ func TestJobsInterruptedRecoveryExpiryAndCapacity(t *testing.T) {
 		t.Fatal("expired raw data not removed from disk")
 	}
 	s = newJobs(t)
-	for i := 0; i < maxJobs; i++ {
+	for i := 0; i < 1000; i++ {
 		if _, err = s.Create([]api.InputRecord{{Id: "same", RawAddress: ""}}); err != nil {
 			t.Fatal(err)
 		}
+	}
+	// A full journal must remain readable after restart, with every job retained.
+	s, err = OpenJobs(s.path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if count := len(s.List()); count != 1000 {
+		t.Fatalf("restart lost jobs: %d", count)
 	}
 	if _, err = s.Create([]api.InputRecord{{Id: "same", RawAddress: ""}}); !errors.Is(err, ErrJobLimit) {
 		t.Fatal("capacity unbounded")

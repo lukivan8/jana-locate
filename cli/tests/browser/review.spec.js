@@ -25,8 +25,9 @@ for (const viewport of [{width:1440,height:1000},{width:390,height:844}]) {
     await row.getByRole('button').click();
     await page.getByLabel('Квартира',{exact:true}).fill('99');
     await page.getByLabel('Подъезд',{exact:true}).fill('4');
-    await page.getByRole('button',{name:'Сохранить исправления',exact:true}).click();
-    await expect(page.locator('#editor')).toBeHidden();
+    await page.getByRole('button',{name:'Подтвердить адрес',exact:true}).click();
+    await expect(page.locator('#editor')).toBeVisible();
+  await expect(page.getByRole('button',{name:'Подтвердить адрес',exact:true})).toBeEnabled();
     await page.reload();
     await expect(page.locator('#rows > tr:not(.review-details-row)')).toHaveCount(5);
     await row.getByRole('button').click();
@@ -35,7 +36,7 @@ for (const viewport of [{width:1440,height:1000},{width:390,height:844}]) {
     // A conflict must be visible from the editor without losing the draft.
     await page.route('**/v1/runs/*/rows/*/review',route=>route.fulfill({status:409,contentType:'application/json',body:JSON.stringify({code:'revision_conflict',message:'Версия изменилась. Загрузите сохранённую версию.'})}),{times:1});
     await page.getByLabel('Квартира',{exact:true}).fill('100');
-    await page.getByRole('button',{name:'Сохранить исправления',exact:true}).click();
+    await page.getByRole('button',{name:'Подтвердить адрес',exact:true}).click();
     await expect(page.getByRole('alert')).toContainText('Версия изменилась');
     expect(await page.getByRole('alert').evaluate(el=>{const r=el.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight;})).toBe(true);
     await expect(page.getByLabel('Квартира',{exact:true})).toHaveValue('100');
@@ -109,8 +110,9 @@ for (const viewport of [{width:1440,height:1000},{width:390,height:844}]) {
   expect(JSON.parse(rowsJSON).rows[2].result.id).toBe('empty');
   await expect(page.locator('#publication')).toBeHidden();await expect(page.locator('#file-output')).toBeVisible();
   await page.locator('#rows > tr:not(.review-details-row)').first().getByRole('button').click();
-  await page.getByLabel('Квартира',{exact:true}).fill('123');await page.getByRole('button',{name:'Сохранить исправления',exact:true}).click();
-  await expect(page.locator('#editor')).toBeHidden();
+  await page.getByLabel('Квартира',{exact:true}).fill('123');await page.getByRole('button',{name:'Подтвердить адрес',exact:true}).click();
+  await expect(page.locator('#editor')).toBeVisible();
+  await expect(page.getByRole('button',{name:'Подтвердить адрес',exact:true})).toBeEnabled();
   await page.reload();await expect(page.locator('#rows > tr:not(.review-details-row)')).toHaveCount(3);await page.locator('#rows > tr:not(.review-details-row)').first().getByRole('button').click();
   await expect(page.getByLabel('Квартира',{exact:true})).toHaveValue('123');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
@@ -134,7 +136,7 @@ for (const viewport of [{width:1440,height:1000},{width:390,height:844}]) {
   await page.getByRole('button',{name:'Нормализовать пакет'}).click();
   await expect(page.getByRole('heading',{name:'Сарань, улица Жамбыла 63 кв 22',exact:true})).toBeVisible({timeout:120000});
   await expect(page.locator('#rows > tr:not(.review-details-row)')).toContainText('Сарань, улица Жамбыла 63 кв 22');
-  await page.getByLabel('Квартира',{exact:true}).fill('77');await page.getByRole('button',{name:'Сохранить исправления',exact:true}).click();
+  await page.getByLabel('Квартира',{exact:true}).fill('77');await page.getByRole('button',{name:'Подтвердить адрес',exact:true}).click();
   await page.reload();await expect(page.getByLabel('Квартира',{exact:true})).toHaveValue('77');
   await page.getByRole('button',{name:'Сбросить',exact:true}).click();await expect(input).toHaveValue('');
   const response=await page.request.post('/v1/runs/input',{data:{records:Array.from({length:51},(_,i)=>({id:`page-${i}`,raw_address:'Неизвестный адрес'}))}});

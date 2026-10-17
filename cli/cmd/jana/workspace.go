@@ -88,23 +88,10 @@ func startWeb(ctx context.Context, store *app.Store, n *app.Normalizer, p app.Po
 	}
 	ip := net.ParseIP(host)
 	network := host != "localhost" && (ip == nil || !ip.IsLoopback())
-	token, err := secret("JANA_WEB_TOKEN")
+	token, authDisabled, err := webAuthentication(network)
 	if err != nil {
 		lock.Close()
 		return nil, err
-	}
-	authMode := env("JANA_WEB_AUTH", "password")
-	if authMode != "password" && authMode != "none" {
-		lock.Close()
-		return nil, errors.New("JANA_WEB_AUTH должен быть password или none")
-	}
-	authDisabled := authMode == "none"
-	if authDisabled {
-		token = ""
-	}
-	if network && !authDisabled && len(token) < 16 {
-		lock.Close()
-		return nil, errors.New("сетевой интерфейс требует JANA_WEB_TOKEN минимум 16 символов")
 	}
 	listener, err := net.Listen("tcp", listen)
 	if err != nil {
@@ -178,4 +165,27 @@ func startWeb(ctx context.Context, store *app.Store, n *app.Normalizer, p app.Po
 		lock.Close()
 	}
 	return &webSession{URL: site, Owned: true, close: closeFn}, nil
+}
+
+// Local listeners open directly; network listeners retain explicit authentication.
+func webAuthentication(network bool) (string, bool, error) {
+	defaultMode := "none"
+	if network {
+		defaultMode = "password"
+	}
+	mode := env("JANA_WEB_AUTH", defaultMode)
+	if mode == "none" {
+		return "", true, nil
+	}
+	if mode != "password" {
+		return "", false, errors.New("JANA_WEB_AUTH должен быть password или none")
+	}
+	token, err := secret("JANA_WEB_TOKEN")
+	if err != nil {
+		return "", false, err
+	}
+	if network && len(token) < 16 {
+		return "", false, errors.New("сетевой интерфейс требует JANA_WEB_TOKEN минимум 16 символов")
+	}
+	return token, false, nil
 }

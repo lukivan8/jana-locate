@@ -1,7 +1,13 @@
 import type { Fields, Result } from '../../api/client'
 export const fieldLabels: Record<keyof Fields, string> = { province: 'Область', city: 'Город', district: 'Район', living_area: 'Жилой массив', street_type: 'Тип улицы', street_name: 'Улица', house: 'Дом', apartment: 'Квартира', entrance: 'Подъезд', floor: 'Этаж', landmark: 'Ориентир' }
+// Reference names can include the administrative type already shown by the field label.
+export function displayFieldValue(field: keyof Fields, value: string | null | undefined) {
+  if (field !== 'district' || !value) return value
+  return value.replace(/^(?:район|р-н)\s+/iu, '').replace(/\s+(?:район|р-н|ауданы)$/iu, '').trim() || value
+}
 export const statusLabels = { matched: 'Нормализован', needs_review: 'Нужна проверка', unmatched: 'Не распознан' }
 const warningLabels: Record<string, string> = { libpostal_unavailable: 'libpostal недоступен: использован резервный разбор', gliner_unavailable: 'Архивная диагностика: второй проход был недоступен', coordinates_unknown: 'В каталоге нет координат здания', synthetic_catalog_coordinates: 'Синтетические координаты: требуют проверки', ambiguous_catalog_match: 'Несколько подходящих зданий', city_selected_by_operator: 'Населённый пункт выбран оператором',
+  district_inferred_from_address: 'Район определён по справочному адресу здания', district_inferred_from_street: 'Район определён по расположению улицы', district_inferred_from_kato: 'Район определён по справочнику КАТО', district_coverage_incomplete: 'Недостаточно справочных данных для однозначного определения района',
   ambiguous_city_reference: 'Город неоднозначен в справочнике', ambiguous_reference_street: 'Улица неоднозначна в справочнике', building_reference_conflict: 'Здание противоречит справочнику', manually_reviewed: 'Проверено оператором', manually_reviewed_fields: 'Адресные поля проверены оператором', building_fields_changed_coordinates_cleared: 'Поля здания изменены: прежняя геопозиция сброшена' }
 export function warningLabel(warning: string) {
   if (warningLabels[warning]) return warningLabels[warning]
@@ -44,6 +50,6 @@ export function ResultDetails({ result, showWarnings = true, showStatus = true }
     {showWarnings && <ResultWarnings result={result} />}
     <div className="section-title"><h2 className="address-caption">Нормализованный адрес</h2>{showStatus && <ReviewStatus result={result} />}</div>
     <p className="normalized-address">{[result.city, result.street_type, result.street_name, result.house].filter(Boolean).join(', ') || 'Недостаточно данных для адреса'}</p>
-    <dl className="parsed-fields">{Object.entries(fieldLabels).map(([key, label]) => <div key={key}><dt>{label}</dt><dd>{result[key as keyof Fields] ?? <span className="muted">Не определено</span>}</dd></div>)}</dl>
+    <dl className="parsed-fields">{Object.entries(fieldLabels).map(([key, label]) => <div key={key}><dt>{label}</dt><dd>{displayFieldValue(key as keyof Fields, result[key as keyof Fields]) ?? <span className="muted">Не определено</span>}</dd></div>)}</dl>
   </div>
 }

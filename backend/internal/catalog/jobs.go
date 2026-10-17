@@ -27,7 +27,7 @@ var (
 
 const jobTTL = 7 * 24 * time.Hour
 const maxJobBytes = 64 << 20
-const maxJobs = 50
+const maxJobs = 1000
 
 // JobStore is a single-process work journal, never a normalization lookup cache.
 // Jobs are immutable snapshots internally; callers always receive detached copies.

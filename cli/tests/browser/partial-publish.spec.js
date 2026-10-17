@@ -23,8 +23,9 @@ for (const viewport of [{width:1440,height:1000},{width:390,height:844}]) {
   await expect(page.locator('#rows > tr:not(.review-details-row)')).toHaveCount(4);
   await page.locator('#rows > tr:not(.review-details-row)').first().getByRole('button').click();
   await page.getByLabel('Квартира',{exact:true}).fill('99');
-  await page.getByRole('button',{name:'Сохранить исправления',exact:true}).click();
-  await expect(page.locator('#editor')).toBeHidden();
+  await page.getByRole('button',{name:'Подтвердить адрес',exact:true}).click();
+  await expect(page.locator('#editor')).toBeVisible();
+  await expect(page.getByRole('button',{name:'Подтвердить адрес',exact:true})).toBeEnabled();
   const secondPublication=publish();
   expect(secondPublication.id).toBe(created.id);expect(secondPublication.status).toBe('review');expect(secondPublication.published_count).toBe(2);
   await page.reload();

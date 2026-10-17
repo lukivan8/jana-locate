@@ -53,3 +53,27 @@ func TestBareSettlementComponentSurvivesPostalVenueLabel(t *testing.T) {
 		t.Fatalf("candidate and normalization disagree: %+v %+v", choices, r)
 	}
 }
+
+func TestStandaloneSettlementSurvivesVenueSpanningAddress(t *testing.T) {
+	for _, tc := range []struct {
+		raw, province string
+		candidates    int
+	}{
+		{"г.Караганда, Алалыкина д12", "Карагандинская область", 1},
+		{"Караганда, Алалыкина д12", "", 2},
+		{"кафе г.Караганда, Алалыкина д12", "", 0},
+	} {
+		t.Run(tc.raw, func(t *testing.T) {
+			e := Engine{Reference: testutil.Reference(t), Postal: fakePostal{{Label: "house", Value: tc.raw}}}
+			in := api.InputRecord{Id: "venue", RawAddress: tc.raw}
+			r := e.Normalize(in)
+			choices := e.CityCandidates(context.Background(), in)
+			if len(choices) != tc.candidates || catalog.Text(r.Province) != tc.province || catalog.Text(r.House) != "12" || catalog.Text(r.StreetName) != "Алалыкина" {
+				t.Fatalf("standalone settlement role: %+v %+v", r, choices)
+			}
+			if tc.candidates > 1 && (r.Status != api.NeedsReview || !hasWarning(r.Warnings, "ambiguous_city_reference")) {
+				t.Fatalf("venue hypothesis suppressed homonym: %+v", r)
+			}
+		})
+	}
+}

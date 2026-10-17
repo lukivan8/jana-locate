@@ -307,3 +307,24 @@ func BenchmarkDistrictBatch1000(b *testing.B) {
 		}
 	}
 }
+
+// A positive address fact in one settlement does not prove absence in its homonym.
+func TestAddressEvidenceCannotResolveSettlementAndDistrictHomonyms(t *testing.T) {
+	directory, _ := districtFixture(t)
+	e := Engine{Reference: directory, Postal: fakePostal{{Label: "city", Value: "Учебный"}, {Label: "road", Value: "Учебная Сквозная"}, {Label: "house_number", Value: "10"}}}
+	in := api.InputRecord{Id: "ambiguous", RawAddress: "Учебный, улица Учебная Сквозная, дом 10 кв 6"}
+	initial := e.Normalize(in)
+	choices := e.CityCandidates(context.Background(), in)
+	if len(choices) != 2 || initial.Status != api.NeedsReview || !hasWarning(initial.Warnings, "ambiguous_city_reference") || initial.District != nil || initial.Province != nil {
+		t.Fatalf("address prematurely resolved settlement or district: result=%+v candidates=%+v", initial, choices)
+	}
+	for _, selection := range []struct{ city, district string }{{"fixture:city:a", "район Учебный Север"}, {"fixture:village:a", "Учебный Сельский"}} {
+		chosen, err := e.SelectCity(context.Background(), in, selection.city)
+		if err != nil || catalog.Text(chosen.District) != selection.district || hasWarning(chosen.Warnings, "ambiguous_city_reference") || chosen.Status != api.Matched || catalog.Text(chosen.Apartment) != "6" || chosen.RawAddress != in.RawAddress {
+			t.Fatalf("selection did not recompute district: %+v %v", chosen, err)
+		}
+	}
+	if again := e.Normalize(in); again.District != nil || again.Status != api.NeedsReview {
+		t.Fatalf("selection leaked into later normalization: %+v", again)
+	}
+}

@@ -34,9 +34,10 @@ Jana локально через Docker:
   ./cli/jana down               Остановить сервисы с сохранением данных
   ./cli/jana compose <аргументы> Другие операции Docker Compose
 
-Сайт: http://localhost:8095/ (по умолчанию вход jana / local-example-password)
+Сайт: http://localhost:8095/ (без логина и пароля)
 API: http://localhost:8080/
-Порты: CLI_PORT и CLI_API_PORT; пароль сайта: JANA_WEB_TOKEN.
+Порты: CLI_PORT и CLI_API_PORT.
+Необязательный вход: JANA_WEB_AUTH=password и JANA_WEB_TOKEN.
 На обычном Linux localhost указывает на компьютер с вашей базой.
 В Docker Desktop для базы на компьютере используйте host.docker.internal.
 Режим сети: JANA_NETWORK_MODE=host или bridge. База данных не запускается.

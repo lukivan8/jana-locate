@@ -186,3 +186,5 @@ While normalization is running, the queue uses a determinate linear progress ind
 ## Completed run timing (17 October 2026)
 
 Completed CLI runs show total elapsed normalization time and average elapsed time per snapshot record below the run counts, using secondary text and the body-medium role. The same summary remains available after publication. The CLI stores a separate completion timestamp so operator edits and publication do not affect the measurement. Elapsed time includes snapshot creation, waiting and interruptions; average is elapsed/total, not isolated per-address latency. Legacy runs without a completion timestamp do not display an invented duration.
+
+После подтверждения адреса редактор открывает следующий адрес, требующий проверки, и переносит фокус на его заголовок. Автоматически разобранные и уже подтверждённые строки пропускаются. По достижении конца списка проверка продолжается с первой пропущенной строки; если очередь пуста, редактор закрывается. В локальном CLI переход сохраняет позиции записей и работает между страницами, включая фильтр непроверенных строк.

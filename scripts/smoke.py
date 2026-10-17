@@ -17,9 +17,10 @@ def request(path, body=None):
 assert request('/readyz')['status'] == 'ok'
 assert request('/openapi.json')['info']['title'] == 'Jana Address API'
 reference_results = request('/v1/normalize', {'records': [
-    {'id': 'reference-positive', 'raw_address': 'Караганда, Алалыкина 12'},
+    {'id': 'reference-positive', 'raw_address': 'г.Караганда, Алалыкина 12'},
     {'id': 'reference-missing-house', 'raw_address': 'Караганда, Алалыкина 999999'},
     {'id': 'reference-missing-city', 'raw_address': 'Алалыкина 12'},
+    {'id': 'reference-homonym-with-house', 'raw_address': 'Караганда, Алалыкина 12'},
 ]})['results']
 assert all('gliner_unavailable' not in result['warnings'] and 'libpostal_unavailable' not in result['warnings'] for result in reference_results), reference_results
 resolved = reference_results[0]
@@ -28,6 +29,7 @@ assert resolved['street_name'] == 'Алалыкина' and resolved['street_type
 assert resolved['coordinates'] is None and 'ambiguous_city_reference' not in resolved['warnings'], resolved
 assert reference_results[1]['province'] is None and 'ambiguous_city_reference' in reference_results[1]['warnings'], reference_results[1]
 assert reference_results[2]['city'] is None and reference_results[2]['coordinates'] is None, reference_results[2]
+assert reference_results[3]['status'] == 'needs_review' and reference_results[3]['province'] is None and reference_results[3]['district'] is None and 'ambiguous_city_reference' in reference_results[3]['warnings'], reference_results[3]
 assert os.environ.get('SMOKE_EXPECTED_API_URL', api).encode() in fetch(web + '/config.js')
 assert b'<html' in fetch(web + '/review/deep-link')
 fields = dict.fromkeys(['province','city','district','living_area','street_type','street_name','house','apartment','entrance','floor','landmark'])

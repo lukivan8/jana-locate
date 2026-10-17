@@ -6,9 +6,11 @@ import sys
 import time
 import urllib.request
 base = os.environ['JANA_TEST_WEB_URL']
-auth = base64.b64encode(('jana:' + os.environ['JANA_WEB_TOKEN']).encode()).decode()
+auth = base64.b64encode(('jana:' + os.environ['JANA_WEB_TOKEN']).encode()).decode() if os.environ.get('JANA_WEB_TOKEN') else None
 def request(path, body=None):
-    req = urllib.request.Request(base + path, data=None if body is None else json.dumps(body).encode(), headers={'Content-Type': 'application/json', 'Authorization': 'Basic ' + auth})
+    headers = {'Content-Type': 'application/json'}
+    if auth: headers['Authorization'] = 'Basic ' + auth
+    req = urllib.request.Request(base + path, data=None if body is None else json.dumps(body).encode(), headers=headers)
     with urllib.request.urlopen(req, timeout=310) as response:
         return json.load(response)
 if sys.argv[1] == 'write':

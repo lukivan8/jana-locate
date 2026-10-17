@@ -1,12 +1,14 @@
 import { test, expect } from '@playwright/test'
 for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
-  test(`API docs and live input through HTTP at ${viewport.width}px`, async ({ page }) => {
+  test(`API docs at ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport)
     const api = process.env.JANA_TEST_API_URL ?? 'http://localhost:8080'
     await page.route('**/config.js', route => route.fulfill({ contentType: 'text/javascript', body: `window.JANA_CONFIG = ${JSON.stringify({ apiBaseUrl: api })}` }))
     await page.goto('/api')
-    await expect(page.getByRole('heading', { name: 'Нормализация адресов', exact: true })).toBeVisible()
-    await expect(page.getByRole('navigation', { name: 'Методы API' }).getByRole('button')).toHaveCount(14)
+    await expect(page.getByRole('heading', { name: 'Синхронный batch-запрос', exact: true })).toBeVisible()
+    await expect(page.getByRole('navigation', { name: 'Основной метод API' }).getByRole('button')).toHaveCount(1)
+    await expect(page.getByRole('navigation', { name: 'Другие методы API' })).toBeVisible()
+    await expect(page.getByRole('navigation', { name: 'Другие методы API' }).getByRole('button')).toHaveCount(13)
     await page.getByRole('button', { name: 'POST /v1/normalize/candidates', exact: true }).click()
     await expect(page.getByRole('heading', { name: 'Варианты населённого пункта для записи', exact: true })).toBeVisible()
     await expect(page.locator('.api-operation')).toContainText('reference_version')
@@ -14,12 +16,17 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
     await expect(page.getByRole('heading', { name: 'Подтверждение здания', exact: true })).toBeVisible()
     await expect(page.locator('.api-operation')).toContainText('expected_revision')
     await expect(page.locator('.api-operation')).toContainText('Шаблон требует подстановки проверенных данных')
-    await expect(page.locator('.api-operation .code-block')).not.toContainText('Тестовый город')
-    await expect(page.locator('.api-operation .code-block')).toContainText('<число: проверенная широта>')
+    await expect(page.locator('.api-operation .code-block').first()).not.toContainText('Тестовый город')
+    await expect(page.locator('.api-operation .code-block').first()).toContainText('<число: проверенная широта>')
     const downloading = page.waitForEvent('download')
     await page.getByRole('link', { name: 'Скачать OpenAPI' }).click()
     expect((await downloading).suggestedFilename()).toBe('jana-openapi.json')
     await expect(page.getByRole('link', { name: 'Тестовый запуск' })).toHaveCount(0)
+  })
+  test(`Live input through HTTP at ${viewport.width}px`, async ({ page }) => {
+    await page.setViewportSize(viewport)
+    const api = process.env.JANA_TEST_API_URL ?? 'http://localhost:8080'
+    await page.route('**/config.js', route => route.fulfill({ contentType: 'text/javascript', body: `window.JANA_CONFIG = ${JSON.stringify({ apiBaseUrl: api })}` }))
     await page.goto('/geocoder')
     await expect(page.getByRole('link', { name: 'Тестовый запуск' })).toHaveCount(0)
     await expect(page.getByRole('button', { name: 'Разобрать адрес' })).toBeDisabled()

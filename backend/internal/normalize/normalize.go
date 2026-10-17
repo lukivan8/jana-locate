@@ -58,17 +58,7 @@ func (e Engine) NormalizeBatchContext(_ context.Context, records []api.InputReco
 		if texts[i] == "" {
 			continue
 		}
-		if e.Postal != nil {
-			components, err := e.Postal.Parse(texts[i])
-			if err != nil {
-				warnings[i] = append(warnings[i], "libpostal_unavailable")
-			} else {
-				signals[i] = append(signals[i], postalSignals(texts[i], components)...)
-			}
-		} else {
-			warnings[i] = append(warnings[i], "libpostal_unavailable")
-		}
-		signals[i] = append(signals[i], ruleSignals(texts[i])...)
+		signals[i], warnings[i] = e.extractionSignals(texts[i])
 	}
 	out := make([]api.Result, 0, len(records))
 	for i, r := range records {
@@ -76,6 +66,28 @@ func (e Engine) NormalizeBatchContext(_ context.Context, records []api.InputReco
 	}
 	return out
 }
+
+// Keep field extraction identical for normalization and candidate discovery.
+func (e Engine) extractionSignals(work string) ([]evidence, []string) {
+	signals := []evidence{}
+	warnings := []string{}
+	if work == "" {
+		return signals, warnings
+	}
+	if e.Postal != nil {
+		components, err := e.Postal.Parse(work)
+		if err != nil {
+			warnings = append(warnings, "libpostal_unavailable")
+		} else {
+			signals = append(signals, postalSignals(work, components)...)
+		}
+	} else {
+		warnings = append(warnings, "libpostal_unavailable")
+	}
+	signals = append(signals, ruleSignals(work)...)
+	return signals, warnings
+}
+
 func ruleSignals(work string) []evidence {
 	parsed := ruleParse(work)
 	out := []evidence{}
@@ -219,6 +231,12 @@ func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, w
 	if len(explicitCities) > 1 {
 		r.Warnings = append(r.Warnings, "ambiguous_city")
 	}
+	provinces := map[string]reference.Entity{}
+	for _, m := range mentions {
+		if m.Entity.Kind == "province" {
+			provinces[m.Entity.ID] = m.Entity
+		}
+	}
 	var cityID string
 	cities := map[string]reference.Entity{}
 	preliminary := resolve(signals)
@@ -231,7 +249,14 @@ func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, w
 
 	for _, m := range mentions {
 		if m.Entity.Kind == "city" {
-			if street := preliminary["street_name"].Value; street != "" && contains(street, m.Surface) && !e.equivalent(preliminary["city"].Value, m.Entity.Name, "city") {
+			// Match the candidate endpoint: an explicit reference province
+			// constrains settlement identities before administrative inference.
+			if len(provinces) == 1 {
+				if _, compatible := provinces[m.Entity.ProvinceID]; !compatible {
+					continue
+				}
+			}
+			if street := preliminary["street_name"].Value; street != "" && contains(street, m.Surface) && !explicitCities[reference.Canon(m.Surface)] && !e.equivalent(preliminary["city"].Value, m.Entity.Name, "city") {
 				continue
 			}
 			if city := preliminary["city"].Value; city != "" && !e.equivalent(city, m.Entity.Name, "city") {
@@ -245,6 +270,7 @@ func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, w
 			cities[m.Entity.ID] = m.Entity
 		}
 	}
+	cities = compatibleMentionedCities(e.Reference, mentions, cities)
 	if e.selectedCity != "" {
 		city, _ := e.Reference.Entity(e.selectedCity)
 		cities = map[string]reference.Entity{city.ID: city}
@@ -257,21 +283,11 @@ func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, w
 		}
 		signals = kept
 	}
-	// A street name in a partial directory is insufficient to choose a city.
-	// A positive exact street+house fact can refine an explicitly mentioned
-	// settlement identity (e.g. a city and a village sharing the same name).
+	// A street/house fact in a partial directory cannot exclude a settlement
+	// homonym that has no address coverage. Only explicit administrative input
+	// or operator selection may resolve those compatible identities.
 	if len(cities) > 1 && len(explicitCities) <= 1 {
 		cities = e.citiesInDistricts(cities, districts)
-		addressCities := e.Reference.AddressCities(preliminary["street_name"].Value, preliminary["house"].Value, preliminary["street_type"].Value)
-		compatible := map[string]reference.Entity{}
-		for id, city := range cities {
-			if addressCities[id] {
-				compatible[id] = city
-			}
-		}
-		if len(compatible) == 1 {
-			cities = compatible
-		}
 	}
 	if len(cities) == 1 {
 		for id, c := range cities {
@@ -297,12 +313,6 @@ func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, w
 			r.Warnings = append(r.Warnings, "ambiguous_city_reference")
 		} else {
 			r.Warnings = append(r.Warnings, "ambiguous_city")
-		}
-	}
-	provinces := map[string]reference.Entity{}
-	for _, m := range mentions {
-		if m.Entity.Kind == "province" {
-			provinces[m.Entity.ID] = m.Entity
 		}
 	}
 	if len(provinces) == 1 {

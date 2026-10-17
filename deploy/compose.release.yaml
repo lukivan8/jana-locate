@@ -39,8 +39,8 @@ services:
     environment:
       JANA_API_URL: "${JANA_NORMALIZER_URL:-http://backend:8080}"
       JANA_API_TOKEN: "${JANA_API_TOKEN:-}"
-      JANA_WEB_AUTH: password
-      JANA_WEB_TOKEN: "${JANA_WEB_TOKEN:?Укажите JANA_WEB_TOKEN в .env}"
+      JANA_WEB_AUTH: "${JANA_WEB_AUTH:-none}"
+      JANA_WEB_TOKEN: "${JANA_WEB_TOKEN:-}"
       JANA_BROWSER_URL: "http://localhost:${CLI_PORT:-8095}/"
       PGHOST: "${PGHOST:-host.docker.internal}"
       PGPORT: "${PGPORT:-5432}"

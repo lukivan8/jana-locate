@@ -4,8 +4,8 @@ set -eu
 cd "$(dirname "$0")/.."
 project="jana-cli-smoke-$$"
 export CLI_PORT="${CLI_SMOKE_PORT:-18096}" CLI_TEST_PG_PORT="${CLI_SMOKE_PG_PORT:-15439}"
-export JANA_WEB_AUTH=password JANA_PUBLIC_ORIGIN= JANA_BROWSER_URL="http://127.0.0.1:$CLI_PORT/"
-export JANA_WEB_TOKEN="$(python3 -c 'import secrets; print(secrets.token_hex(24))')"
+export JANA_WEB_AUTH=none JANA_PUBLIC_ORIGIN= JANA_BROWSER_URL="http://127.0.0.1:$CLI_PORT/"
+unset JANA_WEB_TOKEN JANA_WEB_TOKEN_FILE
 compose() { docker compose -p "$project" -f compose.yaml -f compose.demo.yaml -f tests/compose.smoke.yaml "$@"; }
 cleanup() { compose down --volumes --remove-orphans; }
 trap cleanup EXIT INT TERM

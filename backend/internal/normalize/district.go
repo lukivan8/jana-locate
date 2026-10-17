@@ -108,6 +108,25 @@ func (e Engine) districtMentions(text string, signals []evidence) ([]reference.M
 				for i := span.start; i < span.end; i++ {
 					cityText[i] = ' '
 				}
+				// A parser venue can span several comma-separated components.
+				// Restore only complete reference settlement components, never
+				// a city name embedded in a venue such as "кафе г.Караганда".
+				if signal.Source == "libpostal" {
+					for _, match := range mentions {
+						if match.Entity.Kind != "city" || match.Start < span.start || match.End > span.end {
+							continue
+						}
+						left := strings.LastIndexAny(text[:match.Start], ",;") + 1
+						right := len(text)
+						if index := strings.IndexAny(text[match.End:], ",;"); index >= 0 {
+							right = match.End + index
+						}
+						component := strings.Trim(text[left:right], " .\t\r\n")
+						if left >= span.start && right <= span.end && len(e.Reference.Exact(component, "city")) > 0 {
+							copy(cityText[left:right], text[left:right])
+						}
+					}
+				}
 			}
 		}
 	}

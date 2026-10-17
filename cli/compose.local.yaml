@@ -10,8 +10,8 @@ services:
     environment:
       JANA_API_URL: http://normalizer:8080
       JANA_API_TOKEN: "${JANA_API_TOKEN:-}"
-      JANA_WEB_AUTH: "${JANA_WEB_AUTH:-password}"
-      JANA_WEB_TOKEN: "${JANA_WEB_TOKEN:-local-example-password}"
+      JANA_WEB_AUTH: "${JANA_WEB_AUTH:-none}"
+      JANA_WEB_TOKEN: "${JANA_WEB_TOKEN:-}"
       JANA_DATABASE_URL: "${JANA_DATABASE_URL:-}"
       PGHOST: "${PGHOST:-host.docker.internal}"
       PGPORT: "${PGPORT:-5432}"

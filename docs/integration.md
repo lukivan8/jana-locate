@@ -29,6 +29,8 @@ curl --fail-with-body https://jana.linker.kz/v1/normalize \
 
 ## Запрос
 
+**После запуска Docker:** [OpenAPI и batch JSON из файла →](quickstart.md#первый-batch-запрос-после-запуска). Контракт работающего API доступен по [`http://localhost:8080/openapi.json`](http://localhost:8080/openapi.json); исходники для его получения не нужны.
+
 ```sh
 curl --fail-with-body http://localhost:8080/v1/normalize \
   -H 'Content-Type: application/json' \
