@@ -1,105 +1,99 @@
-# Быстрый запуск
+# Установка готовых контейнеров
 
-[Документация](README.md) · [Интеграция](integration.md)
+[Документация](README.md) · [Подключение API](integration.md)
 
-## Попробовать готовую веб-версию
+## Попробовать онлайн
 
-**[Откройте Jana Locate → jana.linker.kz](https://jana.linker.kz)**. Приложение уже размещено: для знакомства с нормализацией и проверкой результатов Docker и локальная установка не нужны. Используйте синтетические адреса, запустите обработку и попробуйте экспорт JSON.
+**[Откройте Jana Locate → jana.linker.kz](https://jana.linker.kz)**. Для знакомства с приложением ничего устанавливать не нужно. Можно также вызывать hosted API по `https://jana.linker.kz/v1/normalize`.
 
-Ниже — запуск собственного экземпляра для интеграции и локальной работы.
+## Установить локально одной командой
 
-## 1. Подготовьте окружение
+Нужны Docker Engine/Docker Desktop с Docker Compose v2, curl и POSIX shell (Linux, macOS или WSL). Go, Node.js, Python, Git и подготовка моделей не требуются. Публикуются образы `linux/amd64`; ARM-хостам нужна поддержка эмуляции amd64 в Docker. Нативный ARM пока не проверен и не выпускается.
 
-Установите Git, Docker Engine и Docker Compose v2. Для первой сборки нужен интернет: скачиваются зависимости и модели libpostal. Предусмотрите несколько ГБ свободного места и память для сборки. В Compose API ограничен 3 GiB RAM и двумя CPU; это настройка контейнера, не измеренные минимальные требования.
+Выберите **один** комплект:
 
-```sh
-git clone https://github.com/lukivan8/jana-locate.git
-cd jana-locate
-cp .env.example .env
-```
-
-Готовые публичные контейнерные образы пока не выпускаются. Все Docker-команды в этом руководстве собирают исходники локально.
-
-## 2. Выберите способ работы
-
-### Только HTTP API
+| Комплект | Что запускается | Адрес |
+| --- | --- | --- |
+| `api` | Автономный API | `http://localhost:8080` |
+| `web` | Автономный API и отдельный веб-интерфейс | `http://localhost:3000` |
+| `full` | Автономный API, CLI и встроенный веб-интерфейс | `http://localhost:8095` |
+| `hosted` | Локальный CLI/интерфейс, нормализация через jana.linker.kz | `http://localhost:8095` |
 
 ```sh
-docker compose up --build --wait backend
+curl -fsSL https://raw.githubusercontent.com/lukivan8/jana-locate/main/scripts/install.sh | sh -s -- api
 ```
 
-Это запускает нормализатор без веб-интерфейса. Не требуется подключение PostgreSQL или отдельный Python-сервис. Native libpostal и справочник подготавливаются внутри образа.
+Замените последний аргумент на `web`, `full` или `hosted`. Установщик скачивает опубликованные образы, создаёт `./jana-locate/` и запускает Docker Compose **без сборки исходников**. [Исходник установщика](../scripts/install.sh).
 
-### API и веб-интерфейс
+Изображения скачиваются из GHCR; если реестр недоступен без авторизации, установщик использует публичные архивы того же [релиза 0.1.0](https://github.com/lukivan8/jana-locate/releases/tag/v0.1.0) и проверяет SHA-256. Учётная запись GitHub для этого пути не нужна.
 
-```sh
-docker compose up --build --wait
-```
+Скачивание API занимает несколько ГБ: в образ включены модели libpostal и справочники. Первый старт загружает их в память; ожидайте готовности. API ограничен 3 GiB RAM и двумя CPU в Compose. Для полного комплекта нужен дополнительный запас памяти Docker и свободного диска. Эти значения — настройки контейнеров, а не измеренные минимальные требования.
 
-Откройте `http://localhost:3000`. API работает на `http://localhost:8080`.
+## Автономность
 
-### CLI с локальным журналом
+**Комплекты `api`, `web`, `full` полностью автономны после скачивания.** Парсер, модели, справочники и сохранение рабочих данных находятся локально. Runtime не загружает модели и не обращается к hosted API, онлайн-геокодерам или внешней LLM. Запуск `./jana up` использует только уже установленные образы.
 
-```sh
-./cli/jana up
-./cli/jana connect
-./cli/jana normalize
-```
+Режим `hosted` выбран явно: он требует интернета и отправляет адресные строки на `https://jana.linker.kz`. Пароли вашей БД туда не передаются. [Подключение к обоим вариантам](integration.md#локальный-и-hosted-api).
 
-Сайт CLI доступен на `http://localhost:8095`. В переносимом стенде по умолчанию используются пользователь `jana` и демонстрационный пароль `local-example-password`; перед использованием задайте собственный `JANA_WEB_TOKEN`. PostgreSQL не запускается автоматически. Для файлов и всех флагов см. [CLI](../cli/README.md).
+## Проверить API
 
-Не запускайте одновременно стенды на одинаковом порту API. Другие порты задаются через `.env` или переменные окружения; см. [развёртывание](deployment.md).
-
-## 3. Проверьте API
+Для автономного комплекта:
 
 ```sh
 curl --fail-with-body http://localhost:8080/readyz
 curl --fail-with-body http://localhost:8080/v1/normalize \
   -H 'Content-Type: application/json' \
-  --data-binary @examples/http/request.json
+  -d '{"records":[{"id":"order-1","raw_address":"Астана, проспект Туран 55/6 кв 99"}]}'
 ```
 
-Успешный HTTP 200 означает обработку запроса. Проверьте `status`, `warnings` и неизвестные поля каждой записи. HTTP 200 не означает, что все адреса однозначны.
+HTTP 200 означает обработку запроса. Для каждой записи проверьте `status`, `warnings` и неизвестные поля. Геокодирование не выполняется; legacy-поля координат остаются `null`.
 
-[Следующий шаг: подключение своего сервиса](integration.md).
-
-## Запуск из исходников без Docker
-
-Для разработки нужны Go 1.23+, Python 3 и, для интерфейса, Node.js 22.12+. Python только готовит SQLite; в runtime он не нужен.
-
-Из корня репозитория:
+## Управлять установкой
 
 ```sh
-make reference
-cd backend
-REFERENCE_PATH="$PWD/data/reference/reference.sqlite" go run ./cmd/server
+cd jana-locate
+./jana status
+./jana logs
+./jana down
+./jana up
 ```
 
-Без native-тега libpostal работает резервный разбор с `libpostal_unavailable`. Этот режим проверяет интеграцию, но не воспроизводит качество полного Docker-режима.
+Остановка сохраняет Docker-тома. `./jana compose down --volumes` удаляет данные — для обычной остановки используйте `./jana down`. Настройки хранятся в `.env` с ограниченными правами. В `full`/`hosted` вход на сайт: пользователь `jana`, пароль — значение `JANA_WEB_TOKEN` в `.env`.
 
-В другом терминале из корня:
+Для CLI:
 
 ```sh
-cd frontend
-npm ci
-VITE_JANA_API_URL=http://localhost:8080 npm run dev
+./jana connect
+./jana normalize
+./jana normalize --help
 ```
 
-Для native-сборки см. [режимы нормализации](../backend/docs/normalization.md).
+База PostgreSQL устанавливается отдельно. На обычном Linux CLI использует host network и может подключиться к `localhost` вашей базы. Docker Desktop использует bridge: для базы на компьютере укажите `host.docker.internal`. `JANA_NETWORK_MODE=bridge` позволяет выбрать bridge явно до установки.
 
-## Остановка
+## Другие порты и каталог
+
+Переменные задаются до запуска установщика. При передаче через pipe они должны относиться к `sh`, например:
 
 ```sh
-docker compose down
+curl -fsSL https://raw.githubusercontent.com/lukivan8/jana-locate/main/scripts/install.sh | \
+  JANA_INSTALL_DIR="$HOME/jana-test" JANA_PROJECT_NAME=jana-test JANA_API_PORT=18080 JANA_WEB_PORT=13000 sh -s -- web
 ```
 
-Команда сохраняет том с заданиями и данными приложения. `docker compose down --volumes` удаляет данные. Остановка CLI-стенда описана отдельно в его руководстве.
+Для нескольких независимых установок задавайте разные `JANA_PROJECT_NAME`, каталоги и порты. Для полного комплекта порт сайта задаёт `JANA_CLI_PORT`. Повторная установка сохраняет `.env` и данные; смена комплекта останавливает прежний комплект, не удаляя тома. Порты, браузерный URL API и CORS после установки меняются в `.env` согласованно.
 
-## Если запуск не удался
+## Загрузка в закрытую сеть
+
+Скачайте нужные архивы `jana-locate-<api|web|cli>-0.1.0-linux-amd64.tar.gz` и их `.sha256` из [релиза](https://github.com/lukivan8/jana-locate/releases/tag/v0.1.0). Перенесите их, файлы Compose, launcher и `.env` в закрытую сеть. Проверьте SHA-256, выполните `docker load -i <архив>` для каждого образа и запустите `./jana up`. Интернет для работы локальных комплектов не нужен. [Подробности](deployment.md).
+
+## Сборка из исходников — для разработки
+
+Это дополнительный путь, а не обязательный этап установки:
 
 ```sh
-docker compose ps
-docker compose logs --tail=100 backend
+git clone https://github.com/lukivan8/jana-locate.git
+cd jana-locate
+cp .env.example .env
+docker compose up --build --wait
 ```
 
-Если порт занят, измените `API_PORT`/`WEB_PORT` и согласуйте `JANA_API_URL`/`CORS_ORIGINS`. Если готовность не наступает, проверьте логи, память и наличие подготовленных моделей. [Частые вопросы](faq.md).
+Go 1.23+, Node.js 22.12+ и Python 3 нужны только для разработки вне контейнеров. [Backend](../backend/README.md) · [Frontend](../frontend/README.md) · [CLI](../cli/README.md).

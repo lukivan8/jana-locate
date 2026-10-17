@@ -79,3 +79,17 @@ func (c *Client) Confirm(ctx context.Context, in api.ConfirmationRequest) (api.C
 	err := c.do(ctx, "POST", "/v1/catalog/confirmations", in, &out)
 	return out, err
 }
+
+// RecordCityCandidates resolves compatible settlements without creating a job.
+func (c *Client) RecordCityCandidates(ctx context.Context, record api.InputRecord) (api.RecordCityCandidates, error) {
+	var out api.RecordCityCandidates
+	err := c.do(ctx, "POST", "/v1/normalize/candidates", api.RecordCityCandidatesRequest{Record: record}, &out)
+	return out, err
+}
+
+// SelectRecordCity recomputes a record; the consumer owns journal revisions.
+func (c *Client) SelectRecordCity(ctx context.Context, in api.RecordCitySelectionRequest) (api.Result, error) {
+	var out api.Result
+	err := c.do(ctx, "POST", "/v1/normalize/selections", in, &out)
+	return out, err
+}

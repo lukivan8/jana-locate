@@ -1,0 +1,43 @@
+#!/bin/sh
+# Standalone release launcher: no source checkout, Node, Go or Python required.
+set -eu
+base=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+cd "$base"
+mode=$(cat .jana-mode)
+case "$mode" in api|web|full|hosted) ;; *) echo 'Некорректный режим установки' >&2; exit 2;; esac
+compose() {
+  if [ -f .jana-host-network ]; then
+    docker compose --env-file .env -f compose.yaml -f compose.host.yaml --profile "$mode" "$@"
+  else
+    docker compose --env-file .env -f compose.yaml --profile "$mode" "$@"
+  fi
+}
+cmd=${1:-help}
+if [ "$#" -gt 0 ]; then shift; fi
+case "$cmd" in
+  up) compose up --no-build --pull never -d --wait --wait-timeout 300 "$@" ;;
+  down) compose --profile api --profile web --profile full --profile hosted down "$@" ;;
+  status) compose ps "$@" ;;
+  logs) compose logs -f "$@" ;;
+  compose) compose "$@" ;;
+  connect|normalize|land|serve|postgres|import|publish|runs|export|healthcheck)
+    case "$mode" in full|hosted) ;; *) echo 'Команды CLI доступны в комплекте full или hosted.' >&2; exit 2;; esac
+    if [ -t 0 ] && [ -t 1 ]; then compose exec workspace /jana "$cmd" "$@"
+    else compose exec -T workspace /jana "$cmd" "$@"; fi
+    ;;
+  help|--help|-h)
+    cat <<'HELP'
+Jana Locate — готовые контейнеры
+  ./jana up              Запустить установленные образы без сети и сборки
+  ./jana down            Остановить, сохранив данные
+  ./jana status          Состояние контейнеров
+  ./jana logs            Логи; Ctrl+C оставляет контейнеры работать
+  ./jana connect         Подключить PostgreSQL (full/hosted)
+  ./jana normalize       Обработать адреса и открыть проверку (full/hosted)
+  ./jana compose ...     Дополнительные команды Docker Compose
+
+Настройки и пароль сайта: .env. База PostgreSQL не запускается автоматически.
+HELP
+    ;;
+  *) echo 'Неизвестная команда. Выполните ./jana help.' >&2; exit 2 ;;
+esac

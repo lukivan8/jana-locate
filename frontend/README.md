@@ -4,6 +4,10 @@
 
 [Основная страница](../README.md) · [Работа в браузере](../docs/web.md) · [Руководство интеграции](../docs/integration.md)
 
+## Готовая установка
+
+Для локальной работы используйте [готовые контейнеры](../docs/quickstart.md): `web` запускает автономный API и frontend, `full` — API и CLI со встроенным frontend. Для локального интерфейса с hosted API выберите `hosted`. Онлайн-приложение: [jana.linker.kz](https://jana.linker.kz).
+
 ## Разработка
 
 Из этого каталога, Node.js 22.12+:
@@ -17,7 +21,7 @@ npm run typecheck
 
 API запускается отдельно. Приложение собирается без Go-исходников, работающего API и соседних каталогов. Нет BFF/server functions или запросов к API при prerender оболочки.
 
-## Docker
+## Сборка Docker-образа для разработки
 
 ```sh
 docker build -t jana-address-web:local .

@@ -20,7 +20,7 @@ const localLaunchModes = [
 function LocalLaunch() {
   const [mode, setMode] = useState<(typeof localLaunchModes)[number]>(localLaunchModes[0])
   const [copyStatus, setCopyStatus] = useState('')
-  const command = `curl -fsSL https://jana.example/install | sh -s -- ${mode.id}`
+  const command = `curl -fsSL https://raw.githubusercontent.com/lukivan8/jana-locate/main/scripts/install.sh | sh -s -- ${mode.id}`
   async function copyCommand() {
     try {
       await navigator.clipboard.writeText(command)
@@ -33,7 +33,7 @@ function LocalLaunch() {
     <div className="local-launch-heading"><h2 id="local-launch-title">Запустить локально</h2><span>Docker</span></div>
     <div className="local-launch-terminal">
       <span className="local-launch-prompt" aria-hidden="true">$</span>
-      <pre className="local-launch-command" tabIndex={0} aria-label="Пример команды установки"><code>{command}</code></pre>
+      <pre className="local-launch-command" tabIndex={0} aria-label="Команда установки"><code>{command}</code></pre>
       <Button className="local-launch-copy" variant="text" aria-label="Копировать команду" title="Копировать команду" onClick={() => { void copyCommand() }}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2" /><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3" /></svg>
       </Button>
@@ -42,7 +42,7 @@ function LocalLaunch() {
       <div className="local-launch-modes" role="group" aria-label="Скачать комплект">
         {localLaunchModes.map(option => <Button key={option.id} variant={mode.id === option.id ? 'tonal' : 'outlined'} aria-pressed={mode.id === option.id} onClick={() => { setMode(option); setCopyStatus('') }}>{option.label}</Button>)}
       </div>
-      <span className="local-launch-hint" role="status">{copyStatus || 'Пример · установщик скоро'}</span>
+      <span className="local-launch-hint" role="status">{copyStatus || 'Готовые контейнеры · без сборки исходников'}</span>
     </div>
   </section>
 }
@@ -248,7 +248,7 @@ export function AddressWorkspace() {
       {job?.local && <dl className="run-counts" aria-label="Итоги запуска" role="status"><div><dt>Всего записей</dt><dd>{job.total}</dd></div><div><dt>Автоматически</dt><dd>{summary?.automatic ?? '…'}</dd></div><div><dt>Требуют проверки</dt><dd>{summary?.needs_review ?? '…'}</dd></div></dl>}
       {job?.local && <RunTiming run={job.local.run} />}
       {!local && results.length > 0 && <div className="batch-outcome" role="status"><span>Обработано: <strong>{results.length}</strong></span><span>Нормализовано: <strong>{results.filter(r => r.status === 'matched').length}</strong></span><span>Требуют оператора: <strong>{needsReview}</strong></span>{elapsed !== null && <span>{elapsed.toLocaleString('ru-RU')} мс · создание задания</span>}</div>}
-      {results.length === 0 ? <p className="empty">{working ? 'Нормализуем адреса. Результаты появятся после ответа API.' : local && job ? 'В этой очереди записей нет.' : 'Загрузите файл или запустите пакет из поля выше.'}</p> : <div className="table-scroll" role="region" aria-label="Результаты проверки адресов" tabIndex={0}><p className="muted table-hint">Таблица прокручивается по горизонтали. Справа — статус и проверка.</p><table><thead><tr><th>Исходный адрес</th><th>Нормализованный адрес</th><th>Уверенность</th><th>Решение</th><th>Действие</th></tr></thead><tbody id="rows">{results.map((r, i) => reviewOnly && (r.status === 'matched' || isReviewed(r, job?.reviewed[i])) ? null : <Fragment key={i}><tr className={`${selected === i ? 'review-row--expanded ' : ''}${r.status !== 'matched' && !isReviewed(r, job?.reviewed[i]) ? 'requires-review' : ''}`}><td>{r.raw_address || <em>Пустая строка</em>}</td><td>{[r.city, r.street_type, r.street_name, r.house].filter(Boolean).join(', ') || 'Не определено'}</td><td>{Math.round(r.confidence * 100)}%</td><td><ReviewStatus result={r} reviewed={job?.reviewed[i]} /></td><td><Button disabled={working} aria-expanded={selected === i} aria-controls={selected === i ? 'editor' : undefined} onClick={() => select(i)}>{selected === i ? 'Свернуть' : r.status === 'matched' || isReviewed(r, job?.reviewed[i]) ? 'Просмотреть' : 'Проверить'}</Button></td></tr>{selected === i && <tr className="review-details-row"><td colSpan={5}><section id="editor" className="panel editor" aria-label="Исправление адреса"><p className="address-caption">Исходный адрес</p><h3 id="correction-heading" className="raw-selected" tabIndex={-1}>{results[selected].raw_address || 'Пустая строка'}</h3><ResultWarnings result={results[selected]} />{job && <CityCandidatePicker job={job} index={selected} disabled={working} dirty={dirty} onBusy={setBusy} onSelected={saved => {
+      {results.length === 0 ? <p className="empty">{working ? 'Нормализуем адреса. Результаты появятся после ответа API.' : local && job ? 'В этой очереди записей нет.' : 'Загрузите файл или запустите пакет из поля выше.'}</p> : <div className="table-scroll" role="region" aria-label="Результаты проверки адресов" tabIndex={0}><p className="muted table-hint">Таблица прокручивается по горизонтали. Справа — статус и проверка.</p><table><thead><tr><th>Исходный адрес</th><th>Нормализованный адрес</th><th>Уверенность</th><th>Решение</th><th>Действие</th></tr></thead><tbody id="rows">{results.map((r, i) => reviewOnly && (r.status === 'matched' || isReviewed(r, job?.reviewed[i])) ? null : <Fragment key={i}><tr className={`${selected === i ? 'review-row--expanded ' : ''}${r.status !== 'matched' && !isReviewed(r, job?.reviewed[i]) ? 'requires-review' : ''}`}><td>{r.raw_address || <em>Пустая строка</em>}</td><td>{[r.city, r.street_type, r.street_name, r.house].filter(Boolean).join(', ') || 'Не определено'}</td><td>{Math.round(r.confidence * 100)}%</td><td><ReviewStatus result={r} reviewed={job?.reviewed[i]} /></td><td><Button disabled={working} aria-expanded={selected === i} aria-controls={selected === i ? 'editor' : undefined} onClick={() => select(i)}>{selected === i ? 'Свернуть' : r.status === 'matched' || isReviewed(r, job?.reviewed[i]) ? 'Просмотреть' : 'Проверить'}</Button></td></tr>{selected === i && <tr className="review-details-row"><td colSpan={5}><section id="editor" className="panel editor" aria-label="Исправление адреса"><p className="address-caption">Исходный адрес</p><h3 id="correction-heading" className="raw-selected" tabIndex={-1}>{results[selected].raw_address || 'Пустая строка'}</h3><ResultWarnings result={results[selected]} />{job && <CityCandidatePicker job={job} index={selected} disabled={working || job.local?.run.status === 'published'} dirty={dirty} onBusy={setBusy} onSelected={saved => {
         const position=job.local?.rows[selected].position
         adopt(saved)
         const index=position===undefined ? selected : saved.local?.rows.findIndex(row=>row.position===position) ?? -1

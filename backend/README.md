@@ -4,7 +4,13 @@
 
 **[Основная страница инструмента](../README.md)** · [Подключение своего сервиса](../docs/integration.md) · [Контракт](api/openapi.json)
 
-## Запуск из исходников
+## Установка готового API
+
+Основной способ локальной работы — [установщик готового контейнера](../docs/quickstart.md). Он не требует Go, Python, Git или сборки моделей. API полностью автономен после скачивания: libpostal и справочник входят в образ.
+
+Если локальный API не нужен, используйте `https://jana.linker.kz/v1/normalize` с тем же контрактом. [Локальная и hosted-интеграция](../docs/integration.md#локальный-и-hosted-api).
+
+## Запуск из исходников — для разработки
 
 Из корня Jana Locate:
 
@@ -16,7 +22,7 @@ REFERENCE_PATH="$PWD/data/reference/reference.sqlite" go run ./cmd/server
 
 Нужны Go 1.23+ и Python 3 для подготовки SQLite. Без native libpostal этот запуск использует резервный разбор и возвращает `libpostal_unavailable`. Для полного режима из корня проекта выполните `docker compose up --build --wait backend`.
 
-## Сборка только этого каталога
+## Самостоятельная сборка только этого каталога
 
 ```sh
 docker build -t jana-address-api:local .

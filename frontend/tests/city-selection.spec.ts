@@ -66,7 +66,6 @@ for (const width of [1440, 390]) {
     const api = process.env.JANA_TEST_API_URL ?? 'http://localhost:8080'
     await context.route('**/config.js', route => route.fulfill({ contentType: 'text/javascript', body: `window.JANA_CONFIG = ${JSON.stringify({ apiBaseUrl: api })}` }))
     await page.goto('/')
-    // Explicit street marker isolates the landmark regression: КАТО also contains село Туран.
     await page.getByLabel('Один адрес на строку').fill('проспект Туран 55/6 магазин Береке 4подъезд 9этаж')
     await page.getByRole('button', { name: 'Нормализовать пакет', exact: true }).click()
     await expect(page.locator('tbody > tr:not(.review-details-row)')).toHaveCount(1)

@@ -1,0 +1,54 @@
+name: Публикация контейнеров
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Версия опубликованного релиза без v
+        required: true
+        default: '0.1.0'
+permissions:
+  contents: read
+  packages: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component: [api, web, cli]
+    steps:
+      - name: Проверить версию
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          case "$VERSION" in ''|*[!a-zA-Z0-9._-]*) exit 2;; esac
+      - uses: actions/checkout@v4
+        with:
+          ref: v${{ inputs.version }}
+      - name: Скачать проверенный образ релиза
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+          COMPONENT: ${{ matrix.component }}
+        run: |
+          archive="jana-locate-$COMPONENT-$VERSION-linux-amd64.tar.gz"
+          gh release download "v$VERSION" --pattern "$archive" --pattern "$archive.sha256"
+          sha256sum -c "$archive.sha256"
+          docker load -i "$archive"
+          image="ghcr.io/lukivan8/jana-locate-$COMPONENT:$VERSION"
+          expected=$(git rev-parse HEAD)
+          actual=$(docker inspect "$image" --format '{{index .Config.Labels "org.opencontainers.image.revision"}}')
+          test "$actual" = "$expected"
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Опубликовать версию и latest
+        env:
+          VERSION: ${{ inputs.version }}
+          COMPONENT: ${{ matrix.component }}
+        run: |
+          image="ghcr.io/lukivan8/jana-locate-$COMPONENT"
+          docker push "$image:$VERSION"
+          docker tag "$image:$VERSION" "$image:latest"
+          docker push "$image:latest"

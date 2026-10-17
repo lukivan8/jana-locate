@@ -10,7 +10,6 @@ export function DemoLayout() {
     <header><Link className="brand" to="/">jana<span>locate</span></Link>
       <nav className="header-nav" aria-label="Сценарии демонстрации">
         {local ? <a href="/openapi.json">Документация</a> : <Link to="/api" activeProps={{ 'aria-current': 'page' }}>Документация</Link>}
-        {local ? <a href="/?new=true">Тестовый запуск</a> : <Link to="/geocoder" activeProps={{ 'aria-current': 'page' }}>Тестовый запуск</Link>}
       </nav>
     </header>
     <Outlet />

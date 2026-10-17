@@ -70,7 +70,7 @@ func (s *Store) cityRow(ctx context.Context, id string, position int) (api.Run, 
 	if err != nil {
 		return run, api.Row{}, err
 	}
-	if run.Status != api.Review {
+	if run.Status != api.Review && run.Status != api.Published {
 		return run, api.Row{}, ErrConflict
 	}
 	if position < 0 || position >= run.Total {
@@ -112,6 +112,9 @@ func (s *Store) CityCandidates(ctx context.Context, n *Normalizer, id string, po
 	if latest.Revision != run.Revision {
 		return out, ErrConflict
 	}
+	if response.ReferenceVersion == "unavailable" {
+		return out, &cityAPIError{502, "Справочник KATO/OSM недоступен в нормализаторе. Подготовьте справочные данные и повторите запрос."}
+	}
 	out.ReferenceVersion = response.ReferenceVersion
 	out.Candidates = response.Candidates
 	return out, nil
@@ -123,6 +126,9 @@ func (s *Store) SelectCity(ctx context.Context, n *Normalizer, id string, positi
 	run, row, err := s.cityRow(ctx, id, position)
 	if err != nil {
 		return row, err
+	}
+	if run.Status != api.Review {
+		return row, ErrConflict
 	}
 	if n == nil || n.URL != run.ApiUrl {
 		return row, ErrConflict

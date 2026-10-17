@@ -1308,6 +1308,15 @@ export interface operations {
                     "application/json": components["schemas"]["Error"];
                 };
             };
+            /** @description Journal read or persistence error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
             /** @description Normalizer unavailable */
             502: {
                 headers: {
@@ -1364,6 +1373,15 @@ export interface operations {
             };
             /** @description Run, row or reference changed */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Journal read or persistence error */
+            500: {
                 headers: {
                     [name: string]: unknown;
                 };

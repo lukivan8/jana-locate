@@ -32,6 +32,10 @@ COPY --from=reference /out/reference.sqlite /app/data/reference.sqlite
 COPY data/catalog.seed.json /app/data/catalog.seed.json
 USER 10001:10001
 ENV HTTP_ADDR=:8080 CATALOG_SEED_PATH=/app/data/catalog.seed.json CATALOG_OVERLAY_PATH=/data/catalog.confirmed.json LIBPOSTAL_DATA_DIR=/models/libpostal REFERENCE_PATH=/app/data/reference.sqlite MODELS_REQUIRED=true ALLOW_DEMO_CATALOG=false LD_LIBRARY_PATH=/opt/libpostal/lib
+ARG JANA_REVISION=unknown
+LABEL org.opencontainers.image.source="https://github.com/lukivan8/jana-locate" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.revision="$JANA_REVISION"
 EXPOSE 8080
 HEALTHCHECK --interval=5s --timeout=3s --start-period=30s CMD ["/app/jana-address", "healthcheck"]
 ENTRYPOINT ["/app/jana-address"]

@@ -11,6 +11,10 @@ COPY --from=build /out/jana /jana
 COPY --from=build --chown=10001:10001 /out/data /data
 USER 10001:10001
 ENV JANA_STATE_PATH=/data/workspace.sqlite
+ARG JANA_REVISION=unknown
+LABEL org.opencontainers.image.source="https://github.com/lukivan8/jana-locate" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.revision="$JANA_REVISION"
 EXPOSE 8095
 HEALTHCHECK --interval=5s --timeout=3s CMD ["/jana", "healthcheck"]
 ENTRYPOINT ["/jana"]

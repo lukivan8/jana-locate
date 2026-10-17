@@ -1,0 +1,9 @@
+# Native Linux: reach a user's loopback-only PostgreSQL without changing its network.
+services:
+  workspace:
+    network_mode: host
+    ports: !reset []
+    command: [serve]
+    environment:
+      JANA_LISTEN: "127.0.0.1:${CLI_PORT:-8095}"
+      PGHOST: "${PGHOST:-localhost}"

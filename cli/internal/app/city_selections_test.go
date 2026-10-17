@@ -25,6 +25,8 @@ func TestLocalCitySelectionPersistenceIdentityAndConcurrency(t *testing.T) {
 	var beforeReturn func()
 	var calls atomic.Int32
 	var callbackMu sync.Mutex
+	var referenceVersion atomic.Value
+	referenceVersion.Store("fixture-v1")
 	remote := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		calls.Add(1)
 		if r.Header.Get("Authorization") != "Bearer synthetic-test" {
@@ -40,10 +42,10 @@ func TestLocalCitySelectionPersistenceIdentityAndConcurrency(t *testing.T) {
 			t.Errorf("source changed or ID leaked: %+v", req.Record)
 		}
 		if r.URL.Path == "/v1/normalize/candidates" {
-			json.NewEncoder(w).Encode(api.RecordCityCandidates{ReferenceVersion: "fixture-v1", Candidates: []api.CityCandidate{{EntityId: "village", Name: "Караганда"}, {EntityId: "city", Name: "Караганда"}}})
+			json.NewEncoder(w).Encode(api.RecordCityCandidates{ReferenceVersion: referenceVersion.Load().(string), Candidates: []api.CityCandidate{{EntityId: "village", Name: "Караганда"}, {EntityId: "city", Name: "Караганда"}}})
 			return
 		}
-		if req.ReferenceVersion != "fixture-v1" {
+		if req.ReferenceVersion != referenceVersion.Load().(string) {
 			w.WriteHeader(409)
 			return
 		}
@@ -99,6 +101,11 @@ func TestLocalCitySelectionPersistenceIdentityAndConcurrency(t *testing.T) {
 	if _, err = s.SelectCity(ctx, n, run.Id, 0, req); err != nil || calls.Load() != previousCalls+1 {
 		t.Fatal("exact retry did not validate the reference or failed", err)
 	}
+	referenceVersion.Store("fixture-v2")
+	if _, err = s.SelectCity(ctx, n, run.Id, 0, req); err == nil {
+		t.Fatal("retry accepted an obsolete reference version")
+	}
+	referenceVersion.Store("fixture-v1")
 	s.DB.Close()
 	s, err = Open(path)
 	if err != nil {
@@ -123,5 +130,17 @@ func TestLocalCitySelectionPersistenceIdentityAndConcurrency(t *testing.T) {
 	rowsAfter, _ := s.Rows(ctx, run.Id, 0, 10, false, false)
 	if rowsAfter[0].Revision != rows[0].Revision {
 		t.Fatal("failed commit changed row")
+	}
+	current, _ := s.Get(ctx, run.Id)
+	closed, err := s.ExportFileWithOptions(ctx, run.Id, filepath.Join(t.TempDir(), "all.json"), current.Revision, false, WriteOptions{})
+	if err != nil || closed.Status != api.Published {
+		t.Fatal("close run", err)
+	}
+	if _, err = s.CityCandidates(ctx, n, run.Id, 0); err != nil {
+		t.Fatal("published choices are not readable", err)
+	}
+	req.ExpectedRevision = closed.Revision
+	if _, err = s.SelectCity(ctx, n, run.Id, 0, req); !errors.Is(err, ErrConflict) {
+		t.Fatal("published run was changed", err)
 	}
 }

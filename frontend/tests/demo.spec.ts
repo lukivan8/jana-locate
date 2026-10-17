@@ -19,7 +19,9 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
     const downloading = page.waitForEvent('download')
     await page.getByRole('link', { name: 'Скачать OpenAPI' }).click()
     expect((await downloading).suggestedFilename()).toBe('jana-openapi.json')
-    await page.getByRole('link', { name: 'Тестовый запуск' }).click()
+    await expect(page.getByRole('link', { name: 'Тестовый запуск' })).toHaveCount(0)
+    await page.goto('/geocoder')
+    await expect(page.getByRole('link', { name: 'Тестовый запуск' })).toHaveCount(0)
     await expect(page.getByRole('button', { name: 'Разобрать адрес' })).toBeDisabled()
     const liveAddress = 'Карагандинская область, город Сарань, улица Жамбыла 63, кв 123'
     await page.getByLabel('Адрес в свободной форме').fill(liveAddress)
