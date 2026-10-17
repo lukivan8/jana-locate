@@ -49,12 +49,12 @@ docker run -d --name jana-locate --platform linux/amd64 \
   ghcr.io/lukivan8/jana-locate-api:0.1.0
 ```
 
-Docker сам скачает готовый образ и запустит API на `http://localhost:8080`. Для этого пути не нужны Compose, Git, компиляторы, ключи внешних сервисов или подготовка моделей. Данные сохраняются в томе; остановка — `docker stop jana-locate`, повторный запуск — `docker start jana-locate`.
+Docker сам скачает готовый образ и запустит API на `http://localhost:8080`. Первый старт загружает модели в память; дождитесь успешного ответа `/readyz` перед отправкой адресов. Для этого пути не нужны Compose, Git, компиляторы, ключи внешних сервисов или подготовка моделей. Данные сохраняются в томе; остановка — `docker stop jana-locate`, повторный запуск — `docker start jana-locate`.
 
 Если нужен единый launcher для управления контейнерами, используйте [установщик](docs/quickstart.md) в режиме `api`. [Исходник установщика](scripts/install.sh).
 
 ```sh
-curl --fail-with-body http://localhost:8080/readyz
+curl --fail --retry 30 --retry-connrefused --retry-delay 2 http://localhost:8080/readyz
 curl --fail-with-body http://localhost:8080/v1/normalize \
   -H 'Content-Type: application/json' \
   -d '{"records":[{"id":"order-1","raw_address":"Астана, проспект Туран 55/6 кв 99"}]}'
