@@ -28,6 +28,7 @@ type Directory struct {
 	version         string
 	entities        map[string]Entity
 	aliases         map[string][]string
+	latinAliases    map[string][]string
 	maxWords        int
 	addresses       map[string]map[string]districtEvidence
 	streetDistricts map[string]districtEvidence
@@ -65,7 +66,7 @@ func Open(path string) (*Directory, error) {
 	if version != "1" && version != "2" && version != "3" {
 		return nil, fmt.Errorf("unsupported reference schema %q", version)
 	}
-	d := &Directory{version: fingerprint, entities: map[string]Entity{}, aliases: map[string][]string{}, maxWords: 1, addresses: map[string]map[string]districtEvidence{}, streetDistricts: map[string]districtEvidence{}}
+	d := &Directory{version: fingerprint, entities: map[string]Entity{}, aliases: map[string][]string{}, latinAliases: map[string][]string{}, maxWords: 1, addresses: map[string]map[string]districtEvidence{}, streetDistricts: map[string]districtEvidence{}}
 	rows, err := db.Query("SELECT id,kind,name,parent_id,city_id,province_id,district_id,street_type,source FROM entities ORDER BY id")
 	if err != nil {
 		return nil, err
@@ -102,6 +103,9 @@ func Open(path string) (*Directory, error) {
 		key := Canon(alias)
 		if key != "" {
 			d.aliases[key] = append(d.aliases[key], id)
+			if latin := LatinKey(key); latin != key {
+				d.latinAliases[latin] = append(d.latinAliases[latin], id)
+			}
 			if n := len(strings.Fields(key)); n > d.maxWords {
 				d.maxWords = n
 			}
@@ -128,6 +132,9 @@ func Open(path string) (*Directory, error) {
 			}
 			key := full + " " + strings.Join(words[1:], " ")
 			d.aliases[key] = append(d.aliases[key], id)
+			if latin := LatinKey(key); latin != key {
+				d.latinAliases[latin] = append(d.latinAliases[latin], id)
+			}
 			if len(words) > d.maxWords {
 				d.maxWords = len(words)
 			}
@@ -206,6 +213,28 @@ func (d *Directory) Exact(value, kind string) []Entity {
 	}
 	return out
 }
+
+// LatinExact is opt-in component matching. It does not change geographic scans
+// or the ordinary Exact contract used for identity and district reconciliation.
+func (d *Directory) LatinExact(value, kind string) []Entity {
+	out := d.Exact(value, kind)
+	if d == nil {
+		return out
+	}
+	seen := map[string]bool{}
+	for _, e := range out {
+		seen[e.ID] = true
+	}
+	for _, id := range d.latinAliases[Canon(value)] {
+		e := d.entities[id]
+		if !seen[id] && e.Kind == kind {
+			out = append(out, e)
+			seen[id] = true
+		}
+	}
+	return out
+}
+
 func (d *Directory) Matches(text string) []Match {
 	out := []Match{}
 	seen := map[string]bool{}

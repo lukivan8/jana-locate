@@ -148,6 +148,10 @@ func postalSignals(work string, parts []postal.Component) []evidence {
 		}
 		if field == "street_name" {
 			value = strings.TrimSpace(streetMarker.ReplaceAllString(value, ""))
+			if name, kind := latinStreetMarker(value); kind != "" {
+				value = name
+				out = append(out, evidence{"street_type", kind, "explicit-marker", 0.94})
+			}
 		}
 		if field == "house" || field == "apartment" || field == "entrance" || field == "floor" {
 			if !numeric.MatchString(value) {
@@ -373,6 +377,9 @@ func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, w
 			for _, m := range matches {
 				field := map[string]string{"street": "street_name", "district": "district", "living_area": "living_area"}[kind]
 				value := m.Surface
+				if kind == "street" {
+					value, _ = latinStreetMarker(value)
+				}
 				if kind != "street" {
 					value = m.Entity.Name
 				}
@@ -388,6 +395,39 @@ func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, w
 	}
 	signals = e.reconcileDistrict(cityID, cities, districts, districtModel, signals, &r.Warnings)
 	fields := resolve(signals)
+	// Canonicalize a complete Latin street component only when all compatible
+	// reference candidates agree on its name. Unknown names stay as entered.
+	if street := fields["street_name"]; street.Value != "" && !street.Conflict && fields["city"].Value != "" {
+		name := ""
+		conflict := false
+		for _, candidate := range e.Reference.LatinExact(street.Value, "street") {
+			if cityID != "" && candidate.CityID != "" && candidate.CityID != cityID {
+				continue
+			}
+			if len(cities) == 0 && candidate.CityID != "" && fields["city"].Value != "" {
+				city, ok := e.Reference.Entity(candidate.CityID)
+				if !ok || (!e.equivalent(fields["city"].Value, city.Name, "city") && reference.LatinKey(city.Name) != reference.Canon(fields["city"].Value)) {
+					continue
+				}
+			}
+			if len(cities) > 0 && candidate.CityID != "" {
+				if _, compatible := cities[candidate.CityID]; !compatible {
+					continue
+				}
+			}
+			if reference.LatinKey(candidate.Name) != reference.Canon(street.Value) {
+				continue
+			}
+			if name != "" && name != candidate.Name {
+				conflict = true
+			}
+			name = candidate.Name
+		}
+		if name != "" && !conflict {
+			street.Value = name
+			fields["street_name"] = street
+		}
+	}
 	for field, v := range fields {
 		if v.Conflict {
 			r.Warnings = append(r.Warnings, "conflicting_"+field)
