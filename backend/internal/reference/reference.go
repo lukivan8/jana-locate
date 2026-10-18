@@ -111,6 +111,28 @@ func Open(path string) (*Directory, error) {
 		return nil, err
 	}
 	rows.Close()
+	// Expand explicit source qualifiers, never infer a settlement's type from
+	// its bare name or popularity. These are component aliases, not addresses.
+	for id, e := range d.entities {
+		if e.Kind != "city" {
+			continue
+		}
+		for _, alias := range e.Aliases {
+			words := strings.Fields(Canon(alias))
+			if len(words) < 2 {
+				continue
+			}
+			full := map[string]string{"г": "город"}[words[0]]
+			if full == "" {
+				continue
+			}
+			key := full + " " + strings.Join(words[1:], " ")
+			d.aliases[key] = append(d.aliases[key], id)
+			if len(words) > d.maxWords {
+				d.maxWords = len(words)
+			}
+		}
+	}
 	if version == "2" || version == "3" {
 		query := "SELECT street_id,city_id,house,0,'' FROM addresses"
 		if version == "3" {

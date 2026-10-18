@@ -61,5 +61,8 @@ func process(ctx context.Context, engine normalize.Engine, records []api.InputRe
 		}
 	}()
 	results = engine.NormalizeBatchContext(ctx, records)
+	if normalize.UnavailableResults(results) {
+		return nil, "Normalization service unavailable; create a new job to retry."
+	}
 	return
 }

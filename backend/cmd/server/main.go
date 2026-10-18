@@ -46,13 +46,28 @@ func main() {
 		os.Exit(1)
 	}
 	engine := normalize.Engine{}
-	engine.Postal, err = postal.Open(env("LIBPOSTAL_DATA_DIR", ""))
-	if err != nil {
-		if env("MODELS_REQUIRED", "false") == "true" {
-			slog.Error("required libpostal unavailable", "error", err)
+	if url := os.Getenv("NUMERIC_SUPPLEMENT_URL"); url != "" {
+		if os.Getenv("CONTEXTUAL_NORMALIZER_URL") != "" {
+			slog.Error("numeric supplement requires native normalization mode")
 			os.Exit(1)
 		}
-		slog.Warn("libpostal disabled", "error", err)
+		engine.NumericSupplement = &normalize.NumericClient{URL: url}
+	}
+	if url := os.Getenv("CONTEXTUAL_NORMALIZER_URL"); url != "" {
+		engine.Contextual = &normalize.ContextualClient{URL: url}
+		if err := engine.Ready(context.Background()); err != nil {
+			slog.Error("contextual normalizer unavailable", "error", err)
+			os.Exit(1)
+		}
+	} else {
+		engine.Postal, err = postal.Open(env("LIBPOSTAL_DATA_DIR", ""))
+		if err != nil {
+			if env("MODELS_REQUIRED", "false") == "true" {
+				slog.Error("required libpostal unavailable", "error", err)
+				os.Exit(1)
+			}
+			slog.Warn("libpostal disabled", "error", err)
+		}
 	}
 	if path := os.Getenv("REFERENCE_PATH"); path != "" {
 		engine.Reference, err = reference.Open(path)

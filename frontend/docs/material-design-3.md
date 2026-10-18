@@ -181,6 +181,8 @@ CSV and XLSX share a native modal dialog for choosing an address column. Radio c
 
 ## CLI normalization progress (17 October 2026)
 
+The web queue uses a shared 48px indeterminate circular indicator while waiting for results, following [Material circular progress guidance](https://material-web.dev/components/progress/). A 20px decorative variant accompanies the disabled normalization button. The queue announces its loading text through a status region; restoring a saved job has its own caption. No percentages or completion times are invented. Primary and secondary-container roles provide the indicator and track; reduced motion keeps a static visible arc and the explanatory text. Forced colors use system foreground roles. The indicator is replaced by results or the existing error/empty state when the request finishes.
+
 While normalization is running, the queue uses a determinate linear progress indicator, following [Material progress guidance](https://material-web.dev/components/progress/) and the [M3 anatomy](https://m3.material.io/components/progress-indicators/guidelines). The shared React primitive uses primary for the active segment, secondary-container for the remaining track, a 4px gap and a stop indicator. The caption preserves processed/total counts; the accessible progressbar exposes its name, range, current value and Russian value text. SSE updates drive the bar without simulated progress. It disappears when the run leaves normalization, retaining the compact completed queue. Reduced-motion preference disables the short value transition.
 
 ## Completed run timing (17 October 2026)
@@ -188,3 +190,9 @@ While normalization is running, the queue uses a determinate linear progress ind
 Completed CLI runs show total elapsed normalization time and average elapsed time per snapshot record below the run counts, using secondary text and the body-medium role. The same summary remains available after publication. The CLI stores a separate completion timestamp so operator edits and publication do not affect the measurement. Elapsed time includes snapshot creation, waiting and interruptions; average is elapsed/total, not isolated per-address latency. Legacy runs without a completion timestamp do not display an invented duration.
 
 После подтверждения адреса редактор открывает следующий адрес, требующий проверки, и переносит фокус на его заголовок. Автоматически разобранные и уже подтверждённые строки пропускаются. По достижении конца списка проверка продолжается с первой пропущенной строки; если очередь пуста, редактор закрывается. В локальном CLI переход сохраняет позиции записей и работает между страницами, включая фильтр непроверенных строк.
+
+## Contextual normalizer confidence
+
+When `confidence_available=false`, existing confidence cells show «Не оценена», with an explicit
+review status. Numeric zero is retained only for API compatibility and is never rendered as 0%.
+Reference diagnostics use Russian field labels; alternatives remain available in exported evidence.

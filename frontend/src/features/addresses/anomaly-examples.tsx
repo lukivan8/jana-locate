@@ -1,3 +1,4 @@
+import { confidenceLabel } from './result-details'
 import { useRef, useState } from 'react'
 import dataset from '../../data/address-anomalies.json'
 import datasetUrl from '../../data/address-anomalies.json?url'
@@ -86,7 +87,7 @@ export function AnomalyExamples({ busy, results, onNormalize }: { busy: boolean;
         </nav>
         {result ? <section className="example-result" aria-label="Результат тестового адреса" aria-live="polite">
           <h3>Результат разбора</h3>
-          <p className="muted">Уверенность: {Math.round(result.confidence * 100)}% · {result.status.replaceAll('_', ' ')}</p>
+          <p className="muted">Уверенность: {confidenceLabel(result)} · {result.status.replaceAll('_', ' ')}</p>
           <dl>{resultFields.map(field => <div key={field}><dt>{field}</dt><dd>{result[field] ?? <span className="muted">null</span>}</dd></div>)}</dl>
           {result.warnings.length > 0 && <p className="muted">Предупреждения: {result.warnings.join(' · ')}</p>}
         </section> : <p className="muted">Нажмите «Нормализовать адрес», чтобы увидеть поля здесь. Результат появится под выбранным примером.</p>}

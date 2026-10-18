@@ -1,0 +1,9 @@
+# Build backend's postal stage first: docker build --target postal -t jana-postal-assets:v1 backend
+FROM jana-postal-assets:v1 AS postal
+COPY trace.c libpostal.h /trace-src/
+RUN cc -O2 -I/trace-src /trace-src/trace.c -L/opt/libpostal/lib -Wl,-rpath,/opt/libpostal/lib -lpostal -o /lab-trace
+FROM python:3.11-slim-bookworm
+RUN pip install --no-cache-dir torch==2.5.1+cpu --index-url https://download.pytorch.org/whl/cpu && pip install --no-cache-dir transformers==4.46.3 numpy==2.4.6 tokenizers==0.20.3 safetensors==0.4.5 text-unidecode==1.3 sentencepiece==0.2.0
+COPY --from=postal /opt/libpostal/lib /opt/libpostal/lib
+COPY --from=postal /models/libpostal /models/libpostal
+COPY --from=postal /lab-trace /lab-trace

@@ -105,6 +105,15 @@ func (e Engine) districtMentions(text string, signals []evidence) ([]reference.M
 				if signal.Source == "libpostal" && component == strings.Trim(text[span.start:span.end], " .\t\r\n") && len(e.Reference.Exact(component, "city")) > 0 {
 					continue
 				}
+				// A venue prefix and a qualified settlement in the same
+				// component describe the venue's name, not a destination.
+				// Keep comma-separated settlement components independent.
+				if strings.TrimSpace(text[left:span.start]) == "" && span.end < right {
+					tail := strings.TrimSpace(text[span.end:right])
+					if strings.HasPrefix(strings.ToLower(tail), "город ") && len(e.Reference.Exact(tail, "city")) > 0 {
+						span.end = right
+					}
+				}
 				for i := span.start; i < span.end; i++ {
 					cityText[i] = ' '
 				}

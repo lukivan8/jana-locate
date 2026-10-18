@@ -16,6 +16,8 @@ import (
 )
 
 type Engine struct {
+	Contextual        *ContextualClient
+	NumericSupplement *NumericClient
 	// Deprecated: retained for internal fixture compatibility; never read during normalization.
 	Catalog   *catalog.Store
 	Postal    postal.Parser
@@ -47,7 +49,10 @@ func (e Engine) Normalize(in api.InputRecord) api.Result {
 func (e Engine) NormalizeBatch(records []api.InputRecord) []api.Result {
 	return e.NormalizeBatchContext(context.Background(), records)
 }
-func (e Engine) NormalizeBatchContext(_ context.Context, records []api.InputRecord) []api.Result {
+func (e Engine) NormalizeBatchContext(ctx context.Context, records []api.InputRecord) []api.Result {
+	if e.Contextual != nil {
+		return e.contextualBatch(ctx, records)
+	}
 	texts := make([]string, len(records))
 	signals := make([][]evidence, len(records))
 	warnings := make([][]string, len(records))
@@ -63,6 +68,9 @@ func (e Engine) NormalizeBatchContext(_ context.Context, records []api.InputReco
 	out := make([]api.Result, 0, len(records))
 	for i, r := range records {
 		out = append(out, e.reconcile(r, texts[i], signals[i], warnings[i]))
+	}
+	if e.NumericSupplement != nil && len(records) > 0 {
+		return e.supplementNumeric(ctx, records, out)
 	}
 	return out
 }
@@ -327,6 +335,24 @@ func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, w
 		matches := map[string]reference.Match{}
 		for _, m := range mentions {
 			if m.Entity.Kind == kind && (cityID == "" || m.Entity.CityID == "" || m.Entity.CityID == cityID) {
+				// Settlement aliases (including bilingual forms) are not
+				// independent street/living-area evidence without a parser role.
+				field := map[string]string{"street": "street_name", "living_area": "living_area"}[kind]
+				qualifiedCity := false
+				for _, cityMention := range mentions {
+					if cityMention.Entity.ID == cityID && strings.HasPrefix(reference.Canon(cityMention.Surface), "город ") {
+						qualifiedCity = true
+					}
+				}
+				if preliminary[field].Value == "" && qualifiedCity {
+					isCityAlias := false
+					for _, c := range e.Reference.Exact(m.Surface, "city") {
+						isCityAlias = isCityAlias || c.ID == cityID
+					}
+					if isCityAlias {
+						continue
+					}
+				}
 				// An alias that only matches a fragment (e.g. "Street" within an
 				// unknown "Smoke Street") cannot contradict a complete extraction.
 				if kind == "street" && preliminary["street_name"].Value != "" && !e.equivalent(preliminary["street_name"].Value, m.Entity.Name, "street") {

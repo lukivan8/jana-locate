@@ -307,6 +307,14 @@ export interface components {
              */
             status: "matched" | "needs_review" | "unmatched";
             warnings: string[];
+            /** @description Normalization implementation version. Missing for legacy results. */
+            normalizer_version?: string;
+            /** @description False means confidence is unavailable; the required legacy numeric confidence is zero and must not be shown as a probability. */
+            confidence_available?: boolean;
+            /** @description Extraction spans (Unicode code point offsets), competing parses, reference candidates and diagnostics. No automatic identity selection. Extensible evidence, not verified geographic truth. */
+            normalization_details?: {
+                [key: string]: unknown;
+            };
         };
         InputRecord: {
             /** @description String or int64 identifier. Use strings for integers outside JavaScript safe range. Never used for matching. */

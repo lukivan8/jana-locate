@@ -35,18 +35,22 @@ func registerRecordCitySelections(mux *http.ServeMux, engine normalize.Engine) {
 					fail(w, 400, "invalid_request", "Для списка вариантов передайте только исходную запись.")
 					return
 				}
-				candidates := engine.CityCandidates(r.Context(), records[0])
+				candidates, err := engine.CityCandidatesChecked(r.Context(), records[0])
+				if err != nil {
+					fail(w, 503, "normalizer_unavailable", "Сервис нормализации недоступен. Повторите запрос.")
+					return
+				}
 				if r.Context().Err() != nil {
 					return
 				}
-				jsonResponse(w, 200, api.RecordCityCandidates{ReferenceVersion: engine.Reference.Version(), Candidates: candidates})
+				jsonResponse(w, 200, api.RecordCityCandidates{ReferenceVersion: engine.ReferenceVersion(), Candidates: candidates})
 				return
 			}
 			if body.ReferenceVersion == nil || body.EntityID == nil || *body.ReferenceVersion == "" || *body.EntityID == "" {
 				fail(w, 400, "invalid_selection", "Укажите entity_id и reference_version.")
 				return
 			}
-			if *body.ReferenceVersion != engine.Reference.Version() {
+			if *body.ReferenceVersion != engine.ReferenceVersion() {
 				fail(w, 409, "reference_version_conflict", "Справочник изменился. Загрузите варианты заново.")
 				return
 			}

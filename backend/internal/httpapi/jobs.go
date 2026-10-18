@@ -173,7 +173,17 @@ func registerCitySelections(mux *http.ServeMux, jobs *catalog.JobStore, engine n
 		if !ok {
 			return
 		}
-		jsonResponse(w, 200, api.CityCandidates{Revision: j.Revision, ReferenceVersion: engine.Reference.Version(), Candidates: engine.CityCandidates(r.Context(), j.Records[index])})
+		// Review the saved extraction evidence; do not run the model again on every UI render.
+		candidates, available := engine.CityCandidatesFromResult(j.Results[index])
+		if !available {
+			var err error
+			candidates, err = engine.CityCandidatesChecked(r.Context(), j.Records[index])
+			if err != nil {
+				fail(w, 503, "normalizer_unavailable", "Сервис нормализации недоступен. Повторите запрос.")
+				return
+			}
+		}
+		jsonResponse(w, 200, api.CityCandidates{Revision: j.Revision, ReferenceVersion: engine.ReferenceVersion(), Candidates: candidates})
 	})
 	mux.HandleFunc("POST /v1/normalization-jobs/{job_id}/records/{record_index}/selections", func(w http.ResponseWriter, r *http.Request) {
 		var req api.CitySelectionRequest
@@ -188,7 +198,7 @@ func registerCitySelections(mux *http.ServeMux, jobs *catalog.JobStore, engine n
 		if !ok {
 			return
 		}
-		if req.ReferenceVersion != engine.Reference.Version() {
+		if req.ReferenceVersion != engine.ReferenceVersion() {
 			fail(w, 409, "reference_version_conflict", "Справочник изменился. Загрузите варианты заново.")
 			return
 		}

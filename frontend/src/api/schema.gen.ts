@@ -286,6 +286,14 @@ export interface components {
              */
             status: "matched" | "needs_review" | "unmatched";
             warnings: string[];
+            /** @description Normalization implementation version. Missing for legacy results. */
+            normalizer_version?: string;
+            /** @description False means confidence is unavailable; the required legacy numeric confidence is zero and must not be shown as a probability. */
+            confidence_available?: boolean;
+            /** @description Extraction spans (Unicode code point offsets), competing parses, reference candidates and diagnostics. No automatic identity selection. Extensible evidence, not verified geographic truth. */
+            normalization_details?: {
+                [key: string]: unknown;
+            };
         };
         NormalizeResponse: {
             results: components["schemas"]["Result"][];
@@ -494,6 +502,15 @@ export interface operations {
                     "application/json": components["schemas"]["Error"];
                 };
             };
+            /** @description Inference dependency unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Health"];
+                };
+            };
         };
     };
     normalize: {
@@ -556,6 +573,15 @@ export interface operations {
             };
             /** @description Storage or internal failure */
             500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Normalization service unavailable or busy; retry later */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1150,6 +1176,15 @@ export interface operations {
                     "application/json": components["schemas"]["Error"];
                 };
             };
+            /** @description Normalization service unavailable or busy; retry later */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
             /** @description Job storage limit reached */
             507: {
                 headers: {
@@ -1312,6 +1347,15 @@ export interface operations {
             };
             /** @description Normalization failed */
             500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description Normalization service unavailable or busy; retry later */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };

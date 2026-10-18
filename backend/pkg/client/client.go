@@ -28,7 +28,7 @@ func (e *HTTPError) Error() string {
 	return fmt.Sprintf("jana-address: HTTP %d: %s: %s", e.Status, e.Detail.Code, e.Detail.Message)
 }
 func New(baseURL string) *Client {
-	return &Client{BaseURL: strings.TrimRight(baseURL, "/"), HTTP: &http.Client{Timeout: 60 * time.Second}}
+	return &Client{BaseURL: strings.TrimRight(baseURL, "/"), HTTP: &http.Client{Timeout: 300 * time.Second}}
 }
 func (c *Client) do(ctx context.Context, method, path string, body, out any) error {
 	var reader io.Reader
@@ -48,14 +48,14 @@ func (c *Client) do(ctx context.Context, method, path string, body, out any) err
 	}
 	transport := c.HTTP
 	if transport == nil {
-		transport = &http.Client{Timeout: 60 * time.Second}
+		transport = &http.Client{Timeout: 300 * time.Second}
 	}
 	res, err := transport.Do(req)
 	if err != nil {
 		return err
 	}
 	defer res.Body.Close()
-	d := json.NewDecoder(io.LimitReader(res.Body, 16<<20))
+	d := json.NewDecoder(io.LimitReader(res.Body, 128<<20))
 	d.UseNumber()
 	if res.StatusCode < 200 || res.StatusCode >= 300 {
 		e := &HTTPError{Status: res.StatusCode}

@@ -1,12 +1,16 @@
 # Separate deployment: docker compose -p jana-showcase --env-file .deploy/showcase.env
-# -f compose.yaml -f compose.showcase.yaml ... (scripts/showcase.sh wraps this).
+# -f compose.yaml -f compose.numeric.yaml -f compose.showcase.yaml ... (scripts/showcase.sh wraps this).
 services:
   backend:
     image: jana-showcase-api:local
     ports: !reset []
     environment:
       CORS_ORIGINS: "https://${SHOWCASE_HOSTNAME:?Set SHOWCASE_HOSTNAME}"
-    networks: [runtime]
+      CONTEXTUAL_NORMALIZER_URL: ""
+    networks: !override [runtime]
+  numeric:
+    image: jana-showcase-numeric:local
+    networks: !override [runtime]
   frontend:
     image: jana-showcase-web:local
     ports: !reset []

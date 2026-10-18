@@ -8,7 +8,7 @@ mkdir -p "$state"
 chmod 700 "$state"
 compose() {
   docker compose -p jana-showcase --env-file "$state/showcase.env" \
-    -f compose.yaml -f compose.showcase.yaml "$@"
+    -f compose.yaml -f compose.numeric.yaml -f compose.showcase.yaml "$@"
 }
 fingerprint() {
   # Includes new uncommitted source files; ignores secrets, models, and build output

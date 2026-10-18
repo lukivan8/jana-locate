@@ -116,3 +116,10 @@ func TestWorkerRecordsParserFailure(t *testing.T) {
 		t.Fatal("failure hidden")
 	}
 }
+
+func TestUnavailableContextualFailsJob(t *testing.T) {
+	results, message := process(context.Background(), normalize.Engine{Contextual: &normalize.ContextualClient{URL: "http://127.0.0.1:1"}}, []api.InputRecord{{Id: "a", RawAddress: "Астана"}})
+	if results != nil || message == "" {
+		t.Fatal("inference outage treated as completed job")
+	}
+}

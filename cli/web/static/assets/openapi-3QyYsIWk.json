@@ -101,6 +101,16 @@
                 }
               }
             }
+          },
+          "503": {
+            "description": "Inference dependency unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
           }
         }
       }
@@ -168,6 +178,16 @@
           },
           "415": {
             "description": "Expected application/json",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Normalization service unavailable or busy; retry later",
             "content": {
               "application/json": {
                 "schema": {
@@ -881,6 +901,16 @@
                 }
               }
             }
+          },
+          "503": {
+            "description": "Normalization service unavailable or busy; retry later",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       }
@@ -1070,6 +1100,16 @@
           },
           "415": {
             "description": "Unsupported media type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Normalization service unavailable or busy; retry later",
             "content": {
               "application/json": {
                 "schema": {
@@ -1447,6 +1487,19 @@
             "items": {
               "type": "string"
             }
+          },
+          "normalizer_version": {
+            "type": "string",
+            "description": "Normalization implementation version. Missing for legacy results."
+          },
+          "confidence_available": {
+            "type": "boolean",
+            "description": "False means confidence is unavailable; the required legacy numeric confidence is zero and must not be shown as a probability."
+          },
+          "normalization_details": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Extraction spans (Unicode code point offsets), competing parses, reference candidates and diagnostics. No automatic identity selection. Extensible evidence, not verified geographic truth."
           }
         }
       },

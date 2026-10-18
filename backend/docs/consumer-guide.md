@@ -30,7 +30,7 @@ curl -sS http://localhost:8080/v1/normalize \
 
 Геокодирование исключено из нормализации. `coordinates`, `catalog_id`, `catalog_revision` — устаревшие совместимые поля, всегда `null` у новых результатов normalize. `matched` означает полный разбор основных полей без неоднозначности, не поиск здания. Если остаются несколько совместимых справочных идентичностей населённого пункта, результат имеет `needs_review` даже при наличии точного адреса только для одной из них. Район по улице/дому дополняется после разрешения этой неоднозначности; явный выбор населённого пункта пересчитывает область и район. `confidence` и статус не зависят от каталога зданий и его координат. `libpostal_unavailable` означает резервный разбор. Новые результаты не содержат предупреждение `gliner_unavailable`; оно может встречаться в старых сохранённых заданиях.
 
-Нормализация использует подготовленный справочник и не читает каталог зданий. Серверный бюджет ответа — 300 секунд, согласование моделей ограничено 270 секундами. У Go SDK таймаут по умолчанию 60 секунд; для больших пакетов увеличьте его и задайте подходящий context.
+Нормализация использует подготовленный справочник и не читает каталог зданий. Серверный бюджет ответа — 300 секунд, согласование моделей ограничено 270 секундами. У Go SDK таймаут по умолчанию 300 секунд; задайте context, покрывающий время обработки пакета.
 
 ## Legacy API каталога зданий
 
@@ -89,3 +89,34 @@ CORS разрешает точные значения `CORS_ORIGINS`. Серве
 ## Выбор населённого пункта в собственном журнале
 
 `POST /v1/normalize/candidates` принимает `{record: {id, raw_address}}` и возвращает `{reference_version, candidates}`. `POST /v1/normalize/selections` принимает `{record, reference_version, entity_id}` и пересчитывает исходную запись тем же движком, что используется заданиями сайта. Несовместимая сущность отклоняется с 400, устаревший справочник — с 409. Эти операции не создают задание и не сохраняют ответы; ревизиями собственного журнала управляет потребитель. Выбор населённого пункта не подтверждает все поля адреса и не создаёт координаты или запись в каталоге зданий.
+
+## Контекстный нормализатор v7
+
+Hosted API может возвращать `normalizer_version=contextual-v7-grounded-microalpha-lean-v1`.
+При `confidence_available=false` поле `confidence=0` — только совместимый числовой placeholder;
+показывайте «Не оценена». До калибровки автоматические ответы имеют `needs_review`.
+Дополнительное поле `normalization_details` содержит исходные выделения, альтернативы,
+справочные кандидаты и диагностику. Офсеты spans считаются в Unicode code points.
+Сбой/занятость inference возвращает HTTP 503 `normalizer_unavailable`; повторите запрос позже.
+Сохраняемое задание при таком сбое получает состояние failed. Старые сохранённые результаты
+не пересчитываются автоматически. Для повторного разбора создайте новое задание.
+
+Расширенная диагностика может увеличивать ответ на 1000 записей сверх 16 МиБ. Текущие исходники Go SDK и CLI принимают до 128 МиБ; старым клиентам с жёстким лимитом требуется обновление либо меньший пакет. Таймаут Go SDK по умолчанию — 300 секунд.
+
+## Experimental native numeric supplement
+
+`NUMERIC_SUPPLEMENT_URL` optionally enables an offline numeric-only CRF service
+on top of native normalization. It is mutually exclusive with
+`CONTEXTUAL_NORMALIZER_URL`. Default behavior is unchanged. Missing proposals,
+transport failure or invalid source spans fall back to the original native result.
+The supplement can only fill null `house`, `apartment`, `entrance`, `floor`; existing
+values, geographic candidates, status and confidence are not replaced. Records
+with ambiguity/conflict warnings are left unchanged. Duplicate role proposals,
+low token scores and overlaps with existing textual components are rejected.
+
+Added fields carry `normalizer_version=native-numeric-crf-v1` and provenance in
+`normalization_details.numeric_supplement`. The existing confidence still describes
+native evidence; the tagger posterior is not a calibrated probability for the
+address. `confidence_scope` records this distinction. No automatic promotion from
+`needs_review` to `matched` is introduced. Runtime never downloads model assets.
+This mode remains a candidate until non-regression and transfer checks are accepted.

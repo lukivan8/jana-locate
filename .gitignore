@@ -32,3 +32,5 @@ cli/var/
 # Local organizer research and operational history are not public documentation.
 docs/hackathon/
 docs/hackathon.md
+
+/backend/contextual/assets/

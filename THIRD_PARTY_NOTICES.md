@@ -8,6 +8,9 @@
 | КАТО | Административные сущности Казахстана | [Бюро национальной статистики](https://stat.gov.kz/ru/classifiers/statistical/21/); URL, дата и SHA-256 сохранены в manifest |
 | libpostal и подготовленные assets | Native-парсер в Docker | [Проект libpostal](https://github.com/openvenues/libpostal); commit закреплён в Dockerfile, условия исходников и обучающих источников см. у проекта |
 | Natural Earth | Включённый географический контур для исторического/справочного представления | [Публичное достояние](https://www.naturalearthdata.com/about/terms-of-use/); [происхождение файла](frontend/src/data/kazakhstan-source.md) |
+| XLM-RoBERTa base | Контекстный encoder в опциональном runtime v7 | FacebookAI/xlm-roberta-base, revision `e73636d4f797dec63c3081bb6ed5c7b0bb3f2089`; MIT по сохранённой карточке модели; SHA-256 в `backend/contextual/assets-manifest.json` |
+| PyTorch / Transformers / tokenizers | CPU inference | Версии закреплены в `backend/contextual/Dockerfile.base`; лицензии пакетов сохраняются в образе |
+| python-crfsuite 0.9.12 | Опциональный компактный числовой разборщик | MIT; metadata и LICENSE.txt сохраняются в образе `Dockerfile.numeric` |
 | Go/JS-библиотеки | API, CLI, интерфейс | Версии в manifests приложений; лицензии принадлежат соответствующим авторам |
 
 [Manifest справочника](backend/data/reference/manifest.json) содержит точные источники, контрольные суммы и границы покрытия. Сам справочник не содержит координат зданий.

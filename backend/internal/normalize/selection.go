@@ -14,6 +14,9 @@ var ErrInvalidCitySelection = errors.New("settlement is not a compatible candida
 // CityCandidates exposes source identities, not a popularity-ranked geocoder result.
 // Explicit province mentions constrain choices; street/house absence is not negative evidence.
 func (e Engine) CityCandidates(ctx context.Context, in api.InputRecord) []api.CityCandidate {
+	if e.Contextual != nil {
+		return e.contextualCities(e.NormalizeBatchContext(ctx, []api.InputRecord{in})[0])
+	}
 	out := []api.CityCandidate{}
 	work := Working(in.RawAddress)
 	administrative := administrativeText(work)
@@ -88,6 +91,46 @@ func compatibleMentionedCities(directory *reference.Directory, mentions []refere
 }
 
 func (e Engine) SelectCity(ctx context.Context, in api.InputRecord, id string) (api.Result, error) {
+	if e.Contextual != nil {
+		results := e.NormalizeBatchContext(ctx, []api.InputRecord{in})
+		if UnavailableResults(results) {
+			return api.Result{}, errors.New("normalization service unavailable")
+		}
+		r := results[0]
+		for _, candidate := range e.contextualCities(r) {
+			if candidate.EntityId != id {
+				continue
+			}
+			r.City = &candidate.Name
+			r.Province = candidate.Province
+			if r.District == nil {
+				value := func(p *string) string {
+					if p == nil {
+						return ""
+					}
+					return *p
+				}
+				inferred := e.Reference.DistrictsForAddress(id, value(r.StreetName), value(r.House), value(r.StreetType))
+				if inferred.Complete && len(inferred.Candidates) == 1 {
+					r.District = &inferred.Candidates[0].Name
+					r.Warnings = append(r.Warnings, "district_inferred_from_"+inferred.Source)
+				}
+				if len(inferred.Candidates) > 1 {
+					r.Warnings = append(r.Warnings, "ambiguous_district_reference")
+				}
+				if !inferred.Complete && len(inferred.Candidates) > 0 {
+					r.Warnings = append(r.Warnings, "district_coverage_incomplete")
+				}
+			}
+			if r.NormalizationDetails != nil {
+				(*r.NormalizationDetails)["operator_selected_city"] = id
+			}
+			r.Warnings = append(r.Warnings, "city_selected_by_operator")
+			return r, nil
+		}
+		return api.Result{}, ErrInvalidCitySelection
+	}
+
 	if err := ctx.Err(); err != nil {
 		return api.Result{}, err
 	}

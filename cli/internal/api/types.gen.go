@@ -178,19 +178,28 @@ type Result struct {
 	City            *string `json:"city"`
 
 	// Confidence Heuristic score of address component evidence and completeness, not a calibrated probability. Coordinates and building catalog contents have no effect.
-	Confidence  float64              `json:"confidence"`
-	Coordinates *NullableCoordinates `json:"coordinates"`
-	District    *string              `json:"district"`
-	Entrance    *string              `json:"entrance"`
-	Floor       *string              `json:"floor"`
-	House       *string              `json:"house"`
+	Confidence float64 `json:"confidence"`
+
+	// ConfidenceAvailable False means confidence is unavailable; the required legacy numeric confidence is zero and must not be shown as a probability.
+	ConfidenceAvailable *bool                `json:"confidence_available,omitempty"`
+	Coordinates         *NullableCoordinates `json:"coordinates"`
+	District            *string              `json:"district"`
+	Entrance            *string              `json:"entrance"`
+	Floor               *string              `json:"floor"`
+	House               *string              `json:"house"`
 
 	// Id String or int64 identifier. Use strings for integers outside JavaScript safe range. Never used for matching.
 	Id         interface{} `json:"id"`
 	Landmark   *string     `json:"landmark"`
 	LivingArea *string     `json:"living_area"`
-	Province   *string     `json:"province"`
-	RawAddress string      `json:"raw_address"`
+
+	// NormalizationDetails Extraction spans (Unicode code point offsets), competing parses, reference candidates and diagnostics. No automatic identity selection. Extensible evidence, not verified geographic truth.
+	NormalizationDetails *map[string]interface{} `json:"normalization_details,omitempty"`
+
+	// NormalizerVersion Normalization implementation version. Missing for legacy results.
+	NormalizerVersion *string `json:"normalizer_version,omitempty"`
+	Province          *string `json:"province"`
+	RawAddress        string  `json:"raw_address"`
 
 	// Status matched: province, city, street_name and house parsed with confidence >= 0.72 and no ambiguous/conflicting evidence; needs_review: incomplete or uncertain parsed address; unmatched: no address fields. Independent of coordinates or catalog membership.
 	Status     ResultStatus `json:"status"`

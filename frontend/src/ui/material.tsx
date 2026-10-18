@@ -22,6 +22,13 @@ export function SelectField({ label, supportingText, id, ...props }: SelectHTMLA
   return <div className="md-field"><label htmlFor={fieldId}>{label}</label><select id={fieldId} aria-describedby={supportingText ? `${fieldId}-support` : undefined} {...props} />{supportingText && <small id={`${fieldId}-support`}>{supportingText}</small>}</div>
 }
 
+export function CircularProgress({ compact = false }: { compact?: boolean }) {
+  return <svg className={`md-circular-progress${compact ? ' md-circular-progress--compact' : ''}`} viewBox="0 0 48 48" fill="none" aria-hidden="true">
+    <circle className="md-circular-progress__track" cx="24" cy="24" r="20" />
+    <circle className="md-circular-progress__active" cx="24" cy="24" r="20" />
+  </svg>
+}
+
 export function LinearProgress({ id, value, max, label }: { id?: string; value: number; max: number; label: string }) {
   const total = Math.max(1, max)
   const completed = Math.min(total, Math.max(0, value))

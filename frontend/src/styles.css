@@ -93,6 +93,19 @@ td small { display: block; font: var(--md-sys-typescale-label-medium); color: va
 .badge.matched { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
 .badge.unmatched { background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); }
 .empty { text-align: center; padding: 32px 16px; max-width: none; color: var(--md-sys-color-on-surface-variant); }
+.normalization-loading { display: flex; flex-direction: column; align-items: center; padding: 32px 16px; text-align: center; }
+.normalization-loading__title { margin: 20px 0 4px; font: var(--md-sys-typescale-title-large); }
+.normalization-loading__hint { margin: 0; color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-body-medium); }
+.md-circular-progress { display: block; width: 48px; height: 48px; flex-shrink: 0; color: var(--md-sys-color-primary); animation: md-progress-rotate 1.4s linear infinite; }
+.md-circular-progress circle { stroke-width: 4; }
+.md-circular-progress__track { stroke: var(--md-sys-color-secondary-container); }
+.md-circular-progress__active { stroke: currentColor; stroke-linecap: round; stroke-dasharray: 88 126; animation: md-progress-sweep 1.4s ease-in-out infinite; }
+.md-circular-progress--compact { width: 20px; height: 20px; margin-inline-end: 8px; color: inherit; }
+.md-circular-progress--compact .md-circular-progress__track { stroke: transparent; }
+@keyframes md-progress-rotate { to { transform: rotate(360deg); } }
+@keyframes md-progress-sweep { 0%, 100% { stroke-dasharray: 24 126; stroke-dashoffset: 0; } 50% { stroke-dasharray: 88 126; stroke-dashoffset: -24; } }
+@media (prefers-reduced-motion: reduce) { .md-circular-progress__active { stroke-dasharray: 88 126; } }
+@media (forced-colors: active) { .md-circular-progress { color: CanvasText; } .md-circular-progress__track { stroke: GrayText; } }
 .message { padding: 16px 20px; border-radius: var(--md-sys-shape-corner-medium); background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); margin-bottom: 24px; }
 .message.error { background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); }
 .field-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px 16px; margin-top: 24px; }

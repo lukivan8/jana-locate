@@ -1,0 +1,24 @@
+# Isolated candidate: add this file to compose.yaml, never compose.contextual.yaml.
+# Models/dependency image must be prepared before building; runtime is offline.
+services:
+  backend:
+    networks: [default, numeric-private]
+    environment:
+      NUMERIC_SUPPLEMENT_URL: http://numeric:8080
+  numeric:
+    networks: [numeric-private]
+    image: jana-numeric:experimental
+    build:
+      context: ./backend/contextual
+      dockerfile: Dockerfile.numeric
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    mem_limit: 128m
+    cpus: 1
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+networks:
+  default: {}
+  numeric-private:
+    internal: true

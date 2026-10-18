@@ -63,7 +63,13 @@ func NewWithJobs(store *catalog.Store, jobs *catalog.JobStore, origins []string,
 	}
 	health := func(w http.ResponseWriter, r *http.Request) { jsonResponse(w, 200, api.Health{Status: "ok"}) }
 	mux.HandleFunc("GET /healthz", health)
-	mux.HandleFunc("GET /readyz", health)
+	mux.HandleFunc("GET /readyz", func(w http.ResponseWriter, r *http.Request) {
+		if err := engine.Ready(r.Context()); err != nil {
+			jsonResponse(w, 503, api.Health{Status: "unavailable"})
+			return
+		}
+		health(w, r)
+	})
 	mux.HandleFunc("GET /openapi.json", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write(contract.OpenAPI)
@@ -84,6 +90,10 @@ func NewWithJobs(store *catalog.Store, jobs *catalog.JobStore, origins []string,
 			return
 		}
 		results := engine.NormalizeBatchContext(r.Context(), records)
+		if normalize.UnavailableResults(results) {
+			fail(w, 503, "normalizer_unavailable", "Normalization service unavailable; retry later.")
+			return
+		}
 		if req.array {
 			jsonResponse(w, 200, results)
 			return

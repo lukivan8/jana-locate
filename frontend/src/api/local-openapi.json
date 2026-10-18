@@ -1204,6 +1204,19 @@
             "items": {
               "type": "string"
             }
+          },
+          "normalizer_version": {
+            "type": "string",
+            "description": "Normalization implementation version. Missing for legacy results."
+          },
+          "confidence_available": {
+            "type": "boolean",
+            "description": "False means confidence is unavailable; the required legacy numeric confidence is zero and must not be shown as a probability."
+          },
+          "normalization_details": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Extraction spans (Unicode code point offsets), competing parses, reference candidates and diagnostics. No automatic identity selection. Extensible evidence, not verified geographic truth."
           }
         }
       },

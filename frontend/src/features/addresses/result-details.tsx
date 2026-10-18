@@ -5,13 +5,19 @@ export function displayFieldValue(field: keyof Fields, value: string | null | un
   if (field !== 'district' || !value) return value
   return value.replace(/^(?:район|р-н)\s+/iu, '').replace(/\s+(?:район|р-н|ауданы)$/iu, '').trim() || value
 }
+export function confidenceLabel(result: Result) { return result.confidence_available === false ? 'Не оценена' : `${Math.round(result.confidence * 100)}%` }
 export const statusLabels = { matched: 'Нормализован', needs_review: 'Нужна проверка', unmatched: 'Не распознан' }
-const warningLabels: Record<string, string> = { libpostal_unavailable: 'libpostal недоступен: использован резервный разбор', gliner_unavailable: 'Архивная диагностика: второй проход был недоступен', coordinates_unknown: 'В каталоге нет координат здания', synthetic_catalog_coordinates: 'Синтетические координаты: требуют проверки', ambiguous_catalog_match: 'Несколько подходящих зданий', city_selected_by_operator: 'Населённый пункт выбран оператором',
+const warningLabels: Record<string, string> = { microdistrict_model_disagreement: 'Разбор микрорайона неоднозначен', numeric_parser_disagreement: 'Разные варианты разбора чисел', ambiguous_unmarked_numeric_roles: 'Неясно, какие числа обозначают дом и квартиру', unresolved_numeric_span: 'Число не удалось отнести к адресному полю', contextual_normalizer_unavailable: 'Сервис нормализации недоступен. Повторите запрос.', confidence_unavailable: 'Уверенность модели пока не оценена', unresolved_parse_alternative: 'Есть несколько вариантов разбора адреса', libpostal_unavailable: 'libpostal недоступен: использован резервный разбор', gliner_unavailable: 'Архивная диагностика: второй проход был недоступен', coordinates_unknown: 'В каталоге нет координат здания', synthetic_catalog_coordinates: 'Синтетические координаты: требуют проверки', ambiguous_catalog_match: 'Несколько подходящих зданий', city_selected_by_operator: 'Населённый пункт выбран оператором',
   district_inferred_from_address: 'Район определён по справочному адресу здания', district_inferred_from_street: 'Район определён по расположению улицы', district_inferred_from_kato: 'Район определён по справочнику КАТО', district_coverage_incomplete: 'Недостаточно справочных данных для однозначного определения района',
   ambiguous_city_reference: 'Город неоднозначен в справочнике', ambiguous_reference_street: 'Улица неоднозначна в справочнике', building_reference_conflict: 'Здание противоречит справочнику', manually_reviewed: 'Проверено оператором', manually_reviewed_fields: 'Адресные поля проверены оператором', building_fields_changed_coordinates_cleared: 'Поля здания изменены: прежняя геопозиция сброшена' }
 export function warningLabel(warning: string) {
   if (warningLabels[warning]) return warningLabels[warning]
-  const field = warning.replace(/^(conflicting_|ambiguous_|ambiguous_reference_)/, '') as keyof Fields
+  const field = warning.replace(/^(conflicting_|ambiguous_reference_|ambiguous_|unresolved_reference_|lossy_transliteration_candidate_|multiple_extracted_|multiple_numeric_role_|compound_numeric_role_)/, '') as keyof Fields
+  const label = fieldLabels[field] ?? (String(field) === 'delivery_instruction' ? 'Инструкция доставки' : field)
+  if (/^(multiple_extracted_|multiple_numeric_role_)/.test(warning)) return `Несколько значений: ${label}`
+  if (warning.startsWith('compound_numeric_role_')) return `Составное числовое значение: ${label}`
+  if (warning.startsWith('unresolved_reference_')) return `Нет подтверждения в справочнике: ${fieldLabels[field] ?? field}`
+  if (warning.startsWith('lossy_transliteration_candidate_')) return `Найдено по приближённому транслиту: ${fieldLabels[field] ?? field}`
   if (warning.startsWith('conflicting_')) return `Противоречивые данные: ${fieldLabels[field] ?? field}`
   if (warning.startsWith('ambiguous_')) return `Неоднозначность: ${fieldLabels[field] ?? field}`
   return warning
@@ -37,8 +43,8 @@ export function ResultWarnings({ result }: { result: Result }) {
   const cityReason = missingCityReason(result)
   const messages = [
     ...(cityReason ? [`${cityReason}. Уточните его в поле «Город».`] : []),
-    ...(result.status !== 'matched' ? [`${statusLabels[result.status]}. Уверенность: ${Math.round(result.confidence * 100)}%. Проверьте адресные поля.`] : []),
-    ...result.warnings.filter(w => !['manually_reviewed', 'manually_reviewed_fields', 'city_selected_by_operator'].includes(w)).map(warningLabel),
+    ...(result.status !== 'matched' ? [`${statusLabels[result.status]}. Уверенность: ${confidenceLabel(result)}. Проверьте адресные поля.`] : []),
+    ...result.warnings.filter(w => !['manually_reviewed', 'manually_reviewed_fields', 'city_selected_by_operator', 'confidence_unavailable', 'extraction_only_identity_not_evaluated'].includes(w)).map(warningLabel),
   ]
   if (!messages.length) return null
   return <ul className="review-warnings" aria-label="На что обратить внимание">{[...new Set(messages)].map(message => <li key={message}>

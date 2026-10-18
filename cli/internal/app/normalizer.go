@@ -65,12 +65,12 @@ func (n *Normalizer) Batch(ctx context.Context, rows []api.Row) ([]api.Row, erro
 	if res.StatusCode != 200 {
 		return nil, fmt.Errorf("API нормализации вернул HTTP %d; проверьте доступ и доступность сервиса, затем возобновите обработку", res.StatusCode)
 	}
-	b, err := io.ReadAll(io.LimitReader(res.Body, 16<<20+1))
+	b, err := io.ReadAll(io.LimitReader(res.Body, 128<<20+1))
 	if err != nil {
 		return nil, errors.New("Не удалось прочитать ответ нормализатора")
 	}
-	if len(b) > 16<<20 {
-		return nil, errors.New("Ответ нормализатора превышает 16 МиБ")
+	if len(b) > 128<<20 {
+		return nil, errors.New("Ответ нормализатора превышает 128 МиБ")
 	}
 	var out struct {
 		Results []api.Result `json:"results"`
