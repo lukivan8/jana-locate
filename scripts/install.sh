@@ -2,7 +2,7 @@
 # Install published, versioned Docker images. No compilation or model preparation.
 set -eu
 umask 077
-version=${JANA_VERSION:-0.3.1}
+version=${JANA_VERSION:-0.3.2}
 mode=${1:-full}
 case "$mode" in api|web|full|hosted) ;; *) echo 'Режим: api, web, full или hosted' >&2; exit 2;; esac
 case "$version" in ''|*[!a-zA-Z0-9._-]*) echo 'Некорректная версия' >&2; exit 2;; esac

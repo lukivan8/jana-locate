@@ -398,39 +398,8 @@ func (e Engine) reconcile(in api.InputRecord, work string, signals []evidence, w
 	}
 	signals = e.reconcileDistrict(cityID, cities, districts, districtModel, signals, &r.Warnings)
 	fields := resolve(signals)
-	// Canonicalize a complete Latin street component only when all compatible
-	// reference candidates agree on its name. Unknown names stay as entered.
-	if street := fields["street_name"]; street.Value != "" && !street.Conflict && fields["city"].Value != "" {
-		name := ""
-		conflict := false
-		for _, candidate := range e.Reference.LatinExact(street.Value, "street") {
-			if cityID != "" && candidate.CityID != "" && candidate.CityID != cityID {
-				continue
-			}
-			if len(cities) == 0 && candidate.CityID != "" && fields["city"].Value != "" {
-				city, ok := e.Reference.Entity(candidate.CityID)
-				if !ok || (!e.equivalent(fields["city"].Value, city.Name, "city") && reference.LatinKey(city.Name) != reference.Canon(fields["city"].Value)) {
-					continue
-				}
-			}
-			if len(cities) > 0 && candidate.CityID != "" {
-				if _, compatible := cities[candidate.CityID]; !compatible {
-					continue
-				}
-			}
-			if reference.LatinKey(candidate.Name) != reference.Canon(street.Value) {
-				continue
-			}
-			if name != "" && name != candidate.Name {
-				conflict = true
-			}
-			name = candidate.Name
-		}
-		if name != "" && !conflict {
-			street.Value = name
-			fields["street_name"] = street
-		}
-	}
+	// Reference lookup uses parsed components above; presentation keeps the
+	// grounded input spelling, including Latin script and aliases.
 	for field, v := range fields {
 		if v.Conflict {
 			r.Warnings = append(r.Warnings, "conflicting_"+field)
