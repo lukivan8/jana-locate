@@ -23,7 +23,7 @@
 curl -fsSL https://raw.githubusercontent.com/lukivan8/jana-locate/main/scripts/install.sh | sh -s -- full
 ```
 
-Установщик скачает готовые контейнеры **v0.3.0** и запустит **API + Web + CLI** вместе с моделями и справочниками. Компилировать проект и устанавливать Go, Node.js или Python не требуется.
+Установщик скачает готовые контейнеры **v0.3.1** и запустит **API + Web + CLI** вместе с моделями и справочниками. Компилировать проект и устанавливать Go, Node.js или Python не требуется.
 
 - **Веб-интерфейс:** [localhost:8095](http://localhost:8095).
 - **API:** `http://localhost:8080`.
