@@ -70,7 +70,10 @@ func (e Engine) NormalizeBatchContext(ctx context.Context, records []api.InputRe
 		out = append(out, e.reconcile(r, texts[i], signals[i], warnings[i]))
 	}
 	if e.NumericSupplement != nil && len(records) > 0 {
-		return e.supplementNumeric(ctx, records, out)
+		out = e.supplementNumeric(ctx, records, out)
+	}
+	for i := range out {
+		out[i] = supplementExplicitComponents(out[i])
 	}
 	return out
 }

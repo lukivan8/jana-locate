@@ -120,3 +120,14 @@ native evidence; the tagger posterior is not a calibrated probability for the
 address. `confidence_scope` records this distinction. No automatic promotion from
 `needs_review` to `matched` is introduced. Runtime never downloads model assets.
 This mode remains a candidate until non-regression and transfer checks are accepted.
+
+## Explicit numeric components
+
+The native pipeline also checks standalone numeric components after the CRF step.
+A complete component contains a number and a known role marker, in either order
+(e.g. `2 этаж`, `4 подъезд`, `41 пәтер`, `podezd 2`). It fills missing fields,
+protects extracted street/landmark spans and reports competing explicit values.
+A house confused with a following corpus is corrected using that explicit syntax.
+Added/corrected fields carry `normalizer_version=native-explicit-components-v1` and
+provenance under `normalization_details.explicit_components`, including UTF-8 byte
+ranges and original numeric fields. Confidence retains its native evidence scope.
