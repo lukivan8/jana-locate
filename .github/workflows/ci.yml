@@ -30,15 +30,29 @@ jobs:
           docker build -t jana-numeric:0.3.0 backend/numeric
       - run: npx playwright install --with-deps chromium
         working-directory: frontend
-      - name: Browser integration against isolated local backend
-        run: |
-          cd backend
-          ALLOW_DEMO_CATALOG=true CATALOG_OVERLAY_PATH="$RUNNER_TEMP/catalog.confirmed.json" go run ./cmd/server > "$RUNNER_TEMP/jana-api.log" 2>&1 &
-          for attempt in $(seq 1 30); do curl -fsS http://localhost:8080/readyz && break; sleep 1; done
-          cd ../frontend
-          npm run test:e2e
       - name: Compose build, startup and restart persistence
         run: make smoke
+      - name: Browser integration against the full offline normalizer
+        env:
+          JANA_TEST_WEB_URL: http://localhost:13001
+          CORS_ORIGINS: http://localhost:13001
+        run: |
+          compose() { docker compose -p jana-browser-test -f compose.yaml -f compose.numeric.yaml "$@"; }
+          cleanup() {
+            compose logs --no-color > "$RUNNER_TEMP/jana-browser.log"
+            compose down --volumes --remove-orphans
+          }
+          trap cleanup EXIT
+          compose up --no-build --pull never -d --wait --wait-timeout 300 backend
+          (cd frontend && npm run test:e2e)
+      - name: Browser failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-failure-evidence
+          path: |
+            frontend/test-results/
+            ${{ runner.temp }}/jana-browser.log
       - name: Standalone CLI, PostgreSQL publication and restart
         run: make cli-smoke
       - name: Offline restart with outbound network disabled
