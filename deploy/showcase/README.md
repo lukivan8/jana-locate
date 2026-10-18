@@ -31,7 +31,7 @@ make showcase
 make showcase-watch
 ```
 
-Нужны Docker Engine/Compose с `!reset` и `build --provenance`, Bash, Python 3, Git, curl, flock и systemd user services. Совместимость Compose ранее проверялась с 5.1.3. Модели скачиваются при build; первая сборка дольше следующих.
+Нужны Docker Engine/Compose с `!reset` и `build --provenance`, Bash, Python 3, Git, curl, flock и systemd user services. Совместимость Compose ранее проверялась с 5.1.3. Модели libpostal скачиваются при build; компактная CRF-модель включена в `backend/numeric/`. Первая сборка дольше следующих. Стенд использует `compose.numeric.yaml`; устаревший contextual runtime исключён из релиза.
 
 Токен подключается как Docker secret из игнорируемого приватного каталога `.deploy/`. Не публикуйте его и не включайте в логи.
 
@@ -44,7 +44,7 @@ make showcase-watch
 После смены конфигурации или токена выполните `make showcase`. После ротации токена перезапустите коннектор:
 
 ```sh
-docker compose -p jana-showcase --env-file .deploy/showcase.env -f compose.yaml -f compose.showcase.yaml restart tunnel
+docker compose -p jana-showcase --env-file .deploy/showcase.env -f compose.yaml -f compose.numeric.yaml -f compose.showcase.yaml restart tunnel
 ```
 
 ```sh

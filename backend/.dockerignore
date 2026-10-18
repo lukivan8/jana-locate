@@ -5,3 +5,4 @@ data/reference/*.sqlite
 __pycache__
 
 contextual
+numeric

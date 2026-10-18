@@ -118,7 +118,7 @@ API reference uses the requested Datadog-style endpoint navigation/content struc
 
 Batch input and the processing explanation precede the queue. Non-matched rows explicitly require an operator, with warnings, counts and an inline correction editor. The original synthetic example browser remains available in a disclosure. Selecting a review moves focus to the editor heading. Coordinates and building facts are still the only durable catalog data; delivery fields remain in the exported session.
 
-Free input starts empty, sends the original text through the generated HTTP client, and measures the complete normalization request with `performance.now()`. Editing clears the previous result and pin. Unknown coordinates never receive a marker. The map is an offline country overview, not a street basemap; its local Natural Earth boundary and synthetic catalog coordinate caveat remain visible. No network tile/font service is used. Warnings describe unavailable models without claiming that a separate LLM corrector exists.
+Free input starts empty, sends the original text through the generated HTTP client, and measures the complete normalization request with `performance.now()`. Editing clears the previous result. Normalization does not provide geocoding; the unused map component, geometry and styles were removed for v0.2.0. No network tile/font service is used. Warnings describe unavailable models without claiming that a separate LLM corrector exists.
 
 ### Extension verification
 

@@ -1,5 +1,12 @@
 .PHONY: up down test generate check smoke reference reference-fetch reference-prepare reference-test offline-smoke showcase showcase-watch showcase-status showcase-stop
 REFERENCE_PYTHON ?= .artifacts/reference-venv/bin/python
+.PHONY: demo demo-status demo-stop
+demo:
+	./scripts/demo.sh up
+demo-status:
+	./scripts/demo.sh status
+demo-stop:
+	./scripts/demo.sh stop
 showcase:
 	./scripts/showcase.sh deploy
 showcase-watch:

@@ -86,9 +86,9 @@ CRF использует слова, Unicode-токены, границы скл
 В native backend задаётся `NUMERIC_SUPPLEMENT_URL`; режим несовместим с
 `CONTEXTUAL_NORMALIZER_URL`. Конфигурация для изолированного запуска —
 `compose.numeric.yaml`. Runtime числового сервиса изолирован внутренней сетью.
-Перед сборкой подготовить `jana-numeric-deps:0.9.12` через
-`backend/contextual/Dockerfile.numeric-deps` и модель по хешу из README;
-`Dockerfile.numeric` собирается офлайн. Ни веса, ни пакеты при старте не скачиваются.
+Модель закреплена в `backend/numeric/model.crfsuite`; её SHA-256 проверяется при
+сборке и запуске. `backend/numeric/Dockerfile` устанавливает закреплённые зависимости
+при сборке. Локальный образ зависимостей не нужен. Ни веса, ни пакеты при старте не скачиваются.
 
 Проверки: backend go test -race ./..., go vet ./..., тесты с native libpostal при
 Docker-сборке, make smoke, Python-тесты признаков, живой HTTP-паритет 4608 строк,

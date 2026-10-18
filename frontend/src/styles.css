@@ -72,13 +72,6 @@ p { margin: 12px 0; max-width: 72ch; }
 .upload label { font: var(--md-sys-typescale-label-large); }
 .upload input { width: 100%; min-width: 0; color: var(--md-sys-color-on-surface-variant); }
 input::file-selector-button { margin-inline-end: 12px; background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); border-color: transparent; padding-inline: 16px; }
-.plot { width: 100%; background: var(--md-sys-color-surface-container); border-radius: var(--md-sys-shape-corner-small); margin: 8px 0; }
-.plot-grid { stroke: var(--md-sys-color-outline-variant); }
-.plot-point { fill: var(--md-sys-color-primary); cursor: pointer; stroke: transparent; stroke-width: 24px; pointer-events: all; }
-.plot-point:focus-visible { stroke: var(--md-sys-color-primary-container); outline: none; }
-.plot-label, .plot-empty { fill: var(--md-sys-color-on-surface-variant); }
-.plot-label { font-size: 12px; }
-.plot-empty { font-size: 16px; }
 .muted { font: var(--md-sys-typescale-body-medium); color: var(--md-sys-color-on-surface-variant); }
 .actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 .actions label { display: flex; align-items: center; min-height: 48px; font: var(--md-sys-typescale-label-large); cursor: pointer; }
@@ -187,19 +180,6 @@ details > pre, pre.code-block { margin: 0; padding: 20px; background: var(--md-s
 .parsed-fields dd { margin: 4px 0 0; overflow-wrap: anywhere; font: var(--md-sys-typescale-body-medium); }
 .warning-list { font: var(--md-sys-typescale-body-medium); padding-left: 20px; }
 .warning-list li { margin-bottom: 8px; }
-.coordinate-map svg { width: 100%; height: auto; display: block; background: var(--md-sys-color-surface-container); border-radius: 8px; }
-.map-grid { fill: none; stroke: var(--md-sys-color-outline-variant); stroke-width: .5; }
-.map-land { fill: var(--md-sys-color-secondary-container); stroke: var(--md-sys-color-outline); stroke-width: 1; }
-.map-country { fill: var(--md-sys-color-on-secondary-container); font-size: 16px; letter-spacing: 3px; }
-.map-city { fill: var(--md-sys-color-on-surface-variant); }
-.map-marker { fill: var(--md-sys-color-primary); stroke: var(--md-sys-color-surface); stroke-width: 2; }
-.map-marker-halo { fill: var(--md-sys-color-primary-container); }
-.map-caption { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font: var(--md-sys-typescale-label-medium); color: var(--md-sys-color-on-surface-variant); margin: 12px 0; }
-.map-empty { padding: 16px 0; color: var(--md-sys-color-on-surface-variant); }
-.map-locations { list-style: none; padding: 0; font: var(--md-sys-typescale-body-medium); }
-.map-locations li { display: flex; gap: 8px; flex-wrap: wrap; padding: 12px 0; border-bottom: 1px solid var(--md-sys-color-outline-variant); }
-.map-locations span { font-variant-numeric: tabular-nums; }
-.map-locations button { min-height: 48px; color: var(--md-sys-color-primary); background: transparent; border: none; padding: 0 12px; text-decoration: underline; cursor: pointer; }
 .api-layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 40px; align-items: start; }
 .api-sidebar { position: sticky; top: 16px; min-width: 0; }
 .api-sidebar h2 { font: var(--md-sys-typescale-label-large); margin-top: 0; }

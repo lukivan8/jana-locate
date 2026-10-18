@@ -1,3 +1,0 @@
-# Build-time preparation only; the runtime never installs dependencies.
-FROM python:3.11-slim-bookworm
-RUN pip install --no-cache-dir python-crfsuite==0.9.12

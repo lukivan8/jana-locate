@@ -1,16 +1,17 @@
-# Isolated candidate: add this file to compose.yaml, never compose.contextual.yaml.
-# Models/dependency image must be prepared before building; runtime is offline.
+# Hackathon numeric supplement. Dependencies are installed only during build.
 services:
   backend:
     networks: [default, numeric-private]
     environment:
       NUMERIC_SUPPLEMENT_URL: http://numeric:8080
+    depends_on:
+      numeric:
+        condition: service_healthy
   numeric:
     networks: [numeric-private]
-    image: jana-numeric:experimental
+    image: jana-numeric:0.2.0
     build:
-      context: ./backend/contextual
-      dockerfile: Dockerfile.numeric
+      context: ./backend/numeric
     restart: unless-stopped
     read_only: true
     tmpfs: [/tmp]

@@ -13,6 +13,7 @@ GUIDES = [
     'docs/README.md', 'docs/quickstart.md', 'docs/integration.md',
     'docs/deployment.md', 'docs/web.md', 'docs/faq.md', 'docs/architecture.md',
     'docs/roadmap.md', 'docs/verification.md', 'examples/http/README.md',
+    'docs/hackathon-demo.md', 'backend/numeric/README.md',
 ]
 
 
