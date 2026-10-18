@@ -8,6 +8,10 @@ COPY tokens.py numeric_recovery.py server_numeric.py test_numeric_recovery.py ./
 RUN python test_numeric_recovery.py
 ENV PYTHONDONTWRITEBYTECODE=1
 USER 10001:10001
+ARG JANA_REVISION=unknown
+LABEL org.opencontainers.image.source="https://github.com/lukivan8/jana-locate" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.revision="$JANA_REVISION"
 EXPOSE 8080
 HEALTHCHECK --interval=5s --timeout=2s CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/ready',timeout=1).read()"]
 ENTRYPOINT ["python", "-u", "/app/server_numeric.py"]

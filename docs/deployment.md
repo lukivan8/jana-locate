@@ -4,7 +4,7 @@
 
 ## Готовые контейнеры — основной путь
 
-[Установщик](quickstart.md) скачивает версионированные образы 0.1.0 и запускает `deploy/compose.release.yaml`: в нём нет `build` и чтения исходников. Комплекты api/web/full автономны; модели libpostal и КАТО/OSM уже включены. Комплект hosted использует внешний API `https://jana.linker.kz` явно.
+[Установщик](quickstart.md) скачивает версионированные образы 0.3.0 и запускает `deploy/compose.release.yaml`: в нём нет `build` и чтения исходников. Комплекты api/web/full автономны; модели libpostal, КАТО/OSM и числовая CRF уже включены. Комплект hosted использует внешний API `https://jana.linker.kz` явно.
 
 В каталоге установленного комплекта:
 
@@ -86,16 +86,16 @@ CORS не заменяет авторизацию. Демонстрационн�
 
 Готовые api/web/full автономны: модели и справочники уже внутри образов. `./jana up` не скачивает образы и не обращается к hosted API.
 
-Для закрытой сети возьмите из [релиза 0.1.0](https://github.com/lukivan8/jana-locate/releases/tag/v0.1.0) архивы нужных образов и контрольные суммы. Скопируйте каталог подготовленной установки (compose.yaml, compose.host.yaml, jana, .env, .jana-mode и при наличии .jana-host-network) и архивы на целевой хост. Не публикуйте .env и не используйте один пароль на нескольких хостах.
+Для закрытой сети возьмите из [релиза 0.3.0](https://github.com/lukivan8/jana-locate/releases/tag/v0.3.0) архивы нужных образов и контрольные суммы. Скопируйте каталог подготовленной установки (compose.yaml, compose.host.yaml, jana, .env, .jana-mode и при наличии .jana-host-network) и архивы на целевой хост. Не публикуйте .env и не используйте один пароль на нескольких хостах.
 
 ```sh
-sha256sum -c jana-locate-api-0.1.0-linux-amd64.tar.gz.sha256
-docker load -i jana-locate-api-0.1.0-linux-amd64.tar.gz
-# Аналогично загрузите web или cli, если они нужны выбранному комплекту.
+sha256sum -c jana-locate-api-0.3.0-linux-amd64.tar.gz.sha256
+docker load -i jana-locate-api-0.3.0-linux-amd64.tar.gz
+# Загрузите также numeric; web или cli нужны согласно выбранному комплекту.
 ./jana up
 ```
 
-Для API нужен только api-образ; для web — api + web; для full — api + cli. Hosted требует доступа к jana.linker.kz и не является автономным режимом.
+Для API нужны api + numeric; для web — api + numeric + web; для full — api + numeric + cli. Hosted требует доступа к jana.linker.kz и не является автономным режимом.
 
 Подготовленный локальный комплект можно также перенести через `docker save` / `docker load`. Сам перенос не отключает сеть: сетевую изоляцию задаёт окружение. Проверка `make offline-smoke` запускает контейнеры во внутренней Docker-сети и использует временные данные.
 

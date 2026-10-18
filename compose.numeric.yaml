@@ -9,7 +9,7 @@ services:
         condition: service_healthy
   numeric:
     networks: [numeric-private]
-    image: jana-numeric:0.2.0
+    image: jana-numeric:0.3.0
     build:
       context: ./backend/numeric
     restart: unless-stopped

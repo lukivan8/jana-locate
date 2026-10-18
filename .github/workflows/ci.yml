@@ -27,7 +27,7 @@ jobs:
       - name: Numeric model, Unicode features and standalone image
         run: |
           python3 backend/numeric/test_numeric_recovery.py
-          docker build -t jana-numeric:0.2.0 backend/numeric
+          docker build -t jana-numeric:0.3.0 backend/numeric
       - run: npx playwright install --with-deps chromium
         working-directory: frontend
       - name: Browser integration against isolated local backend

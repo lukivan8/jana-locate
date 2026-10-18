@@ -2,7 +2,7 @@
 # Install published, versioned Docker images. No compilation or model preparation.
 set -eu
 umask 077
-version=${JANA_VERSION:-0.1.0}
+version=${JANA_VERSION:-0.3.0}
 mode=${1:-full}
 case "$mode" in api|web|full|hosted) ;; *) echo 'Режим: api, web, full или hosted' >&2; exit 2;; esac
 case "$version" in ''|*[!a-zA-Z0-9._-]*) echo 'Некорректная версия' >&2; exit 2;; esac
@@ -92,6 +92,10 @@ case "$mode" in
   full) load_image api; load_image cli ;;
   hosted) load_image cli ;;
 esac
+# Older pinned releases contain only the native API. Follow the downloaded manifest.
+if docker compose --env-file .env -f compose.yaml --profile "$mode" config --services | grep -qx numeric; then
+  load_image numeric
+fi
 # Keep a ready-to-send synthetic batch without replacing the user's file.
 if [ ! -e batch.example.json ]; then
   cat > batch.example.json <<'JSON'

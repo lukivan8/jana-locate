@@ -6,18 +6,19 @@
 
 **[Откройте Jana Locate → jana.linker.kz](https://jana.linker.kz)**. Для знакомства с приложением ничего устанавливать не нужно. Можно также вызывать hosted API по `https://jana.linker.kz/v1/normalize`.
 
-## Только API: одна команда Docker
+## Только API: одна команда установки
 
-Для нормализатора достаточно установленного Docker:
+Нужны Docker Engine/Desktop с Compose v2, curl и shell:
 
 ```sh
-docker run -d --name jana-locate --platform linux/amd64 \
-  --restart unless-stopped -p 127.0.0.1:8080:8080 \
-  -v jana-locate-api-data:/data \
-  ghcr.io/lukivan8/jana-locate-api:0.1.0
+curl -fsSL https://raw.githubusercontent.com/lukivan8/jana-locate/main/scripts/install.sh | sh -s -- api
 ```
 
-Docker автоматически скачает образ. API — `http://localhost:8080`, готовность — `/readyz`. Модели и справочники уже внутри. Остановить: `docker stop jana-locate`; снова запустить: `docker start jana-locate`. Данные остаются в томе `jana-locate-api-data`.
+Установщик скачивает готовые образы API и числовой модели и запускает их вместе.
+API — `http://localhost:8080`, готовность — `/readyz`. Модели и справочники уже внутри.
+Остановить: `cd jana-locate && ./jana down`; снова запустить: `./jana up`.
+Данные сохраняются в томе. В комплекте v0.3.0 локальный API включает тот же
+числовой CRF-слой, что публичный стенд.
 
 ## Первый batch-запрос после запуска
 
@@ -88,7 +89,7 @@ cat batch-results.json
 
 | Симптом | Что проверить |
 | --- | --- |
-| Не удаётся подключиться / `/readyz` ещё не отвечает | Первый старт загружает модели. Дождитесь готовности; для `docker run` смотрите `docker logs jana-locate`, для установщика — `./jana logs` |
+| Не удаётся подключиться / `/readyz` ещё не отвечает | Первый старт загружает модели. Дождитесь готовности; смотрите `./jana logs` |
 | HTTP 400 | Валидность JSON, наличие `id` и строкового `raw_address`, число записей и длину адресов |
 | HTTP 413 | Уменьшите пакет: тело превышает 2 MiB |
 | HTTP 415 | Передайте заголовок `Content-Type: application/json` |
@@ -117,7 +118,7 @@ curl -fsSL https://raw.githubusercontent.com/lukivan8/jana-locate/main/scripts/i
 
 После запуска установщик печатает URL OpenAPI и команду отправки `batch.example.json` в API с сохранением `batch-results.json`. Пример лежит в каталоге установки; существующий файл не перезаписывается. [Формат и оценка результата](#первый-batch-запрос-после-запуска).
 
-Изображения скачиваются из GHCR; если реестр недоступен без авторизации, установщик использует публичные архивы того же [релиза 0.1.0](https://github.com/lukivan8/jana-locate/releases/tag/v0.1.0) и проверяет SHA-256. Учётная запись GitHub для этого пути не нужна.
+Изображения скачиваются из GHCR; если реестр недоступен без авторизации, установщик использует публичные архивы того же [релиза 0.3.0](https://github.com/lukivan8/jana-locate/releases/tag/v0.3.0) и проверяет SHA-256. Учётная запись GitHub для этого пути не нужна.
 
 API-образ включает модели libpostal и справочники: архив этого релиза занимает около 817 MiB. Дополнительное место потребуется для загруженного Docker-образа и рабочих томов. Первый старт загружает их в память; ожидайте готовности. API ограничен 3 GiB RAM и двумя CPU в Compose. Для полного комплекта нужен дополнительный запас памяти Docker и свободного диска. Эти значения — настройки контейнеров, а не измеренные минимальные требования.
 
@@ -162,7 +163,7 @@ curl -fsSL https://raw.githubusercontent.com/lukivan8/jana-locate/main/scripts/i
 
 ## Загрузка в закрытую сеть
 
-Скачайте нужные архивы `jana-locate-<api|web|cli>-0.1.0-linux-amd64.tar.gz` и их `.sha256` из [релиза](https://github.com/lukivan8/jana-locate/releases/tag/v0.1.0). Перенесите их, файлы Compose, launcher и `.env` в закрытую сеть. Проверьте SHA-256, выполните `docker load -i <архив>` для каждого образа и запустите `./jana up`. Интернет для работы локальных комплектов не нужен. [Подробности](deployment.md).
+Скачайте нужные архивы `jana-locate-<api|numeric|web|cli>-0.3.0-linux-amd64.tar.gz` и их `.sha256` из [релиза](https://github.com/lukivan8/jana-locate/releases/tag/v0.3.0). Перенесите их, файлы Compose, launcher и `.env` в закрытую сеть. Проверьте SHA-256, выполните `docker load -i <архив>` для каждого образа и запустите `./jana up`. Интернет для работы локальных комплектов не нужен. [Подробности](deployment.md).
 
 ## Сборка из исходников — для разработки
 

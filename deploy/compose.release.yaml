@@ -2,12 +2,16 @@ name: jana-locate
 services:
   backend:
     profiles: [api, web, full]
-    image: ghcr.io/lukivan8/jana-locate-api:${JANA_VERSION:-0.1.0}
+    image: ghcr.io/lukivan8/jana-locate-api:${JANA_VERSION:-0.3.0}
     platform: linux/amd64
     ports: ["${API_BIND_ADDRESS:-127.0.0.1}:${API_PORT:-8080}:8080"]
     environment:
       MODELS_REQUIRED: "true"
+      NUMERIC_SUPPLEMENT_URL: http://numeric:8080
       CORS_ORIGINS: "${CORS_ORIGINS:-http://localhost:3000}"
+    networks: [default, numeric-private]
+    depends_on:
+      numeric: {condition: service_healthy}
     volumes: ["api-data:/data"]
     restart: unless-stopped
     read_only: true
@@ -19,9 +23,21 @@ services:
     healthcheck:
       start_period: 90s
       retries: 12
+  numeric:
+    profiles: [api, web, full]
+    image: ghcr.io/lukivan8/jana-locate-numeric:${JANA_VERSION:-0.3.0}
+    platform: linux/amd64
+    networks: [numeric-private]
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    mem_limit: 128m
+    cpus: 1
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
   frontend:
     profiles: [web]
-    image: ghcr.io/lukivan8/jana-locate-web:${JANA_VERSION:-0.1.0}
+    image: ghcr.io/lukivan8/jana-locate-web:${JANA_VERSION:-0.3.0}
     platform: linux/amd64
     ports: ["${WEB_BIND_ADDRESS:-127.0.0.1}:${WEB_PORT:-3000}:8080"]
     environment:
@@ -33,7 +49,7 @@ services:
     cap_drop: [ALL]
   workspace:
     profiles: [full, hosted]
-    image: ghcr.io/lukivan8/jana-locate-cli:${JANA_VERSION:-0.1.0}
+    image: ghcr.io/lukivan8/jana-locate-cli:${JANA_VERSION:-0.3.0}
     platform: linux/amd64
     ports: ["127.0.0.1:${CLI_PORT:-8095}:8095"]
     environment:
@@ -58,3 +74,8 @@ services:
 volumes:
   api-data:
   workspace-data:
+
+networks:
+  default: {}
+  numeric-private:
+    internal: true

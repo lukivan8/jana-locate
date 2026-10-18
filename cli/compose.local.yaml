@@ -42,11 +42,32 @@ services:
     ports:
       - "127.0.0.1:${CLI_API_PORT:-8080}:8080"
     environment:
-      MODELS_REQUIRED: "false"
+      MODELS_REQUIRED: "true"
+      NUMERIC_SUPPLEMENT_URL: http://numeric:8080
       ALLOW_DEMO_CATALOG: "false"
+    networks: [default, numeric-private]
+    depends_on:
+      numeric:
+        condition: service_healthy
     volumes:
       - normalizer-data:/data
     restart: unless-stopped
+  numeric:
+    image: jana-numeric:0.3.0
+    build:
+      context: ../backend/numeric
+    networks: [numeric-private]
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    mem_limit: 128m
+    cpus: 1
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+networks:
+  default: {}
+  numeric-private:
+    internal: true
 volumes:
   workspace-data:
   normalizer-data:
